@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>迪兹瓦安全可视化与智能预警</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@4.24.16/dist/antd.min.css">
+  <link rel="stylesheet" href="./css/app.css?v=144">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar dark-nav">
+      <div class="brand">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <defs>
+              <linearGradient id="mineral-logo" x1="0" y1="0" x2="26" y2="26">
+                <stop stop-color="oklch(0.5 0.14 256)" />
+                <stop offset="1" stop-color="oklch(0.82 0.125 205)" />
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width="24" height="24" rx="7" fill="url(#mineral-logo)" />
+            <path d="M7 17.5 13 6l6 11.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M9.6 14h6.8" stroke="white" stroke-width="1.4" stroke-linecap="round" opacity=".7" />
+          </svg>
+        </span>
+        <strong>安全生产风险可视化与智能预警</strong>
+      </div>
+      <nav class="tabs" id="tabs" aria-label="一级功能"></nav>
+      <div class="top-meta">
+        <button type="button" class="pad-link" id="reset-demo">重置演示</button>
+        <span class="lang"><b>中文</b> EN</span>
+        <span class="user-chip" id="operator"></span>
+      </div>
+    </header>
+    <div class="body">
+      <nav class="sidenav" id="sidenav" aria-label="当前功能下的页面"></nav>
+      <div class="workspace">
+        <div class="main-head" id="crumb"></div>
+        <main class="main" id="main"></main>
+      </div>
+    </div>
+  </div>
+  <script src="https://registry.npmmirror.com/echarts/5.5.1/files/dist/echarts.min.js"></script>
+  <script>
+    if (typeof echarts === "undefined") {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"><\/script>');
+    }
+  </script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/antd@4.24.16/dist/antd.min.js"></script>
+  <script src="./js/store.js?v=8"></script>
+  <script src="./js/app.js?v=213"></script>
+</body>
+</html>

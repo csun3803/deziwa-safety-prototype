@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deziwa 围栏标定 · 576×655</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+    .layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+    aside { padding: 12px; border-right: 1px solid #334155; overflow: auto; }
+    main { padding: 12px; overflow: auto; }
+    h1 { font-size: 16px; margin: 0 0 8px; }
+    .hint { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
+    .zone-item { display: block; width: 100%; text-align: left; padding: 8px 10px; margin-bottom: 6px;
+      border: 1px solid #475569; border-radius: 8px; background: #1e293b; color: inherit; cursor: pointer; }
+    .zone-item.is-on { border-color: #38bdf8; background: #0c4a6e; }
+    .zone-item code { font-size: 11px; color: #7dd3fc; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    button { padding: 8px 12px; border-radius: 8px; border: 1px solid #475569; background: #334155; color: #fff; cursor: pointer; }
+    button.primary { background: #2563eb; border-color: #2563eb; }
+    .stage { position: relative; width: min(100%, 576px); margin: 0 auto; }
+    .stage svg { width: 100%; height: auto; display: block; border: 1px solid #475569; touch-action: none; }
+    .coords { font-family: ui-monospace, monospace; font-size: 12px; margin-top: 8px; color: #cbd5e1; }
+    textarea { width: 100%; height: 160px; margin-top: 8px; font-size: 11px; font-family: ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <h1>围栏标定</h1>
+      <p class="hint">拖拽框体移动；<b>Shift+拖拽</b> 改大小。保存：覆盖 <code>data/deziwa-map-zones.json</code> 后刷新三维实景页即可（无需跑 sync）。</p>
+      <div class="toolbar">
+        <button type="button" class="primary" id="btn-export">复制 JSON</button>
+        <button type="button" id="btn-download">下载 JSON</button>
+      </div>
+      <div id="zone-list"></div>
+    </aside>
+    <main>
+      <div class="stage" id="stage"></div>
+      <div class="coords" id="coords">—</div>
+      <textarea id="out" readonly placeholder="导出 JSON 会显示在这里"></textarea>
+    </main>
+  </div>
+  <script>
+    const MAP_W = 576;
+    const MAP_H = 655;
+    const zonesUrl = "../data/deziwa-map-zones.json";
+    const imgUrl = "../assets/deziwa-aerial.png";
+
+    let zones = [];
+    let selectedId = null;
+    let drag = null;
+
+    async function load() {
+      zones = await fetch(zonesUrl).then((r) => r.json());
+      selectedId = zones[0]?.id ?? null;
+      renderList();
+      renderSvg();
+    }
+
+    function renderList() {
+      const list = document.getElementById("zone-list");
+      list.innerHTML = zones.map((z) => `
+        <button type="button" class="zone-item${z.id === selectedId ? " is-on" : ""}" data-id="${z.id}">
+          <strong>${z.name}</strong><br>
+          <code>${z.id}</code> · x=${z.x} y=${z.y} w=${z.w} h=${z.h}
+        </button>
+      `).join("");
+      list.querySelectorAll("[data-id]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedId = btn.dataset.id;
+          renderList();
+          renderSvg();
+        });
+      });
+    }
+
+    function renderSvg() {
+      const z = zones.find((item) => item.id === selectedId);
+      document.getElementById("coords").textContent = z
+        ? `${z.name} (${z.id})  x=${z.x}  y=${z.y}  w=${z.w}  h=${z.h}`
+        : "—";
+
+      const rects = zones.map((item) => {
+        const on = item.id === selectedId;
+        return `<rect data-id="${item.id}" x="${item.x}" y="${item.y}" width="${item.w}" height="${item.h}"
+          fill="${on ? "rgba(56,189,248,0.25)" : "rgba(239,68,68,0.12)"}"
+          stroke="${on ? "#38bdf8" : "#f87171"}" stroke-width="${on ? 2 : 1}" stroke-dasharray="4 2" />`;
+      }).join("");
+
+      document.getElementById("stage").innerHTML = `
+        <svg viewBox="0 0 ${MAP_W} ${MAP_H}" xmlns="http://www.w3.org/2000/svg">
+          <image href="${imgUrl}" x="0" y="0" width="${MAP_W}" height="${MAP_H}" />
+          ${rects}
+        </svg>
+      `;
+
+      const svg = document.querySelector("#stage svg");
+      svg.addEventListener("pointerdown", onPointerDown);
+      svg.addEventListener("pointermove", onPointerMove);
+      svg.addEventListener("pointerup", onPointerUp);
+      svg.addEventListener("pointerleave", onPointerUp);
+    }
+
+    function svgPoint(svg, clientX, clientY) {
+      const pt = svg.createSVGPoint();
+      pt.x = clientX;
+      pt.y = clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return { x: 0, y: 0 };
+      const p = pt.matrixTransform(ctm.inverse());
+      return { x: p.x, y: p.y };
+    }
+
+    function onPointerDown(event) {
+      const svg = event.currentTarget;
+      const target = event.target.closest("[data-id]");
+      if (!target || target.tagName !== "rect") return;
+      selectedId = target.dataset.id;
+      renderList();
+      const zone = zones.find((z) => z.id === selectedId);
+      const p = svgPoint(svg, event.clientX, event.clientY);
+      drag = {
+        id: selectedId,
+        resize: event.shiftKey,
+        startX: p.x,
+        startY: p.y,
+        ox: zone.x,
+        oy: zone.y,
+        ow: zone.w,
+        oh: zone.h,
+      };
+      svg.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    }
+
+    function onPointerMove(event) {
+      if (!drag) return;
+      const svg = event.currentTarget;
+      const zone = zones.find((z) => z.id === drag.id);
+      const p = svgPoint(svg, event.clientX, event.clientY);
+      const dx = p.x - drag.startX;
+      const dy = p.y - drag.startY;
+      if (drag.resize) {
+        zone.w = Math.max(8, Math.round((drag.ow + dx) * 10) / 10);
+        zone.h = Math.max(8, Math.round((drag.oh + dy) * 10) / 10);
+      } else {
+        zone.x = Math.round((drag.ox + dx) * 10) / 10;
+        zone.y = Math.round((drag.oy + dy) * 10) / 10;
+      }
+      renderSvg();
+    }
+
+    function onPointerUp(event) {
+      if (!drag) return;
+      drag = null;
+      try { event.currentTarget.releasePointerCapture(event.pointerId); } catch (_) {}
+    }
+
+    function exportJson() {
+      return JSON.stringify(zones, null, 2) + "\n";
+    }
+
+    document.getElementById("btn-export").addEventListener("click", async () => {
+      const text = exportJson();
+      document.getElementById("out").value = text;
+      await navigator.clipboard.writeText(text);
+      alert("已复制到剪贴板，请粘贴保存到 prototype/data/deziwa-map-zones.json，然后刷新 index.html#/t1/overview");
+    });
+
+    document.getElementById("btn-download").addEventListener("click", () => {
+      const blob = new Blob([exportJson()], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "deziwa-map-zones.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    load().catch((err) => alert("加载失败：" + err));
+  </script>
+</body>
+</html>

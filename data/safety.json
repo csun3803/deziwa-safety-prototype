@@ -1,0 +1,4482 @@
+{
+  "systemName": "迪兹瓦安全可视化与智能预警",
+  "operator": {
+    "name": "李成",
+    "role": "超级管理员",
+    "shift": "白班 08:00–20:00"
+  },
+  "plants": [
+    {
+      "id": "all",
+      "name": "全厂"
+    },
+    {
+      "id": "hydro",
+      "name": "湿法分厂"
+    },
+    {
+      "id": "mill",
+      "name": "选矿分厂"
+    },
+    {
+      "id": "tailings",
+      "name": "尾矿库作业区"
+    }
+  ],
+  "jobs": [
+    "湿法值班员",
+    "萃取操作工",
+    "浸出班长",
+    "浸出操作工",
+    "电积巡检",
+    "破碎巡检",
+    "坝体巡视",
+    "安环专工",
+    "外来承包商"
+  ],
+  "orgs": [
+    "湿法分厂值班",
+    "选矿分厂值班",
+    "尾矿库值班",
+    "安环部"
+  ],
+  "zones": [
+    {
+      "id": "z-wh",
+      "name": "1-6号仓库区",
+      "mapLabel": "1-6号仓库",
+      "risk": "中",
+      "x": 1078,
+      "y": 76,
+      "w": 92,
+      "h": 78,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [
+        "破碎巡检"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "选矿值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-unload",
+      "name": "下料区",
+      "risk": "中",
+      "x": 270,
+      "y": 52,
+      "w": 58,
+      "h": 26,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [
+        "破碎巡检"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "选矿值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-stock",
+      "name": "中间料堆区",
+      "mapLabel": "中间料堆",
+      "risk": "中",
+      "x": 184,
+      "y": 82,
+      "w": 108,
+      "h": 56,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [
+        "破碎巡检"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "选矿值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-crush",
+      "name": "磨矿区",
+      "risk": "中",
+      "x": 218,
+      "y": 140,
+      "w": 76,
+      "h": 40,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [
+        "破碎巡检"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "选矿值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-me",
+      "name": "机电部",
+      "risk": "中",
+      "x": 344,
+      "y": 66,
+      "w": 86,
+      "h": 44,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": false,
+      "whitelist": "机电值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-so2",
+      "name": "SO2、硫酸存储区",
+      "mapLabel": "SO2硫酸",
+      "risk": "高",
+      "x": 74,
+      "y": 152,
+      "w": 60,
+      "h": 42,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-lcu",
+      "name": "低铜料液池",
+      "mapLabel": "低铜料液",
+      "risk": "高",
+      "x": 70,
+      "y": 196,
+      "w": 94,
+      "h": 68,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "浸出操作工",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-hcu",
+      "name": "高铜料液池",
+      "mapLabel": "高铜料液",
+      "risk": "高",
+      "x": 68,
+      "y": 266,
+      "w": 96,
+      "h": 72,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "浸出操作工",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-gas",
+      "name": "加油站",
+      "risk": "高",
+      "x": 38,
+      "y": 348,
+      "w": 30,
+      "h": 30,
+      "plant": "mill",
+      "fence": "电子围栏",
+      "jobs": [],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "安环部",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-leach",
+      "name": "浸出区",
+      "risk": "较高",
+      "x": 246,
+      "y": 190,
+      "w": 40,
+      "h": 132,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "浸出班长",
+        "浸出操作工",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": false,
+      "whitelist": "浸出班",
+      "tempAuth": "无",
+      "version": "v2",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-ccd",
+      "name": "CCD洗涤",
+      "risk": "较高",
+      "x": 286,
+      "y": 190,
+      "w": 30,
+      "h": 132,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "浸出操作工",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": false,
+      "whitelist": "浸出班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-sx",
+      "name": "萃取+洗涤+反萃区",
+      "mapLabel": "萃取反萃",
+      "risk": "高",
+      "x": 62,
+      "y": 428,
+      "w": 172,
+      "h": 58,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "萃取操作工",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v3",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-cmd",
+      "name": "指挥中心",
+      "risk": "中",
+      "x": 256,
+      "y": 320,
+      "w": 46,
+      "h": 34,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "全天",
+      "permit": false,
+      "whitelist": "调度值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-co-ppt",
+      "name": "沉钴区",
+      "risk": "较高",
+      "x": 228,
+      "y": 350,
+      "w": 84,
+      "h": 30,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-coh",
+      "name": "氢氧化钴生产区",
+      "mapLabel": "氢氧化钴",
+      "risk": "较高",
+      "x": 216,
+      "y": 380,
+      "w": 100,
+      "h": 50,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-tail",
+      "name": "高位水池",
+      "risk": "重大",
+      "x": 330,
+      "y": 298,
+      "w": 62,
+      "h": 66,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "坝体巡视"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "水池巡视名单",
+      "tempAuth": "无",
+      "version": "v4",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-raff-h",
+      "name": "高铜萃余液池",
+      "mapLabel": "高铜萃余",
+      "risk": "高",
+      "x": 216,
+      "y": 448,
+      "w": 80,
+      "h": 56,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-elec",
+      "name": "电贫液池",
+      "risk": "较高",
+      "x": 300,
+      "y": 452,
+      "w": 40,
+      "h": 44,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "电积巡检",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": false,
+      "whitelist": "电积班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-ew",
+      "name": "铜电积区",
+      "risk": "较高",
+      "x": 60,
+      "y": 488,
+      "w": 176,
+      "h": 58,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "电积巡检",
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": false,
+      "whitelist": "电积班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-fe",
+      "name": "除铁后液池",
+      "mapLabel": "除铁后液",
+      "risk": "高",
+      "x": 366,
+      "y": 190,
+      "w": 30,
+      "h": 128,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-pool-raff-l",
+      "name": "低铜萃余液池",
+      "mapLabel": "低铜萃余",
+      "risk": "高",
+      "x": 398,
+      "y": 190,
+      "w": 30,
+      "h": 128,
+      "plant": "hydro",
+      "fence": "电子围栏",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "08:00–20:00",
+      "permit": true,
+      "whitelist": "湿法分厂值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-sub",
+      "name": "总降变电站",
+      "mapLabel": "总降",
+      "risk": "较高",
+      "x": 196,
+      "y": 568,
+      "w": 102,
+      "h": 50,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [
+        "破碎巡检"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "选矿值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-diesel",
+      "name": "柴油发电",
+      "risk": "较高",
+      "x": 300,
+      "y": 568,
+      "w": 74,
+      "h": 50,
+      "plant": "hydro",
+      "fence": "风险区",
+      "jobs": [
+        "湿法值班员"
+      ],
+      "hours": "全天",
+      "permit": true,
+      "whitelist": "机电值班",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-admin",
+      "name": "行政楼",
+      "risk": "低",
+      "x": 446,
+      "y": 54,
+      "w": 60,
+      "h": 46,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [],
+      "hours": "全天",
+      "permit": false,
+      "whitelist": "—",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-life",
+      "name": "老生活区",
+      "risk": "低",
+      "x": 510,
+      "y": 54,
+      "w": 56,
+      "h": 46,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [],
+      "hours": "全天",
+      "permit": false,
+      "whitelist": "—",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图像素框"
+    },
+    {
+      "id": "z-lab",
+      "name": "检测中心",
+      "mapLabel": "检测/食堂",
+      "risk": "低",
+      "x": 456,
+      "y": 102,
+      "w": 82,
+      "h": 52,
+      "plant": "mill",
+      "fence": "风险区",
+      "jobs": [],
+      "hours": "全天",
+      "permit": false,
+      "whitelist": "—",
+      "tempAuth": "无",
+      "version": "v1",
+      "note": "孪生图含老食堂、检测中心"
+    }
+  ],
+  "assemblyPoints": [
+    {
+      "id": "ap-hydro-n",
+      "name": "湿法分厂北侧集合点",
+      "plant": "hydro",
+      "x": 184,
+      "y": 82,
+      "w": 108,
+      "h": 56,
+      "note": "中间料堆北侧"
+    },
+    {
+      "id": "ap-mill",
+      "name": "选矿分厂集合点",
+      "plant": "mill",
+      "x": 78,
+      "y": 76,
+      "w": 92,
+      "h": 78,
+      "note": "1-6号仓库前"
+    },
+    {
+      "id": "ap-tail",
+      "name": "高位水池集合点",
+      "plant": "hydro",
+      "x": 330,
+      "y": 298,
+      "w": 62,
+      "h": 66,
+      "note": "林缘应急点"
+    }
+  ],
+  "people": [
+    {
+      "id": "p-01",
+      "employeeId": "em-zwd",
+      "status": "正常",
+      "x": 148,
+      "y": 457,
+      "zone": "z-sx"
+    },
+    {
+      "id": "p-02",
+      "employeeId": "em-ms",
+      "status": "正常",
+      "x": 148,
+      "y": 517,
+      "zone": "z-ew"
+    },
+    {
+      "id": "p-03",
+      "employeeId": "em-cl",
+      "status": "越界",
+      "x": 172,
+      "y": 454,
+      "zone": "z-sx"
+    },
+    {
+      "id": "p-04",
+      "employeeId": "em-wh",
+      "status": "异常滞留",
+      "x": 266,
+      "y": 256,
+      "zone": "z-leach"
+    },
+    {
+      "id": "p-05",
+      "employeeId": "em-kbl",
+      "status": "正常",
+      "x": 361,
+      "y": 331,
+      "zone": "z-tail"
+    },
+    {
+      "id": "p-06",
+      "employeeId": "em-lc",
+      "status": "定位过期",
+      "x": 252,
+      "y": 268,
+      "zone": "z-leach"
+    },
+    {
+      "id": "p-08",
+      "employeeId": "em-zl",
+      "status": "正常",
+      "x": 220,
+      "y": 175,
+      "zone": "z-crush"
+    }
+  ],
+  "cameras": [],
+  "personTracks": [
+    {
+      "id": "tr-p03-chen-intrude",
+      "personId": "p-03",
+      "label": "11:32–12:40 进入萃取围栏（演示）",
+      "points": [
+        {
+          "t": "11:32",
+          "x": 95,
+          "y": 398,
+          "note": "西侧通道",
+          "label": "起点"
+        },
+        {
+          "t": "11:48",
+          "x": 132,
+          "y": 418,
+          "note": "沿管廊侧向洗涤区"
+        },
+        {
+          "t": "12:00",
+          "x": 155,
+          "y": 434
+        },
+        {
+          "t": "12:28",
+          "x": 168,
+          "y": 450,
+          "note": "靠近萃取围栏"
+        },
+        {
+          "t": "12:40",
+          "x": 172,
+          "y": 454,
+          "kind": "warn",
+          "shape": "triangle",
+          "label": "越界",
+          "note": "围栏命中 · 与 EVT-20261104-018 同步"
+        }
+      ]
+    },
+    {
+      "id": "tr-p04-wang-loiter",
+      "personId": "p-04",
+      "label": "11:20–11:52 浸出槽区滞留",
+      "points": [
+        {
+          "t": "11:20",
+          "x": 248,
+          "y": 242,
+          "label": "起点"
+        },
+        {
+          "t": "11:35",
+          "x": 272,
+          "y": 250,
+          "note": "槽边巡检折返"
+        },
+        {
+          "t": "11:45",
+          "x": 262,
+          "y": 262
+        },
+        {
+          "t": "11:52",
+          "x": 266,
+          "y": 256,
+          "kind": "warn",
+          "label": "滞留",
+          "note": "≥15 分钟 · EVT-20261104-009"
+        }
+      ]
+    }
+  ],
+  "eventTypes": [
+    {
+      "id": "et-in",
+      "code": "INTRUDE",
+      "name": "非法闯入",
+      "level": 1,
+      "source": "定位",
+      "strategy": "直接进正式告警",
+      "sla": "15分钟",
+      "enabled": true,
+      "desc": "无准入进入限制区。定位类事件（人员落点、围栏越界）不进识别复核，在「区域与定位告警」配置。",
+      "ruleId": "R-IN"
+    },
+    {
+      "id": "et-stay",
+      "code": "LOITER",
+      "name": "异常滞留",
+      "level": 3,
+      "source": "定位",
+      "strategy": "直接进正式告警",
+      "sla": "30分钟",
+      "enabled": true,
+      "desc": "限制区停留超过阈值后生成正式告警。",
+      "ruleId": "R-LG"
+    },
+    {
+      "id": "et-helm",
+      "code": "HELMET",
+      "name": "安全帽缺失",
+      "level": 2,
+      "source": "视频AI",
+      "strategy": "先告警后复核",
+      "sla": "20分钟",
+      "enabled": true,
+      "desc": "作业区未佩戴安全帽。先出正式告警，复核可关误报。",
+      "ruleId": "R-HL"
+    },
+    {
+      "id": "et-fire",
+      "code": "FIRE",
+      "name": "烟火",
+      "level": 2,
+      "source": "视频AI",
+      "strategy": "先告警后复核",
+      "sla": "10分钟",
+      "enabled": true,
+      "desc": "烟火识别。先告警后复核。",
+      "ruleId": "R-FR"
+    },
+    {
+      "id": "et-inv",
+      "code": "INV",
+      "name": "区域入侵",
+      "level": 1,
+      "source": "视频AI",
+      "strategy": "真警才进正式告警",
+      "sla": "15分钟",
+      "enabled": true,
+      "desc": "视频入侵。置信度偏低时先复核，真警才进告警中心。",
+      "ruleId": "R-INV"
+    }
+  ],
+  "rules": [
+    {
+      "id": "R-IN",
+      "name": "高风险区无作业票禁入",
+      "type": "非法闯入",
+      "zone": "z-sx",
+      "level": 1,
+      "status": "启用",
+      "version": "v1.2",
+      "stay": 30,
+      "window": 300,
+      "recover": 60,
+      "shift": "白班 08:00–20:00",
+      "dedup": "5分钟同人同区合并",
+      "merge": "默认一事件一告警；规则显式开启时才同学区多源合并",
+      "suppress": "",
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "notify": "待办 + 短信",
+      "sla": "15分钟",
+      "note": "萃取围栏无作业票不得进入",
+      "history": [
+        {
+          "version": "v1.1",
+          "status": "启用",
+          "time": "2026-09-12 10:20",
+          "actor": "安环部",
+          "note": "停留阈值 60 秒改为 30 秒"
+        },
+        {
+          "version": "v1.2",
+          "status": "启用",
+          "time": "2026-10-28 09:05",
+          "actor": "安环部",
+          "note": "派发改为当班岗位，不再指定个人"
+        }
+      ]
+    },
+    {
+      "id": "R-HL",
+      "name": "作业区必须佩戴安全帽",
+      "type": "安全帽缺失",
+      "zone": "z-ew",
+      "level": 2,
+      "status": "启用",
+      "version": "v1.0",
+      "stay": 0,
+      "window": 180,
+      "recover": 30,
+      "shift": "全天",
+      "dedup": "10分钟同通道合并",
+      "merge": "AI 抓拍作为主证据",
+      "suppress": "",
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "notify": "待办",
+      "sla": "20分钟",
+      "note": "电积作业区未戴帽",
+      "history": [
+        {
+          "version": "v1.0",
+          "status": "启用",
+          "time": "2026-08-03 14:10",
+          "actor": "安环部",
+          "note": "首发，先告警后复核"
+        }
+      ]
+    },
+    {
+      "id": "R-LG",
+      "name": "限制区停留超过 15 分钟",
+      "type": "异常滞留",
+      "zone": "z-leach",
+      "level": 3,
+      "status": "启用",
+      "version": "v1.1",
+      "stay": 900,
+      "window": 1200,
+      "recover": 120,
+      "shift": "白班 08:00–20:00",
+      "dedup": "同人同区不重复派发",
+      "merge": "",
+      "suppress": "",
+      "org": "湿法分厂值班",
+      "role": "浸出班长",
+      "notify": "待办 + 短信",
+      "sla": "30分钟",
+      "note": "浸出槽区滞留",
+      "history": [
+        {
+          "version": "v1.1",
+          "status": "启用",
+          "time": "2026-10-08 16:40",
+          "actor": "安环部",
+          "note": "阈值由 10 分钟改为 15 分钟"
+        }
+      ]
+    },
+    {
+      "id": "R-FR",
+      "name": "烟火识别",
+      "type": "烟火",
+      "zone": "z-crush",
+      "level": 2,
+      "status": "启用",
+      "version": "v2.0",
+      "stay": 0,
+      "window": 120,
+      "recover": 60,
+      "shift": "全天",
+      "dedup": "3分钟同通道合并",
+      "merge": "与动火作业票比对，有票则降为提示",
+      "suppress": "",
+      "org": "选矿分厂值班",
+      "role": "当班值班员",
+      "notify": "待办 + 电话",
+      "sla": "10分钟",
+      "note": "破碎筛分烟火",
+      "history": [
+        {
+          "version": "v1.0",
+          "status": "启用",
+          "time": "2026-07-19 09:00",
+          "actor": "安环部",
+          "note": "首发"
+        },
+        {
+          "version": "v2.0",
+          "status": "启用",
+          "time": "2026-10-21 11:30",
+          "actor": "安环部",
+          "note": "增加与作业票比对，减少焊接误报"
+        }
+      ]
+    },
+    {
+      "id": "R-INV",
+      "name": "萃取围栏视频入侵",
+      "type": "区域入侵",
+      "zone": "z-sx",
+      "level": 1,
+      "status": "停用",
+      "version": "v0.3",
+      "stay": 8,
+      "window": 180,
+      "recover": 30,
+      "shift": "白班 08:00–20:00",
+      "dedup": "3分钟同通道合并",
+      "merge": "默认真警单开告警；同学区与 R-IN 重复时按规则合并为一条（可选）",
+      "suppress": "",
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "notify": "待办",
+      "sla": "15分钟",
+      "note": "置信度偏低，真警才进正式告警。尚未发布。",
+      "history": [
+        {
+          "version": "v0.2",
+          "status": "测试",
+          "time": "2026-10-30 15:12",
+          "actor": "安环部",
+          "note": "用历史抓拍回放，误报偏高"
+        },
+        {
+          "version": "v0.3",
+          "status": "草稿",
+          "time": "2026-11-03 09:18",
+          "actor": "安环部",
+          "note": "策略改为真警才进正式告警"
+        }
+      ]
+    }
+  ],
+  "kpis": {
+    "onlinePeople": 128,
+    "openAlerts": 3,
+    "todayAlerts": 9,
+    "avgHandle": "18min"
+  },
+  "shiftSync": {
+    "source": "企业 OA · 排班模块",
+    "lastSync": "2026-11-05 04:00",
+    "status": "正常",
+    "lagMin": 0,
+    "externalHint": "排班编制与换班在外部 OA 完成；本页仅展示同步结果。"
+  },
+  "shiftContext": {
+    "date": "2026-11-05",
+    "shiftCode": "DAY",
+    "shiftLabel": "白班 08:00–20:00"
+  },
+  "shiftRoster": [
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂值班",
+      "name": "李成",
+      "job": "湿法值班员",
+      "place": "值班室",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "张卫东",
+      "job": "萃取操作工",
+      "personId": "p-01",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "穆萨",
+      "job": "电积巡检",
+      "personId": "p-02",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "陈立",
+      "job": "外来承包商",
+      "personId": "p-03",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "王慧",
+      "job": "浸出班长",
+      "personId": "p-04",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "周敏",
+      "job": "湿法值班员",
+      "place": "铜电积区",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "马强",
+      "job": "浸出操作工",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "hydro",
+      "org": "湿法分厂",
+      "name": "阿卜杜",
+      "job": "萃取操作工",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "mill",
+      "org": "选矿分厂值班",
+      "name": "赵磊",
+      "job": "破碎巡检",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "mill",
+      "org": "选矿分厂",
+      "name": "孙浩",
+      "job": "破碎巡检",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "tailings",
+      "org": "尾矿库值班",
+      "name": "卡比拉",
+      "job": "坝体巡视",
+      "personId": "p-05",
+      "source": "OA排班"
+    },
+    {
+      "date": "2026-11-05",
+      "shiftCode": "DAY",
+      "shiftLabel": "白班 08:00–20:00",
+      "plant": "tailings",
+      "org": "尾矿库作业区",
+      "name": "本杰明",
+      "job": "坝体巡视",
+      "source": "OA排班"
+    }
+  ],
+  "rollcalls": [
+    {
+      "id": "RC-20261104-01",
+      "mode": "emergency",
+      "name": "全厂 · 危险区域 萃取车间围栏 · 应急清点",
+      "scope": "all",
+      "scopeKey": "plant:all",
+      "scopeLabel": "全厂",
+      "targetKind": "danger",
+      "targetIds": [
+        "z-sx"
+      ],
+      "targetLabels": [
+        "萃取车间围栏"
+      ],
+      "rosterSource": "企业 OA · 排班模块 · 2026-11-05 白班 · 同步 2026-11-05 04:00",
+      "time": "17:20",
+      "status": "进行中",
+      "expected": 8,
+      "note": "应急清点快照；全厂应到，相对所选地点判定。",
+      "rows": [
+        {
+          "name": "李成",
+          "job": "湿法值班员",
+          "status": "无法判定",
+          "place": "值班室",
+          "note": "应到但无定位绑定，无法判定是否在危险区域内"
+        },
+        {
+          "name": "张卫东",
+          "job": "萃取操作工",
+          "status": "危险",
+          "place": "萃取+洗涤+反萃区",
+          "personId": "p-01",
+          "note": "实时位置判定在 萃取车间围栏 内"
+        },
+        {
+          "name": "穆萨",
+          "job": "电积巡检",
+          "status": "已离开",
+          "place": "铜电积区",
+          "personId": "p-02",
+          "note": "当前在 电积厂房，已离开 萃取车间围栏"
+        },
+        {
+          "name": "陈立",
+          "job": "外来承包商",
+          "status": "危险",
+          "place": "萃取+洗涤+反萃区",
+          "personId": "p-03",
+          "note": "实时位置判定在 萃取车间围栏 内（越界告警）"
+        },
+        {
+          "name": "王慧",
+          "job": "浸出班长",
+          "status": "无法判定",
+          "place": "浸出区",
+          "personId": "p-04",
+          "note": "定位过期；最后关联 浸出槽区，不能自动判定是否已离开"
+        },
+        {
+          "name": "周敏",
+          "job": "湿法值班员",
+          "status": "已离开",
+          "place": "铜电积区",
+          "note": "当前在 电积厂房，已离开 萃取车间围栏"
+        },
+        {
+          "name": "马强",
+          "job": "浸出操作工",
+          "status": "无法判定",
+          "place": "—",
+          "note": "应到但无定位绑定，无法判定是否在危险区域内"
+        },
+        {
+          "name": "阿卜杜",
+          "job": "萃取操作工",
+          "status": "无法判定",
+          "place": "—",
+          "note": "应到但无定位绑定，无法判定是否在危险区域内"
+        }
+      ]
+    },
+    {
+      "id": "RC-20261103-02",
+      "mode": "duty",
+      "name": "全厂 · 在岗清点",
+      "scope": "all",
+      "scopeKey": "plant:all",
+      "scopeLabel": "全厂",
+      "rosterSource": "企业 OA · 排班模块 · 2026-11-05 白班 · 同步 2026-11-05 04:00",
+      "time": "20:05",
+      "status": "已归档",
+      "expected": 6,
+      "note": "在岗清点归档样例；用于交接班对照，不表示应急疏散完成。",
+      "rows": [
+        {
+          "name": "卡比拉",
+          "job": "坝体巡视",
+          "status": "已在岗",
+          "place": "高位水池",
+          "personId": "p-05",
+          "note": "有效定位 · 尾矿库坝前"
+        },
+        {
+          "name": "李成",
+          "job": "湿法值班员",
+          "status": "已在岗",
+          "place": "值班室",
+          "note": "有效定位 · 值班室"
+        },
+        {
+          "name": "破碎夜班",
+          "job": "破碎巡检",
+          "status": "已在岗",
+          "place": "磨矿区",
+          "note": "有效定位 · 破碎筛分"
+        },
+        {
+          "name": "王慧",
+          "job": "浸出班长",
+          "status": "已在岗",
+          "place": "浸出区",
+          "note": "有效定位 · 浸出槽区"
+        },
+        {
+          "name": "外来车辆",
+          "job": "外来承包商",
+          "status": "未到岗",
+          "place": "—",
+          "note": "无有效定位；应到但未收到有效定位"
+        },
+        {
+          "name": "穆萨",
+          "job": "电积巡检",
+          "status": "已在岗",
+          "place": "铜电积区",
+          "note": "有效定位 · 电积厂房"
+        }
+      ]
+    }
+  ],
+  "analysis": {
+    "summary": {
+      "periodLabel": "近30天",
+      "alertTotal": 86,
+      "alertPrev": 92,
+      "avgHandleMin": 18,
+      "falseRate": 0.21,
+      "majorShare": 0.14
+    },
+    "months": [
+      {
+        "name": "6月",
+        "count": 14
+      },
+      {
+        "name": "7月",
+        "count": 19
+      },
+      {
+        "name": "8月",
+        "count": 16
+      },
+      {
+        "name": "9月",
+        "count": 23
+      },
+      {
+        "name": "10月",
+        "count": 21
+      },
+      {
+        "name": "11月",
+        "count": 9
+      }
+    ],
+    "types": [
+      {
+        "name": "非法闯入",
+        "count": 28
+      },
+      {
+        "name": "安全帽缺失",
+        "count": 22
+      },
+      {
+        "name": "烟火",
+        "count": 15
+      },
+      {
+        "name": "异常滞留",
+        "count": 12
+      },
+      {
+        "name": "区域入侵",
+        "count": 8
+      }
+    ],
+    "areas": [
+      {
+        "name": "未分区",
+        "count": 28
+      },
+      {
+        "name": "溶剂油库",
+        "count": 28
+      },
+      {
+        "name": "配电室",
+        "count": 28,
+        "zone": "z-crush"
+      },
+      {
+        "name": "矿坑",
+        "count": 28,
+        "zone": "z-crush"
+      },
+      {
+        "name": "总降区域",
+        "count": 28,
+        "zone": "z-crush"
+      },
+      {
+        "name": "沉钴区域",
+        "count": 28,
+        "zone": "z-leach"
+      },
+      {
+        "name": "电积车间",
+        "count": 26,
+        "zone": "z-ew"
+      },
+      {
+        "name": "萃取一系列",
+        "count": 12,
+        "zone": "z-sx"
+      },
+      {
+        "name": "萃取二系列",
+        "count": 10,
+        "zone": "z-sx"
+      },
+      {
+        "name": "室外溶液池",
+        "count": 10
+      }
+    ],
+    "review": {
+      "total": 86,
+      "trueHit": 61,
+      "falseHit": 18,
+      "hold": 7
+    },
+    "levels": [
+      {
+        "name": "一级",
+        "count": 5
+      },
+      {
+        "name": "二级",
+        "count": 18
+      },
+      {
+        "name": "三级",
+        "count": 34
+      },
+      {
+        "name": "四级",
+        "count": 29
+      }
+    ],
+    "byPlant": [
+      {
+        "name": "湿法分厂",
+        "count": 52
+      },
+      {
+        "name": "选矿分厂",
+        "count": 21
+      },
+      {
+        "name": "尾矿库作业区",
+        "count": 13
+      }
+    ],
+    "byHour": [
+      {
+        "name": "00–06",
+        "count": 6
+      },
+      {
+        "name": "06–08",
+        "count": 9
+      },
+      {
+        "name": "08–12",
+        "count": 28
+      },
+      {
+        "name": "12–16",
+        "count": 24
+      },
+      {
+        "name": "16–20",
+        "count": 15
+      },
+      {
+        "name": "20–24",
+        "count": 4
+      }
+    ],
+    "reviewByCamera": [
+      {
+        "name": "电积主通道",
+        "falseHit": 6,
+        "total": 10
+      },
+      {
+        "name": "萃取西门",
+        "falseHit": 4,
+        "total": 12
+      },
+      {
+        "name": "破碎南门",
+        "falseHit": 3,
+        "total": 8
+      },
+      {
+        "name": "尾矿坝顶",
+        "falseHit": 1,
+        "total": 5
+      }
+    ],
+    "hotspots": [
+      {
+        "id": "hs-1",
+        "name": "溶剂油库储罐",
+        "area": "溶剂油库",
+        "zone": "z-leach",
+        "count": 16,
+        "types": "非法闯入、异常滞留",
+        "period": "近30天",
+        "sample": 16,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-2",
+        "name": "一系列澄清池西",
+        "area": "萃取一系列",
+        "zone": "z-sx",
+        "count": 14,
+        "types": "区域入侵",
+        "period": "近30天",
+        "sample": 14,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-3",
+        "name": "矿坑旋回顶部",
+        "area": "矿坑",
+        "zone": "z-crush",
+        "count": 12,
+        "types": "安全帽缺失",
+        "period": "近30天",
+        "sample": 12,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-4",
+        "name": "电积一系列槽面二",
+        "area": "电积车间",
+        "zone": "z-ew",
+        "count": 11,
+        "types": "安全帽缺失",
+        "period": "近30天",
+        "sample": 11,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-5",
+        "name": "沉钴脱水浓密机",
+        "area": "沉钴区域",
+        "zone": "z-leach",
+        "count": 9,
+        "types": "异常滞留",
+        "period": "近30天",
+        "sample": 9,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-6",
+        "name": "配电室主通道",
+        "area": "配电室",
+        "zone": "z-crush",
+        "count": 8,
+        "types": "非法闯入",
+        "period": "近30天",
+        "sample": 8,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-7",
+        "name": "门架西球机",
+        "area": "总降区域",
+        "zone": "z-crush",
+        "count": 7,
+        "types": "烟火",
+        "period": "近30天",
+        "sample": 7,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-8",
+        "name": "中间矿堆走廊",
+        "area": "矿坑",
+        "zone": "z-crush",
+        "count": 6,
+        "types": "区域入侵",
+        "period": "近30天",
+        "sample": 6,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-9",
+        "name": "2#雷达站边坡",
+        "area": "矿坑",
+        "zone": "z-crush",
+        "count": 5,
+        "types": "边坡巡视",
+        "period": "近30天",
+        "sample": 5,
+        "note": "统计结果，非正式认定"
+      },
+      {
+        "id": "hs-10",
+        "name": "辅料制备车间一",
+        "area": "配电室",
+        "zone": "z-crush",
+        "count": 5,
+        "types": "安全帽缺失",
+        "period": "近30天",
+        "sample": 5,
+        "note": "统计结果，非正式认定"
+      }
+    ]
+  },
+  "reports": [
+    {
+      "id": "RP-202610",
+      "name": "2026年10月安全月报",
+      "tpl": "月报",
+      "status": "已归档",
+      "time": "2026-11-02 09:10",
+      "scope": "全厂",
+      "caliber": "正式告警，不含 AI 误报",
+      "note": "快照已固化，不随补录改数"
+    },
+    {
+      "id": "RP-202611-w",
+      "name": "本周告警流程统计",
+      "tpl": "告警与事件完整流程统计",
+      "status": "待审批",
+      "time": "2026-11-04 16:40",
+      "scope": "全厂",
+      "caliber": "本周一 00:00 起的正式告警",
+      "note": "待安环部审批"
+    },
+    {
+      "id": "RP-HD-Q3",
+      "name": "三季度隐患排查台账",
+      "tpl": "隐患排查台账",
+      "status": "编制中",
+      "time": "2026-11-04 11:20",
+      "scope": "湿法分厂",
+      "caliber": "高频点位 + 已办结事件",
+      "note": "尚未生成快照"
+    },
+    {
+      "id": "RP-202609",
+      "name": "2026年9月安全月报",
+      "tpl": "月报",
+      "status": "已归档",
+      "time": "2026-10-08 10:02",
+      "scope": "全厂",
+      "caliber": "正式告警，不含 AI 误报",
+      "note": "快照已固化"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "EVT-20261104-020",
+      "level": 2,
+      "type": "烟火",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "status": "待签收",
+      "time": "13:06",
+      "wait": "00:00",
+      "timeout": false,
+      "person": "人工上报",
+      "rule": "R-FR 烟火识别",
+      "camera": "",
+      "x": 250,
+      "y": 165,
+      "org": "选矿分厂值班",
+      "role": "当班值班员",
+      "assignee": "选矿分厂值班",
+      "notify": "待办 + 电话",
+      "eventIds": [
+        "SE-20261104-020"
+      ],
+      "timeline": [
+        {
+          "status": "原始事件",
+          "time": "13:05",
+          "actor": "张磊",
+          "note": "人工上报：破碎南侧焦糊味"
+        },
+        {
+          "status": "正式告警",
+          "time": "13:06",
+          "actor": "规则引擎",
+          "note": "直接进正式告警，派选矿值班"
+        }
+      ]
+    },
+    {
+      "id": "EVT-20261104-018",
+      "level": 1,
+      "type": "非法闯入",
+      "place": "萃取+洗涤+反萃区",
+      "plant": "湿法分厂",
+      "status": "待签收",
+      "time": "12:41",
+      "wait": "00:26",
+      "timeout": false,
+      "person": "陈立 / 外来承包商",
+      "rule": "R-IN 高风险区无作业票禁入",
+      "camera": "cam-12",
+      "x": 172,
+      "y": 454,
+      "timeline": [
+        {
+          "status": "原始事件",
+          "time": "12:40",
+          "actor": "定位规则",
+          "note": "围栏越界 38 秒"
+        },
+        {
+          "status": "正式告警",
+          "time": "12:41",
+          "actor": "规则引擎",
+          "note": "去重后派发湿法值班"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [
+        "SE-20261104-018"
+      ],
+      "notify": "待办 + 短信"
+    },
+    {
+      "id": "EVT-20261104-014",
+      "level": 2,
+      "type": "安全帽缺失",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "status": "待签收",
+      "time": "12:18",
+      "wait": "00:49",
+      "timeout": false,
+      "person": "未识别人员",
+      "rule": "R-HL 作业区必须佩戴安全帽",
+      "camera": "cam-18",
+      "x": 148,
+      "y": 517,
+      "timeline": [
+        {
+          "status": "AI识别",
+          "time": "12:17",
+          "actor": "视频平台",
+          "note": "置信度 91%"
+        },
+        {
+          "status": "正式告警",
+          "time": "12:18",
+          "actor": "规则引擎",
+          "note": "待值班签收"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [
+        "AI-20261104-112"
+      ],
+      "notify": "待办"
+    },
+    {
+      "id": "EVT-20261104-009",
+      "level": 3,
+      "type": "异常滞留",
+      "place": "浸出区",
+      "plant": "湿法分厂",
+      "status": "核查中",
+      "time": "11:52",
+      "wait": "01:08",
+      "timeout": true,
+      "person": "王慧 / 浸出班长",
+      "rule": "R-LG 限制区停留超过 15 分钟",
+      "camera": "cam-07",
+      "x": 266,
+      "y": 256,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "11:52",
+          "actor": "规则引擎",
+          "note": "滞留 16 分钟"
+        },
+        {
+          "status": "待签收",
+          "time": "11:53",
+          "actor": "系统",
+          "note": "派发浸出班"
+        },
+        {
+          "status": "核查中",
+          "time": "12:01",
+          "actor": "李成",
+          "note": "已签收，调阅浸出东侧"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "浸出班长",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [
+        "SE-20261104-009"
+      ],
+      "notify": "待办 + 短信"
+    },
+    {
+      "id": "EVT-20261104-003",
+      "level": 2,
+      "type": "烟火",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "status": "处理中",
+      "time": "10:06",
+      "wait": "02:21",
+      "timeout": true,
+      "person": "现场巡检",
+      "rule": "R-FR 烟火识别",
+      "camera": "cam-22",
+      "x": 256,
+      "y": 160,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "10:06",
+          "actor": "视频平台",
+          "note": "油库南侧误报待核"
+        },
+        {
+          "status": "核查中",
+          "time": "10:12",
+          "actor": "李成",
+          "note": "视频确认为焊接火花"
+        },
+        {
+          "status": "处理中",
+          "time": "10:20",
+          "actor": "现场",
+          "note": "已派人到场"
+        }
+      ],
+      "org": "选矿分厂值班",
+      "assignee": "选矿分厂值班",
+      "role": "当班值班员",
+      "eventIds": [
+        "AI-20261104-108"
+      ],
+      "notify": "待办 + 电话"
+    },
+    {
+      "id": "EVT-20261104-011",
+      "level": 2,
+      "type": "安全帽缺失",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "status": "处理中",
+      "time": "11:28",
+      "wait": "01:32",
+      "timeout": false,
+      "person": "未识别人员",
+      "rule": "R-HL 作业区必须佩戴安全帽",
+      "camera": "cam-18",
+      "x": 496.8,
+      "y": 252.2,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "11:28",
+          "actor": "规则引擎",
+          "note": "通道东侧抓拍"
+        },
+        {
+          "status": "处理中",
+          "time": "11:35",
+          "actor": "李成",
+          "note": "派湿法现场到场核实"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [
+        "SE-20261104-011"
+      ],
+      "notify": "待办"
+    },
+    {
+      "id": "EVT-20261104-006",
+      "level": 1,
+      "type": "异常滞留",
+      "place": "高位水池",
+      "plant": "尾矿库作业区",
+      "status": "处理中",
+      "time": "10:48",
+      "wait": "02:05",
+      "timeout": true,
+      "person": "未知人员",
+      "rule": "R-IN-TAIL 坝前禁入",
+      "camera": "cam-31",
+      "x": 444.4,
+      "y": 481.4,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "10:48",
+          "actor": "定位规则",
+          "note": "坝前停留 12 分钟"
+        },
+        {
+          "status": "处理中",
+          "time": "10:55",
+          "actor": "李成",
+          "note": "尾矿现场到场劝离"
+        }
+      ],
+      "org": "尾矿库值班",
+      "assignee": "尾矿库值班",
+      "role": "坝体巡视",
+      "eventIds": [
+        "SE-20261104-006"
+      ],
+      "notify": "待办 + 短信"
+    },
+    {
+      "id": "EVT-20261101-033",
+      "level": 3,
+      "type": "异常滞留",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "status": "待复核",
+      "time": "08:12",
+      "wait": "—",
+      "timeout": false,
+      "person": "检修班组",
+      "rule": "R-LG 限制区停留超过 15 分钟",
+      "camera": "cam-22",
+      "x": 123.5,
+      "y": 422.4,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "08:12",
+          "actor": "规则引擎",
+          "note": "筛分平台停留"
+        },
+        {
+          "status": "处理中",
+          "time": "08:20",
+          "actor": "李成",
+          "note": "派选矿现场"
+        },
+        {
+          "status": "待复核",
+          "time": "08:38",
+          "actor": "选矿现场值班",
+          "note": "到场 08:32。已监护；风险已消除；检修票作业中"
+        }
+      ],
+      "org": "选矿分厂值班",
+      "assignee": "选矿分厂值班",
+      "role": "浸出班长",
+      "eventIds": [
+        "SE-20261101-033"
+      ],
+      "notify": "待办 + 短信"
+    },
+    {
+      "id": "EVT-20261025-019",
+      "level": 2,
+      "type": "安全帽缺失",
+      "place": "萃取+洗涤+反萃区",
+      "plant": "湿法分厂",
+      "status": "已办结",
+      "time": "16:05",
+      "wait": "—",
+      "timeout": false,
+      "person": "穆萨 / 电积巡检",
+      "rule": "R-HL 作业区必须佩戴安全帽",
+      "camera": "cam-12",
+      "x": 326.5,
+      "y": 225.9,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "16:05",
+          "actor": "视频平台",
+          "note": "西门通道"
+        },
+        {
+          "status": "处理中",
+          "time": "16:12",
+          "actor": "李成",
+          "note": "派湿法现场"
+        },
+        {
+          "status": "待复核",
+          "time": "16:28",
+          "actor": "湿法现场值班",
+          "note": "到场 16:22。已劝离；风险已消除；人员已补戴安全帽"
+        },
+        {
+          "status": "已办结",
+          "time": "16:45",
+          "actor": "李成",
+          "note": "复核关闭"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [],
+      "notify": "待办"
+    },
+    {
+      "id": "EVT-20261103-088",
+      "level": 4,
+      "type": "非法闯入",
+      "place": "高位水池",
+      "plant": "尾矿库作业区",
+      "status": "已办结",
+      "time": "16:22",
+      "wait": "—",
+      "timeout": false,
+      "person": "卡比拉 / 坝体巡视",
+      "rule": "R-IN 坝前禁入",
+      "camera": "cam-31",
+      "x": 451,
+      "y": 494.5,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "16:22",
+          "actor": "定位规则",
+          "note": "短时进入"
+        },
+        {
+          "status": "核查中",
+          "time": "16:25",
+          "actor": "李成",
+          "note": "当班巡视"
+        },
+        {
+          "status": "处理中",
+          "time": "16:30",
+          "actor": "卡比拉",
+          "note": "已退出围栏"
+        },
+        {
+          "status": "待复核",
+          "time": "16:38",
+          "actor": "尾矿现场值班",
+          "note": "到场 16:33。已劝离；风险已消除；确认为当班巡视"
+        },
+        {
+          "status": "待复核",
+          "time": "16:40",
+          "actor": "李成",
+          "note": "现场照片已回传"
+        },
+        {
+          "status": "已办结",
+          "time": "17:02",
+          "actor": "安环部",
+          "note": "确认为巡视，关闭"
+        }
+      ],
+      "org": "尾矿库值班",
+      "assignee": "尾矿库值班",
+      "role": "坝体巡视",
+      "eventIds": [
+        "AI-20261103-090"
+      ],
+      "notify": "待办 + 短信"
+    },
+    {
+      "id": "EVT-20261028-044",
+      "level": 2,
+      "type": "安全帽缺失",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "status": "已办结",
+      "time": "14:08",
+      "wait": "—",
+      "timeout": false,
+      "person": "未识别人员",
+      "rule": "R-HL 作业区必须佩戴安全帽",
+      "camera": "cam-18",
+      "x": 490.3,
+      "y": 245.6,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "14:08",
+          "actor": "规则引擎",
+          "note": "先告警后复核"
+        },
+        {
+          "status": "已办结",
+          "time": "14:40",
+          "actor": "李成",
+          "note": "复核确认为误报：光照"
+        }
+      ],
+      "org": "湿法分厂值班",
+      "role": "当班值班员",
+      "assignee": "湿法分厂值班",
+      "assigneePerson": "李成",
+      "eventIds": [],
+      "notify": "待办"
+    },
+    {
+      "id": "EVT-20261015-021",
+      "level": 2,
+      "type": "烟火",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "status": "已办结",
+      "time": "09:33",
+      "wait": "—",
+      "timeout": false,
+      "person": "现场巡检",
+      "rule": "R-FR 烟火识别",
+      "camera": "cam-22",
+      "x": 123.5,
+      "y": 415.9,
+      "timeline": [
+        {
+          "status": "正式告警",
+          "time": "09:33",
+          "actor": "视频平台",
+          "note": "破碎南门"
+        },
+        {
+          "status": "处理中",
+          "time": "09:48",
+          "actor": "选矿值班",
+          "note": "有动火票，现场监护"
+        },
+        {
+          "status": "待复核",
+          "time": "09:55",
+          "actor": "选矿现场值班",
+          "note": "到场 09:50。已监护；风险已消除；动火票监护中"
+        },
+        {
+          "status": "已办结",
+          "time": "10:20",
+          "actor": "安环部",
+          "note": "有票作业，关闭"
+        }
+      ],
+      "org": "选矿分厂值班",
+      "assignee": "选矿分厂值班",
+      "role": "当班值班员",
+      "eventIds": [],
+      "notify": "待办 + 电话"
+    }
+  ],
+  "sysOrgs": [
+    {
+      "id": "o-root",
+      "name": "迪兹瓦铜钴矿",
+      "parent": "—",
+      "kind": "企业",
+      "duty": "全厂统筹",
+      "sync": "主数据",
+      "note": "组织树根节点，与人事主数据同步"
+    },
+    {
+      "id": "o-hydro",
+      "name": "湿法分厂",
+      "parent": "迪兹瓦铜钴矿",
+      "kind": "分厂",
+      "duty": "湿法生产",
+      "sync": "主数据",
+      "note": "告警默认派发至湿法分厂值班"
+    },
+    {
+      "id": "o-mill",
+      "name": "选矿分厂",
+      "parent": "迪兹瓦铜钴矿",
+      "kind": "分厂",
+      "duty": "选矿生产",
+      "sync": "主数据",
+      "note": "破碎筛分等区域归属"
+    },
+    {
+      "id": "o-tail",
+      "name": "尾矿库作业区",
+      "parent": "迪兹瓦铜钴矿",
+      "kind": "分厂",
+      "duty": "坝体巡视",
+      "sync": "主数据",
+      "note": "重大风险区，派发尾矿库值班"
+    },
+    {
+      "id": "o-ehs",
+      "name": "安环部",
+      "parent": "迪兹瓦铜钴矿",
+      "kind": "职能部门",
+      "duty": "规则与督办",
+      "sync": "主数据",
+      "note": "全厂数据范围，不接一线签收"
+    },
+    {
+      "id": "o-hydro-duty",
+      "name": "湿法分厂值班",
+      "parent": "湿法分厂",
+      "kind": "岗位",
+      "duty": "当班签收与复核",
+      "sync": "排班",
+      "note": "规则派发默认责任组织"
+    },
+    {
+      "id": "o-mill-duty",
+      "name": "选矿分厂值班",
+      "parent": "选矿分厂",
+      "kind": "岗位",
+      "duty": "当班签收与复核",
+      "sync": "排班",
+      "note": "规则派发默认责任组织"
+    },
+    {
+      "id": "o-tail-duty",
+      "name": "尾矿库值班",
+      "parent": "尾矿库作业区",
+      "kind": "岗位",
+      "duty": "当班签收与复核",
+      "sync": "排班",
+      "note": "规则派发默认责任组织"
+    }
+  ],
+  "sysUsers": [
+    {
+      "id": "u-lc",
+      "name": "李成",
+      "account": "licheng",
+      "org": "湿法分厂值班",
+      "role": "分厂值班员",
+      "plant": "湿法分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****1001",
+      "shift": "白班 08:00–20:00",
+      "employeeId": "em-lc"
+    },
+    {
+      "id": "u-zwd",
+      "name": "张卫东",
+      "account": "zhangwd",
+      "org": "湿法分厂",
+      "role": "现场作业",
+      "plant": "湿法分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****1002",
+      "shift": "白班",
+      "employeeId": "em-zwd"
+    },
+    {
+      "id": "u-ms",
+      "name": "穆萨",
+      "account": "musa",
+      "org": "湿法分厂",
+      "role": "现场作业",
+      "plant": "湿法分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****1003",
+      "shift": "白班",
+      "employeeId": "em-ms"
+    },
+    {
+      "id": "u-cl",
+      "name": "陈立",
+      "account": "chenli",
+      "org": "湿法分厂",
+      "role": "承包商",
+      "plant": "湿法分厂",
+      "status": "临时",
+      "source": "临时授权",
+      "mobile": "139****2201",
+      "shift": "作业票有效期内",
+      "employeeId": "em-cl"
+    },
+    {
+      "id": "u-wh",
+      "name": "王慧",
+      "account": "wanghui",
+      "org": "湿法分厂",
+      "role": "现场作业",
+      "plant": "湿法分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****1004",
+      "shift": "白班",
+      "employeeId": "em-wh"
+    },
+    {
+      "id": "u-kbl",
+      "name": "卡比拉",
+      "account": "kabila",
+      "org": "尾矿库值班",
+      "role": "现场作业",
+      "plant": "尾矿库作业区",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****1005",
+      "shift": "全天轮班",
+      "employeeId": "em-kbl"
+    },
+    {
+      "id": "u-zn",
+      "name": "赵宁",
+      "account": "zhaoning",
+      "org": "选矿分厂值班",
+      "role": "分厂值班员",
+      "plant": "选矿分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****2001",
+      "shift": "白班",
+      "employeeId": "em-zn"
+    },
+    {
+      "id": "u-ly",
+      "name": "刘洋",
+      "account": "liuyang",
+      "org": "尾矿库值班",
+      "role": "分厂值班员",
+      "plant": "尾矿库作业区",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****3001",
+      "shift": "白班",
+      "employeeId": "em-ly"
+    },
+    {
+      "id": "u-za",
+      "name": "周安",
+      "account": "zhouan",
+      "org": "安环部",
+      "role": "安环专工",
+      "plant": "全厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****4001",
+      "shift": "常白班",
+      "employeeId": "em-za"
+    },
+    {
+      "id": "u-admin",
+      "name": "系统管理员",
+      "account": "admin",
+      "org": "安环部",
+      "role": "系统管理员",
+      "plant": "全厂",
+      "status": "启用",
+      "source": "本地账号",
+      "mobile": "—",
+      "shift": "—",
+      "employeeId": ""
+    },
+    {
+      "id": "u-zl",
+      "name": "张磊",
+      "account": "zhanglei",
+      "org": "选矿分厂值班",
+      "role": "现场作业",
+      "plant": "选矿分厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****2002",
+      "shift": "白班",
+      "employeeId": "em-zl"
+    },
+    {
+      "id": "u-sc",
+      "name": "苏晨",
+      "account": "suchen",
+      "org": "安环部",
+      "role": "公司领导",
+      "plant": "全厂",
+      "status": "启用",
+      "source": "组织主数据",
+      "mobile": "138****4002",
+      "shift": "常白班",
+      "employeeId": "em-sc"
+    }
+  ],
+  "sysRoles": [
+    {
+      "id": "r-duty",
+      "name": "分厂值班员",
+      "scope": "本分厂",
+      "desc": "本分厂告警签收、核查、转派与识别复核。",
+      "menus": [
+        "安全综合监控",
+        "告警中心",
+        "识别复核"
+      ],
+      "actions": [
+        "查看",
+        "签收",
+        "核查",
+        "转派",
+        "真警误报"
+      ],
+      "objects": [
+        "告警",
+        "识别结果",
+        "摄像头"
+      ]
+    },
+    {
+      "id": "r-field",
+      "name": "现场值班",
+      "scope": "本分厂",
+      "desc": "工业平板到场处置与识别现场确认，不判真警。",
+      "menus": [
+        "告警中心"
+      ],
+      "actions": [
+        "查看",
+        "现场处置"
+      ],
+      "objects": [
+        "告警",
+        "识别结果"
+      ]
+    },
+    {
+      "id": "r-ehs",
+      "name": "安环专工",
+      "scope": "全厂",
+      "desc": "全厂查看、规则配置、督办关闭。",
+      "menus": [
+        "安全综合监控",
+        "告警中心",
+        "识别复核",
+        "配置中心",
+        "安全分析"
+      ],
+      "actions": [
+        "查看",
+        "转派",
+        "关闭",
+        "配置规则"
+      ],
+      "objects": [
+        "告警",
+        "识别结果",
+        "摄像头",
+        "围栏",
+        "人员"
+      ]
+    },
+    {
+      "id": "r-admin",
+      "name": "系统管理员",
+      "scope": "全厂",
+      "desc": "组织、权限、摄像头、字典、通知与审计。",
+      "menus": [
+        "配置中心"
+      ],
+      "actions": [
+        "查看",
+        "系统配置"
+      ],
+      "objects": [
+        "摄像头",
+        "人员"
+      ]
+    },
+    {
+      "id": "r-lead",
+      "name": "管理层",
+      "scope": "全厂",
+      "desc": "驾驶舱与报表只读。",
+      "menus": [
+        "安全综合监控",
+        "安全分析"
+      ],
+      "actions": [
+        "查看"
+      ],
+      "objects": [
+        "告警"
+      ]
+    }
+  ],
+  "sysDicts": [
+    {
+      "id": "d-level",
+      "name": "告警等级",
+      "code": "ALERT_LEVEL",
+      "note": "与规则、告警、统计同一口径",
+      "items": [
+        {
+          "value": "1",
+          "label": "一级",
+          "enabled": true
+        },
+        {
+          "value": "2",
+          "label": "二级",
+          "enabled": true
+        },
+        {
+          "value": "3",
+          "label": "三级",
+          "enabled": true
+        },
+        {
+          "value": "4",
+          "label": "四级",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "d-false",
+      "name": "误报原因",
+      "code": "FALSE_REASON",
+      "note": "识别复核标记误报必选",
+      "items": [
+        {
+          "value": "遮挡",
+          "label": "遮挡",
+          "enabled": true
+        },
+        {
+          "value": "光照",
+          "label": "光照",
+          "enabled": true
+        },
+        {
+          "value": "目标误识别",
+          "label": "目标误识别",
+          "enabled": true
+        },
+        {
+          "value": "维护作业",
+          "label": "维护作业",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "d-notify",
+      "name": "通知渠道",
+      "code": "NOTIFY_CHANNEL",
+      "note": "待办为默认渠道",
+      "items": [
+        {
+          "value": "待办",
+          "label": "待办",
+          "enabled": true
+        },
+        {
+          "value": "短信",
+          "label": "短信",
+          "enabled": true
+        },
+        {
+          "value": "电话",
+          "label": "电话",
+          "enabled": true
+        },
+        {
+          "value": "对讲",
+          "label": "对讲",
+          "enabled": false
+        }
+      ]
+    },
+    {
+      "id": "d-job",
+      "name": "岗位工种",
+      "code": "JOB_TYPE",
+      "note": "准入岗位与人员档案共用",
+      "items": [
+        {
+          "value": "湿法值班员",
+          "label": "湿法值班员",
+          "enabled": true
+        },
+        {
+          "value": "萃取操作工",
+          "label": "萃取操作工",
+          "enabled": true
+        },
+        {
+          "value": "浸出班长",
+          "label": "浸出班长",
+          "enabled": true
+        },
+        {
+          "value": "电积巡检",
+          "label": "电积巡检",
+          "enabled": true
+        },
+        {
+          "value": "破碎巡检",
+          "label": "破碎巡检",
+          "enabled": true
+        },
+        {
+          "value": "坝体巡视",
+          "label": "坝体巡视",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "sysParams": [
+    {
+      "id": "sp-ack",
+      "group": "告警",
+      "name": "待签收时限",
+      "code": "ALERT_ACK_SLA",
+      "value": "30",
+      "unit": "分钟",
+      "note": "超时进入督办，不单独做超时筛选项"
+    },
+    {
+      "id": "sp-dedup",
+      "group": "告警",
+      "name": "去重窗口",
+      "code": "ALERT_DEDUP",
+      "value": "120",
+      "unit": "秒",
+      "note": "同对象同类型不重复派单"
+    },
+    {
+      "id": "sp-loc",
+      "group": "定位",
+      "name": "定位过期",
+      "code": "LOC_STALE",
+      "value": "15",
+      "unit": "分钟",
+      "note": "超过则人员状态为定位过期"
+    },
+    {
+      "id": "sp-ai",
+      "group": "识别复核",
+      "name": "待复核提醒",
+      "code": "AI_REVIEW_SLA",
+      "value": "20",
+      "unit": "分钟",
+      "note": "队列超时角标提醒"
+    },
+    {
+      "id": "sp-shift",
+      "group": "值班",
+      "name": "白班时段",
+      "code": "SHIFT_DAY",
+      "value": "08:00–20:00",
+      "unit": "",
+      "note": "与排班、围栏有效时段对齐"
+    }
+  ],
+  "sysNotify": [
+    {
+      "id": "n-ack",
+      "name": "告警待签收",
+      "source": "告警中心",
+      "target": "责任组织",
+      "channels": [
+        "待办",
+        "短信"
+      ],
+      "template": "【告警】${type} ${place}，请尽快签收 ${id}",
+      "enabled": true
+    },
+    {
+      "id": "n-field",
+      "name": "转现场处置",
+      "source": "告警中心",
+      "target": "现场值班",
+      "channels": [
+        "待办"
+      ],
+      "template": "【处置】${id} 已转现场，请到场回传",
+      "enabled": true
+    },
+    {
+      "id": "n-ai",
+      "name": "识别待复核",
+      "source": "识别复核",
+      "target": "当班值班员",
+      "channels": [
+        "待办"
+      ],
+      "template": "【识别】${type} ${place} 待复核",
+      "enabled": true
+    },
+    {
+      "id": "n-check",
+      "name": "识别待核查",
+      "source": "识别复核",
+      "target": "推送对象",
+      "channels": [
+        "待办"
+      ],
+      "template": "【核查】请现场确认 ${type} ${place}",
+      "enabled": true
+    },
+    {
+      "id": "n-up",
+      "name": "告警升级",
+      "source": "告警中心",
+      "target": "安环部",
+      "channels": [
+        "待办",
+        "电话"
+      ],
+      "template": "【升级】${id} ${type} 已升级",
+      "enabled": true
+    }
+  ],
+  "sysAudits": [
+    {
+      "id": "AUD-1105-01",
+      "time": "11-05 09:12",
+      "user": "李成",
+      "module": "告警中心",
+      "action": "签收",
+      "object": "EVT-20261104-018",
+      "result": "成功",
+      "ip": "10.12.8.21",
+      "detail": "湿法分厂值班签收非法闯入"
+    },
+    {
+      "id": "AUD-1105-02",
+      "time": "11-05 09:28",
+      "user": "李成",
+      "module": "告警中心",
+      "action": "转派",
+      "object": "EVT-20261104-014",
+      "result": "成功",
+      "ip": "10.12.8.21",
+      "detail": "转派给选矿分厂值班"
+    },
+    {
+      "id": "AUD-1105-03",
+      "time": "11-05 10:06",
+      "user": "李成",
+      "module": "识别复核",
+      "action": "真警",
+      "object": "AI-20261104-112",
+      "result": "成功",
+      "ip": "10.12.8.21",
+      "detail": "确认真警并关联正式告警"
+    },
+    {
+      "id": "AUD-1105-04",
+      "time": "11-05 10:41",
+      "user": "李成",
+      "module": "识别复核",
+      "action": "误报",
+      "object": "AI-20261104-101",
+      "result": "成功",
+      "ip": "10.12.8.21",
+      "detail": "误报原因：光照"
+    },
+    {
+      "id": "AUD-1105-05",
+      "time": "11-05 11:02",
+      "user": "周安",
+      "module": "配置中心",
+      "action": "发布",
+      "object": "R-IN-围栏禁入",
+      "result": "成功",
+      "ip": "10.12.8.8",
+      "detail": "发布 v3，三维与告警按新规则执行"
+    },
+    {
+      "id": "AUD-1105-06",
+      "time": "11-05 11:18",
+      "user": "系统管理员",
+      "module": "配置中心",
+      "action": "同步组织",
+      "object": "组织用户",
+      "result": "成功",
+      "ip": "10.12.8.2",
+      "detail": "从主数据同步 10 名用户"
+    },
+    {
+      "id": "AUD-1104-11",
+      "time": "11-04 16:40",
+      "user": "赵宁",
+      "module": "告警中心",
+      "action": "关闭",
+      "object": "EVT-20261015-021",
+      "result": "成功",
+      "ip": "10.14.2.9",
+      "detail": "有票作业，复核关闭"
+    },
+    {
+      "id": "AUD-1104-12",
+      "time": "11-04 17:05",
+      "user": "系统管理员",
+      "module": "配置中心",
+      "action": "修改权限",
+      "object": "分厂值班员",
+      "result": "成功",
+      "ip": "10.12.8.2",
+      "detail": "增加操作：转派"
+    }
+  ],
+  "sysLedgers": [
+    {
+      "id": "HZ-2026-018",
+      "kind": "隐患",
+      "title": "萃取西门围栏局部破损",
+      "place": "萃取+洗涤+反萃区",
+      "owner": "湿法分厂",
+      "status": "整改中",
+      "due": "11-12",
+      "note": "承包商反复越界相关点位"
+    },
+    {
+      "id": "HZ-2026-021",
+      "kind": "隐患",
+      "title": "破碎南门动火监护不到位",
+      "place": "磨矿区",
+      "owner": "选矿分厂",
+      "status": "待复查",
+      "due": "11-08",
+      "note": "关联烟火识别事件"
+    },
+    {
+      "id": "YJ-TAIL-01",
+      "kind": "应急",
+      "title": "尾矿库漫坝应急预案",
+      "place": "高位水池",
+      "owner": "尾矿库作业区",
+      "status": "现行有效",
+      "due": "2027-03",
+      "note": "年度演练计划已排"
+    },
+    {
+      "id": "YJ-HYDRO-02",
+      "kind": "应急",
+      "title": "萃取泄漏应急处置卡",
+      "place": "萃取+洗涤+反萃区",
+      "owner": "湿法分厂",
+      "status": "现行有效",
+      "due": "2027-01",
+      "note": "现场值班持卡"
+    },
+    {
+      "id": "SG-2025-003",
+      "kind": "事故",
+      "title": "电积通道滑倒轻伤",
+      "place": "铜电积区",
+      "owner": "湿法分厂",
+      "status": "已结案",
+      "due": "—",
+      "note": "已纳入培训案例"
+    },
+    {
+      "id": "ZZ-CAM-12",
+      "kind": "证照",
+      "title": "萃取西门摄像头计量检定",
+      "place": "萃取西门",
+      "owner": "安环部",
+      "status": "有效",
+      "due": "2027-06",
+      "note": "CH-012"
+    },
+    {
+      "id": "ZZ-LOC-01",
+      "kind": "证照",
+      "title": "人员定位卡批次校准",
+      "place": "全厂",
+      "owner": "安环部",
+      "status": "临期",
+      "due": "11-30",
+      "note": "白班换卡窗口"
+    }
+  ],
+  "events": [
+    {
+      "id": "AI-20261104-112",
+      "type": "安全帽缺失",
+      "level": 2,
+      "status": "待复核",
+      "confidence": 91,
+      "time": "12:17",
+      "camera": "cam-18",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "x": 110.4,
+      "y": 474.9,
+      "precision": "区域落点",
+      "algo": "helmet-v3.2",
+      "timeout": false,
+      "alertId": "EVT-20261104-014",
+      "reason": "",
+      "note": "先告警后复核，正式告警已生成",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-112",
+      "typeCode": "HELMET",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-HL",
+      "deviceId": "cam-18",
+      "summary": "先告警后复核，正式告警已生成",
+      "payload": {
+        "algo": "helmet-v3.2",
+        "confidence": 91,
+        "camera_id": "cam-18"
+      }
+    },
+    {
+      "id": "AI-20261104-108",
+      "type": "烟火",
+      "level": 2,
+      "status": "待核查",
+      "confidence": 88,
+      "time": "11:40",
+      "camera": "cam-22",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "x": 202.1,
+      "y": 153.9,
+      "precision": "摄像头点位",
+      "algo": "fire-v2.1",
+      "timeout": true,
+      "alertId": "EVT-20261104-003",
+      "reason": "",
+      "note": "视频看不清，已推送现场确认",
+      "fieldTo": "选矿现场值班",
+      "fieldSentAt": "11:42",
+      "fieldAsk": "11:40 破碎筛分烟火识别，请核实是否为焊接火花或真实火情",
+      "fieldReply": "",
+      "fieldReplyAt": "",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-108",
+      "typeCode": "FIRE",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "摄像头点位",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-FR",
+      "deviceId": "cam-22",
+      "summary": "视频看不清，已推送现场确认",
+      "payload": {
+        "algo": "fire-v2.1",
+        "confidence": 88,
+        "camera_id": "cam-22"
+      }
+    },
+    {
+      "id": "AI-20261104-101",
+      "type": "区域入侵",
+      "level": 1,
+      "status": "待复核",
+      "confidence": 76,
+      "time": "11:08",
+      "camera": "cam-12",
+      "place": "萃取+洗涤+反萃区",
+      "plant": "湿法分厂",
+      "x": 136.6,
+      "y": 396.3,
+      "precision": "区域落点",
+      "algo": "intrusion-v1.8",
+      "timeout": true,
+      "alertId": "",
+      "reason": "",
+      "note": "置信度偏低，尚未生成正式告警",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-101",
+      "typeCode": "INV",
+      "entryPath": "真警才进正式告警",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-INV",
+      "deviceId": "cam-12",
+      "summary": "置信度偏低，尚未生成正式告警",
+      "payload": {
+        "algo": "intrusion-v1.8",
+        "confidence": 76,
+        "camera_id": "cam-12"
+      }
+    },
+    {
+      "id": "AI-20261104-096",
+      "type": "安全帽缺失",
+      "level": 3,
+      "status": "误报",
+      "confidence": 64,
+      "time": "10:22",
+      "camera": "cam-18",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "x": 110.4,
+      "y": 474.9,
+      "precision": "摄像头点位",
+      "algo": "helmet-v3.2",
+      "timeout": false,
+      "alertId": "",
+      "reviewer": "李成",
+      "reason": "光照",
+      "note": "逆光把安全帽判成未佩戴",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-096",
+      "typeCode": "HELMET",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "摄像头点位",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-HL",
+      "deviceId": "cam-18",
+      "summary": "逆光把安全帽判成未佩戴",
+      "payload": {
+        "algo": "helmet-v3.2",
+        "confidence": 64,
+        "camera_id": "cam-18"
+      }
+    },
+    {
+      "id": "AI-20261103-090",
+      "type": "烟火",
+      "level": 2,
+      "status": "真警",
+      "confidence": 93,
+      "time": "16:08",
+      "camera": "cam-31",
+      "place": "高位水池",
+      "plant": "尾矿库作业区",
+      "x": 451,
+      "y": 468.3,
+      "precision": "区域落点",
+      "algo": "fire-v2.1",
+      "timeout": false,
+      "alertId": "EVT-20261103-088",
+      "reviewer": "李成",
+      "reason": "",
+      "note": "真警已转入正式告警",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261103-090",
+      "typeCode": "FIRE",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-FR",
+      "deviceId": "cam-31",
+      "summary": "真警已转入正式告警",
+      "payload": {
+        "algo": "fire-v2.1",
+        "confidence": 93,
+        "camera_id": "cam-31"
+      }
+    },
+    {
+      "id": "AI-20261104-105",
+      "type": "烟火",
+      "level": 2,
+      "status": "待核查",
+      "confidence": 85,
+      "time": "12:05",
+      "camera": "cam-07",
+      "place": "浸出区",
+      "plant": "湿法分厂",
+      "x": 241.4,
+      "y": 245.6,
+      "precision": "区域落点",
+      "algo": "fire-v2.1",
+      "timeout": false,
+      "alertId": "",
+      "reason": "",
+      "note": "槽区烟雾，需现场辨认真伪",
+      "fieldTo": "湿法现场值班",
+      "fieldSentAt": "12:06",
+      "fieldAsk": "12:05 浸出槽区烟火识别，请核实是否为蒸汽或真实火情",
+      "fieldReply": "",
+      "fieldReplyAt": "",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-105",
+      "typeCode": "FIRE",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-FR",
+      "deviceId": "cam-07",
+      "summary": "槽区烟雾，需现场辨认真伪",
+      "payload": {
+        "algo": "fire-v2.1",
+        "confidence": 85,
+        "camera_id": "cam-07"
+      }
+    },
+    {
+      "id": "AI-20261104-099",
+      "type": "区域入侵",
+      "level": 1,
+      "status": "待核查",
+      "confidence": 82,
+      "time": "11:55",
+      "camera": "cam-31",
+      "place": "高位水池",
+      "plant": "尾矿库作业区",
+      "x": 437.9,
+      "y": 481.4,
+      "precision": "摄像头点位",
+      "algo": "intrusion-v1.8",
+      "timeout": false,
+      "alertId": "",
+      "reason": "",
+      "note": "坝顶出现人员轮廓",
+      "fieldTo": "尾矿现场值班",
+      "fieldSentAt": "11:56",
+      "fieldAsk": "11:55 坝前入侵识别，请核实是否为当班巡视人员",
+      "fieldReply": "",
+      "fieldReplyAt": "",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-099",
+      "typeCode": "INV",
+      "entryPath": "真警才进正式告警",
+      "zoneId": "",
+      "coordPrecision": "摄像头点位",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-INV",
+      "deviceId": "cam-31",
+      "summary": "坝顶出现人员轮廓",
+      "payload": {
+        "algo": "intrusion-v1.8",
+        "confidence": 82,
+        "camera_id": "cam-31"
+      }
+    },
+    {
+      "id": "AI-20261103-082",
+      "type": "烟火",
+      "level": 2,
+      "status": "真警",
+      "confidence": 90,
+      "time": "15:18",
+      "camera": "cam-22",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "x": 202.1,
+      "y": 153.9,
+      "precision": "区域落点",
+      "algo": "fire-v2.1",
+      "timeout": false,
+      "alertId": "EVT-20261103-079",
+      "reviewer": "李成",
+      "reason": "",
+      "note": "现场确认为焊接监护，已关联动火票",
+      "fieldTo": "选矿现场值班",
+      "fieldSentAt": "15:10",
+      "fieldAsk": "破碎筛分烟火，请核实是否为动火作业",
+      "fieldReply": "情况属实。动火票监护中，火花来自焊枪；建议真警",
+      "fieldReplyAt": "15:22",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261103-082",
+      "typeCode": "FIRE",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-FR",
+      "deviceId": "cam-22",
+      "summary": "现场确认为焊接监护，已关联动火票",
+      "payload": {
+        "algo": "fire-v2.1",
+        "confidence": 90,
+        "camera_id": "cam-22"
+      }
+    },
+    {
+      "id": "AI-20261102-068",
+      "type": "安全帽缺失",
+      "level": 3,
+      "status": "误报",
+      "confidence": 71,
+      "time": "09:44",
+      "camera": "cam-18",
+      "place": "铜电积区",
+      "plant": "湿法分厂",
+      "x": 110.4,
+      "y": 474.9,
+      "precision": "摄像头点位",
+      "algo": "helmet-v3.2",
+      "timeout": false,
+      "alertId": "",
+      "reviewer": "李成",
+      "reason": "反光",
+      "note": "现场人员均佩戴安全帽",
+      "fieldTo": "湿法现场值班",
+      "fieldSentAt": "09:40",
+      "fieldAsk": "电积通道未戴帽识别，请现场核实",
+      "fieldReply": "不是这个问题。人员均戴白色安全帽，摄像头反光；建议误报",
+      "fieldReplyAt": "09:52",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261102-068",
+      "typeCode": "HELMET",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "摄像头点位",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-HL",
+      "deviceId": "cam-18",
+      "summary": "现场人员均佩戴安全帽",
+      "payload": {
+        "algo": "helmet-v3.2",
+        "confidence": 71,
+        "camera_id": "cam-18"
+      }
+    },
+    {
+      "id": "AI-20261030-051",
+      "type": "烟火",
+      "level": 2,
+      "status": "真警",
+      "confidence": 94,
+      "time": "17:06",
+      "camera": "cam-31",
+      "place": "高位水池",
+      "plant": "尾矿库作业区",
+      "x": 457.5,
+      "y": 455.2,
+      "precision": "区域落点",
+      "algo": "fire-v2.1",
+      "timeout": false,
+      "alertId": "EVT-20261030-048",
+      "reviewer": "李成",
+      "reason": "",
+      "note": "坝顶杂草焚烧，已扑灭",
+      "fieldTo": "尾矿现场值班",
+      "fieldSentAt": "17:00",
+      "fieldAsk": "坝顶烟火，请立即到场",
+      "fieldReply": "情况属实。坝顶小范围杂草火，已用灭火器扑灭；建议真警",
+      "fieldReplyAt": "17:18",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261030-051",
+      "typeCode": "FIRE",
+      "entryPath": "先告警后复核",
+      "zoneId": "",
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-FR",
+      "deviceId": "cam-31",
+      "summary": "坝顶杂草焚烧，已扑灭",
+      "payload": {
+        "algo": "fire-v2.1",
+        "confidence": 94,
+        "camera_id": "cam-31"
+      }
+    },
+    {
+      "id": "AI-20261028-041",
+      "type": "区域入侵",
+      "level": 1,
+      "status": "误报",
+      "confidence": 69,
+      "time": "13:20",
+      "camera": "cam-22",
+      "place": "磨矿区",
+      "plant": "选矿分厂",
+      "x": 202.1,
+      "y": 153.9,
+      "precision": "摄像头点位",
+      "algo": "intrusion-v1.8",
+      "timeout": false,
+      "alertId": "",
+      "reviewer": "李成",
+      "reason": "动物",
+      "note": "野狗穿过画面",
+      "fieldTo": "选矿现场值班",
+      "fieldSentAt": "13:18",
+      "fieldAsk": "破碎南门入侵，请核实",
+      "fieldReply": "不是这个问题。野狗穿过监控，无人进入；建议误报",
+      "fieldReplyAt": "13:28",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261028-041",
+      "typeCode": "INV",
+      "entryPath": "真警才进正式告警",
+      "zoneId": "",
+      "coordPrecision": "摄像头点位",
+      "subjectKind": "未知",
+      "person": "",
+      "ruleId": "R-INV",
+      "deviceId": "cam-22",
+      "summary": "野狗穿过画面",
+      "payload": {
+        "algo": "intrusion-v1.8",
+        "confidence": 69,
+        "camera_id": "cam-22"
+      }
+    },
+    {
+      "id": "SE-20261104-018",
+      "source": "定位",
+      "locTrigger": "人员定位",
+      "sourceEventId": "LOC-8841",
+      "type": "非法闯入",
+      "typeCode": "INTRUDE",
+      "level": 1,
+      "entryPath": "直接进正式告警",
+      "status": "已升告警",
+      "time": "12:40",
+      "plant": "湿法分厂",
+      "zoneId": "z-sx",
+      "place": "萃取+洗涤+反萃区",
+      "x": 172,
+      "y": 454,
+      "coordPrecision": "人员落点",
+      "subjectKind": "人员",
+      "person": "陈立 / 外来承包商",
+      "ruleId": "R-IN",
+      "alertId": "EVT-20261104-018",
+      "deviceId": "TAG-8841",
+      "summary": "人员落点与围栏边界同时命中，无作业票进入萃取区 38 秒",
+      "payload": {
+        "tag_id": "TAG-8841",
+        "dwell_sec": 38,
+        "permit_ok": false,
+        "fence_id": "z-sx",
+        "fence_action": "进入"
+      }
+    },
+    {
+      "id": "SE-20261104-009",
+      "source": "定位",
+      "locTrigger": "人员定位",
+      "sourceEventId": "LOC-7712",
+      "type": "异常滞留",
+      "typeCode": "LOITER",
+      "level": 3,
+      "entryPath": "直接进正式告警",
+      "status": "已升告警",
+      "time": "11:52",
+      "plant": "湿法分厂",
+      "zoneId": "z-leach",
+      "place": "浸出区",
+      "x": 266,
+      "y": 256,
+      "coordPrecision": "人员落点",
+      "subjectKind": "人员",
+      "person": "王慧 / 浸出班长",
+      "ruleId": "R-LG",
+      "alertId": "EVT-20261104-009",
+      "deviceId": "TAG-7712",
+      "summary": "浸出槽区停留 16 分钟",
+      "payload": {
+        "tag_id": "TAG-7712",
+        "dwell_sec": 960
+      }
+    },
+    {
+      "id": "SE-20261104-006",
+      "source": "定位",
+      "locTrigger": "围栏边界",
+      "sourceEventId": "FENCE-z-tail-1048",
+      "type": "异常滞留",
+      "typeCode": "LOITER",
+      "level": 1,
+      "entryPath": "直接进正式告警",
+      "status": "已升告警",
+      "time": "10:48",
+      "plant": "尾矿库作业区",
+      "zoneId": "z-tail",
+      "place": "高位水池",
+      "x": 444.4,
+      "y": 481.4,
+      "coordPrecision": "区域落点",
+      "subjectKind": "未知",
+      "person": "未知人员",
+      "ruleId": "R-IN",
+      "alertId": "EVT-20261104-006",
+      "deviceId": "FENCE-TAIL",
+      "summary": "坝前围栏停留 12 分钟",
+      "payload": {
+        "fence_id": "z-tail",
+        "action": "停留",
+        "dwell_sec": 720
+      }
+    },
+    {
+      "id": "SE-20261104-011",
+      "source": "视频AI",
+      "sourceEventId": "AI-20261104-011",
+      "type": "安全帽缺失",
+      "typeCode": "HELMET",
+      "level": 2,
+      "entryPath": "先告警后复核",
+      "status": "待复核",
+      "confidence": 87,
+      "time": "11:28",
+      "camera": "cam-18",
+      "plant": "湿法分厂",
+      "place": "铜电积区",
+      "x": 496.8,
+      "y": 252.2,
+      "precision": "区域落点",
+      "coordPrecision": "区域落点",
+      "algo": "helmet-v3.2",
+      "timeout": false,
+      "subjectKind": "未知",
+      "person": "未识别人员",
+      "ruleId": "R-HL",
+      "alertId": "EVT-20261104-011",
+      "deviceId": "cam-18",
+      "summary": "先告警后复核，通道东侧抓拍",
+      "payload": {
+        "algo": "helmet-v3.2",
+        "confidence": 87,
+        "camera_id": "cam-18"
+      }
+    },
+    {
+      "id": "SE-20261104-020",
+      "source": "人工上报",
+      "sourceEventId": "RPT-1104-07",
+      "type": "烟火",
+      "typeCode": "FIRE",
+      "level": 2,
+      "entryPath": "直接进正式告警",
+      "status": "已升告警",
+      "time": "13:05",
+      "plant": "选矿分厂",
+      "zoneId": "z-crush",
+      "place": "磨矿区",
+      "x": 250,
+      "y": 165,
+      "coordPrecision": "手工点选",
+      "subjectKind": "无对象",
+      "person": "",
+      "ruleId": "R-FR",
+      "alertId": "EVT-20261104-020",
+      "reporterName": "张磊",
+      "reporterJob": "破碎巡检",
+      "summary": "破碎南侧焦糊味，未见明火",
+      "payload": {
+        "category": "现场隐患",
+        "description": "破碎南侧焦糊味，未见明火",
+        "photo_count": 1
+      }
+    },
+    {
+      "id": "SE-20261101-033",
+      "source": "定位",
+      "locTrigger": "人员定位",
+      "sourceEventId": "LOC-5520",
+      "type": "异常滞留",
+      "typeCode": "LOITER",
+      "level": 3,
+      "entryPath": "直接进正式告警",
+      "status": "已升告警",
+      "time": "08:12",
+      "plant": "选矿分厂",
+      "place": "磨矿区",
+      "x": 123.5,
+      "y": 422.4,
+      "coordPrecision": "人员落点",
+      "subjectKind": "人员",
+      "person": "检修班组",
+      "ruleId": "R-LG",
+      "alertId": "EVT-20261101-033",
+      "deviceId": "TAG-5520",
+      "summary": "筛分平台停留超过阈值",
+      "payload": {
+        "tag_id": "TAG-5520",
+        "dwell_sec": 980
+      }
+    }
+  ],
+  "workTypes": [
+    {
+      "id": "wt-hot",
+      "code": "HOT",
+      "name": "动火",
+      "level": 2,
+      "enabled": true,
+      "zoneIds": [
+        "z-crush",
+        "z-wh",
+        "z-stock",
+        "z-unload"
+      ],
+      "workerRole": "现场作业",
+      "guardianRole": "当班值班员",
+      "approverRole": "分厂值班员",
+      "quals": [
+        {
+          "role": "作业人",
+          "cert": "动火作业证",
+          "required": true
+        },
+        {
+          "role": "监护人",
+          "cert": "监护资格",
+          "required": true
+        }
+      ],
+      "measures": [
+        "气体检测合格",
+        "清除可燃物",
+        "灭火器到位",
+        "监护人在场"
+      ],
+      "approval": [
+        {
+          "step": "班组确认",
+          "role": "班长"
+        },
+        {
+          "step": "分厂审批",
+          "role": "分厂值班员"
+        }
+      ],
+      "validityHours": 8,
+      "night": false,
+      "flowId": "wf-four"
+    },
+    {
+      "id": "wt-height",
+      "code": "WAH",
+      "name": "高处",
+      "level": 2,
+      "enabled": true,
+      "zoneIds": [
+        "z-ew",
+        "z-tail",
+        "z-cmd"
+      ],
+      "workerRole": "现场作业",
+      "guardianRole": "当班值班员",
+      "approverRole": "分厂值班员",
+      "quals": [
+        {
+          "role": "作业人",
+          "cert": "高处作业证",
+          "required": true
+        },
+        {
+          "role": "监护人",
+          "cert": "监护资格",
+          "required": true
+        }
+      ],
+      "measures": [
+        "安全带完好",
+        "脚手架或平台验收",
+        "下方警戒"
+      ],
+      "approval": [
+        {
+          "step": "分厂审批",
+          "role": "分厂值班员"
+        }
+      ],
+      "validityHours": 8,
+      "night": false,
+      "flowId": "wf-four"
+    }
+  ],
+  "workOrders": [
+    {
+      "id": "WO-261106-01",
+      "typeId": "wt-hot",
+      "status": "作业中",
+      "plant": "选矿分厂",
+      "zoneIds": [
+        "z-crush"
+      ],
+      "place": "磨矿区",
+      "start": "2026-11-06 08:00",
+      "end": "2026-11-06 16:00",
+      "people": [
+        {
+          "name": "张磊",
+          "roleOnTicket": "作业人",
+          "cert": "动火作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "赵宁",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": true
+        },
+        {
+          "name": "清除可燃物",
+          "done": true
+        },
+        {
+          "name": "灭火器到位",
+          "done": true
+        },
+        {
+          "name": "监护人在场",
+          "done": true
+        }
+      ],
+      "timeline": [
+        {
+          "status": "待审批",
+          "time": "07:40",
+          "actor": "张磊",
+          "note": "提交审批"
+        },
+        {
+          "status": "已签发",
+          "time": "07:52",
+          "actor": "赵宁",
+          "note": "分厂审批通过"
+        },
+        {
+          "status": "作业中",
+          "time": "08:05",
+          "actor": "张磊",
+          "note": "开始焊接"
+        }
+      ]
+    },
+    {
+      "id": "WO-261106-02",
+      "typeId": "wt-height",
+      "status": "待审批",
+      "plant": "湿法分厂",
+      "zoneIds": [
+        "z-sx"
+      ],
+      "place": "萃取+洗涤+反萃区",
+      "start": "2026-11-06 13:00",
+      "end": "2026-11-06 18:00",
+      "people": [
+        {
+          "name": "陈立",
+          "roleOnTicket": "作业人",
+          "cert": "受限空间作业证",
+          "qual": "过期"
+        },
+        {
+          "name": "李成",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": false
+        },
+        {
+          "name": "强制通风",
+          "done": false
+        },
+        {
+          "name": "进出登记",
+          "done": false
+        },
+        {
+          "name": "救援器材到位",
+          "done": false
+        }
+      ],
+      "timeline": [
+        {
+          "status": "草稿",
+          "time": "12:10",
+          "actor": "陈立",
+          "note": "创建工单"
+        },
+        {
+          "status": "待审批",
+          "time": "12:18",
+          "actor": "陈立",
+          "note": "提交审批"
+        }
+      ]
+    },
+    {
+      "id": "WO-261106-03",
+      "typeId": "wt-height",
+      "status": "已签发",
+      "plant": "湿法分厂",
+      "zoneIds": [
+        "z-ew"
+      ],
+      "place": "铜电积区",
+      "start": "2026-11-06 09:00",
+      "end": "2026-11-06 17:00",
+      "people": [
+        {
+          "name": "穆萨",
+          "roleOnTicket": "作业人",
+          "cert": "高处作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "李成",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "安全带完好",
+          "done": true
+        },
+        {
+          "name": "脚手架或平台验收",
+          "done": true
+        },
+        {
+          "name": "下方警戒",
+          "done": false
+        }
+      ],
+      "timeline": [
+        {
+          "status": "待审批",
+          "time": "08:20",
+          "actor": "穆萨",
+          "note": "提交审批"
+        },
+        {
+          "status": "已签发",
+          "time": "08:36",
+          "actor": "李成",
+          "note": "通过"
+        }
+      ]
+    },
+    {
+      "id": "WO-261106-04",
+      "typeId": "wt-height",
+      "status": "待销项",
+      "plant": "选矿分厂",
+      "zoneIds": [
+        "z-sub"
+      ],
+      "place": "总降变电站",
+      "start": "2026-11-06 07:30",
+      "end": "2026-11-06 15:30",
+      "people": [
+        {
+          "name": "赵宁",
+          "roleOnTicket": "作业人",
+          "cert": "电工证",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "漏电保护",
+          "done": true
+        },
+        {
+          "name": "电缆架空或防护",
+          "done": true
+        },
+        {
+          "name": "停送电联系",
+          "done": true
+        }
+      ],
+      "timeline": [
+        {
+          "status": "已签发",
+          "time": "07:12",
+          "actor": "赵宁",
+          "note": "通过"
+        },
+        {
+          "status": "作业中",
+          "time": "07:35",
+          "actor": "赵宁",
+          "note": "开始接线"
+        },
+        {
+          "status": "待销项",
+          "time": "14:50",
+          "actor": "赵宁",
+          "note": "作业结束，申请销项"
+        }
+      ]
+    },
+    {
+      "id": "WO-261106-05",
+      "typeId": "wt-height",
+      "status": "草稿",
+      "plant": "湿法分厂",
+      "zoneIds": [
+        "z-so2"
+      ],
+      "place": "SO2、硫酸存储区",
+      "start": "2026-11-06 14:00",
+      "end": "2026-11-06 18:00",
+      "people": [
+        {
+          "name": "张卫东",
+          "roleOnTicket": "作业人",
+          "cert": "受限空间作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "李成",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": false
+        },
+        {
+          "name": "强制通风",
+          "done": false
+        },
+        {
+          "name": "进出登记",
+          "done": false
+        },
+        {
+          "name": "救援器材到位",
+          "done": false
+        }
+      ],
+      "timeline": [
+        {
+          "status": "草稿",
+          "time": "13:40",
+          "actor": "张卫东",
+          "note": "创建工单"
+        }
+      ]
+    },
+    {
+      "id": "WO-261106-06",
+      "typeId": "wt-hot",
+      "status": "已签发",
+      "plant": "选矿分厂",
+      "zoneIds": [
+        "z-wh"
+      ],
+      "place": "1-6号仓库区",
+      "start": "2026-11-06 10:00",
+      "end": "2026-11-06 18:00",
+      "people": [
+        {
+          "name": "张磊",
+          "roleOnTicket": "作业人",
+          "cert": "动火作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "赵宁",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": true
+        },
+        {
+          "name": "清除可燃物",
+          "done": false
+        },
+        {
+          "name": "灭火器到位",
+          "done": true
+        },
+        {
+          "name": "监护人在场",
+          "done": false
+        }
+      ],
+      "timeline": [
+        {
+          "status": "待审批",
+          "time": "09:10",
+          "actor": "张磊",
+          "note": "提交"
+        },
+        {
+          "status": "已签发",
+          "time": "09:28",
+          "actor": "赵宁",
+          "note": "通过"
+        }
+      ]
+    },
+    {
+      "id": "WO-261105-08",
+      "typeId": "wt-height",
+      "status": "已驳回",
+      "plant": "尾矿库作业区",
+      "zoneIds": [
+        "z-tail"
+      ],
+      "place": "高位水池",
+      "start": "2026-11-05 09:00",
+      "end": "2026-11-05 16:00",
+      "people": [
+        {
+          "name": "卡比拉",
+          "roleOnTicket": "作业人",
+          "cert": "高处作业证",
+          "qual": "缺失"
+        },
+        {
+          "name": "李成",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "安全带完好",
+          "done": false
+        },
+        {
+          "name": "脚手架或平台验收",
+          "done": false
+        },
+        {
+          "name": "下方警戒",
+          "done": false
+        }
+      ],
+      "timeline": [
+        {
+          "status": "待审批",
+          "time": "08:40",
+          "actor": "卡比拉",
+          "note": "提交"
+        },
+        {
+          "status": "已驳回",
+          "time": "09:05",
+          "actor": "安环部",
+          "note": "作业人高处作业证缺失"
+        }
+      ]
+    },
+    {
+      "id": "WO-261015-04",
+      "typeId": "wt-hot",
+      "status": "已归档",
+      "plant": "选矿分厂",
+      "zoneIds": [
+        "z-crush"
+      ],
+      "place": "磨矿区",
+      "start": "2026-10-15 08:00",
+      "end": "2026-10-15 16:00",
+      "closedAt": "2026-10-15 16:20",
+      "people": [
+        {
+          "name": "张磊",
+          "roleOnTicket": "作业人",
+          "cert": "动火作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "赵宁",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": true
+        },
+        {
+          "name": "清除可燃物",
+          "done": true
+        },
+        {
+          "name": "灭火器到位",
+          "done": true
+        },
+        {
+          "name": "监护人在场",
+          "done": true
+        }
+      ],
+      "timeline": [
+        {
+          "status": "作业中",
+          "time": "08:10",
+          "actor": "张磊",
+          "note": "焊接监护"
+        },
+        {
+          "status": "已归档",
+          "time": "16:20",
+          "actor": "赵宁",
+          "note": "销项。对应烟火告警已关闭"
+        }
+      ]
+    },
+    {
+      "id": "WO-261104-02",
+      "typeId": "wt-height",
+      "status": "已归档",
+      "plant": "湿法分厂",
+      "zoneIds": [
+        "z-sx"
+      ],
+      "place": "萃取+洗涤+反萃区",
+      "start": "2026-11-04 08:00",
+      "end": "2026-11-04 12:00",
+      "closedAt": "2026-11-04 12:10",
+      "people": [
+        {
+          "name": "张卫东",
+          "roleOnTicket": "作业人",
+          "cert": "受限空间作业证",
+          "qual": "合格"
+        },
+        {
+          "name": "李成",
+          "roleOnTicket": "监护人",
+          "cert": "监护资格",
+          "qual": "合格"
+        }
+      ],
+      "measures": [
+        {
+          "name": "气体检测合格",
+          "done": true
+        },
+        {
+          "name": "强制通风",
+          "done": true
+        },
+        {
+          "name": "进出登记",
+          "done": true
+        },
+        {
+          "name": "救援器材到位",
+          "done": true
+        }
+      ],
+      "timeline": [
+        {
+          "status": "作业中",
+          "time": "08:05",
+          "actor": "张卫东",
+          "note": "槽内检查"
+        },
+        {
+          "status": "已归档",
+          "time": "12:10",
+          "actor": "李成",
+          "note": "销项"
+        }
+      ]
+    }
+  ],
+  "workCerts": [
+    {
+      "person": "张磊",
+      "cert": "动火作业证",
+      "no": "DH-049",
+      "status": "合格",
+      "due": "2027-06",
+      "employeeId": "em-zl"
+    },
+    {
+      "person": "张磊",
+      "cert": "特种作业资格证",
+      "no": "049",
+      "status": "合格",
+      "due": "2027-06",
+      "employeeId": "em-zl"
+    },
+    {
+      "person": "穆萨",
+      "cert": "动火作业证",
+      "no": "DH-051",
+      "status": "合格",
+      "due": "2027-03",
+      "employeeId": "em-ms"
+    },
+    {
+      "person": "穆萨",
+      "cert": "高处作业证",
+      "no": "WAH-118",
+      "status": "合格",
+      "due": "2027-08",
+      "employeeId": "em-ms"
+    },
+    {
+      "person": "穆萨",
+      "cert": "特种作业资格证",
+      "no": "051",
+      "status": "合格",
+      "due": "2027-03",
+      "employeeId": "em-ms"
+    },
+    {
+      "person": "赵宁",
+      "cert": "监护资格",
+      "no": "GRD-012",
+      "status": "合格",
+      "due": "2027-12",
+      "employeeId": "em-zn"
+    },
+    {
+      "person": "李成",
+      "cert": "监护资格",
+      "no": "GRD-007",
+      "status": "合格",
+      "due": "2027-12",
+      "employeeId": "em-lc"
+    },
+    {
+      "person": "张卫东",
+      "cert": "受限空间作业证",
+      "no": "CSE-033",
+      "status": "合格",
+      "due": "2027-04",
+      "employeeId": "em-zwd"
+    },
+    {
+      "person": "陈立",
+      "cert": "受限空间作业证",
+      "no": "CSE-088",
+      "status": "过期",
+      "due": "2026-08",
+      "employeeId": "em-cl"
+    },
+    {
+      "person": "卡比拉",
+      "cert": "高处作业证",
+      "no": "",
+      "status": "缺失",
+      "due": "",
+      "employeeId": "em-kbl"
+    },
+    {
+      "person": "赵宁",
+      "cert": "电工证",
+      "no": "EL-021",
+      "status": "合格",
+      "due": "2027-09",
+      "employeeId": "em-zn"
+    }
+  ],
+  "workTrainings": [
+    {
+      "id": "tr-001",
+      "person": "张磊",
+      "employeeId": "em-zl",
+      "course": "动火安全专项培训",
+      "kind": "培训",
+      "result": "通过",
+      "score": "",
+      "time": "2026-09-20",
+      "source": "仿真培训平台"
+    },
+    {
+      "id": "tr-002",
+      "person": "张磊",
+      "employeeId": "em-zl",
+      "course": "动火仿真操作考核 L2",
+      "kind": "操作考核",
+      "result": "通过",
+      "score": "92",
+      "time": "2026-10-15",
+      "source": "仿真培训平台"
+    },
+    {
+      "id": "tr-003",
+      "person": "穆萨",
+      "employeeId": "em-ms",
+      "course": "高处作业年度复训",
+      "kind": "培训",
+      "result": "通过",
+      "score": "",
+      "time": "2026-08-05",
+      "source": "公司培训系统"
+    },
+    {
+      "id": "tr-004",
+      "person": "穆萨",
+      "employeeId": "em-ms",
+      "course": "高处仿真操作考核",
+      "kind": "操作考核",
+      "result": "通过",
+      "score": "88",
+      "time": "2026-08-12",
+      "source": "仿真培训平台"
+    },
+    {
+      "id": "tr-005",
+      "person": "陈立",
+      "employeeId": "em-cl",
+      "course": "受限空间入场培训",
+      "kind": "培训",
+      "result": "通过",
+      "score": "",
+      "time": "2026-07-01",
+      "source": "公司培训系统"
+    },
+    {
+      "id": "tr-006",
+      "person": "陈立",
+      "employeeId": "em-cl",
+      "course": "受限空间仿真操作考核",
+      "kind": "操作考核",
+      "result": "未通过",
+      "score": "58",
+      "time": "2026-07-08",
+      "source": "仿真培训平台"
+    },
+    {
+      "id": "tr-007",
+      "person": "卡比拉",
+      "employeeId": "em-kbl",
+      "course": "高处作业入场培训",
+      "kind": "培训",
+      "result": "通过",
+      "score": "",
+      "time": "2026-06-18",
+      "source": "公司培训系统"
+    },
+    {
+      "id": "tr-008",
+      "person": "赵宁",
+      "employeeId": "em-zn",
+      "course": "监护人角色培训",
+      "kind": "培训",
+      "result": "通过",
+      "score": "",
+      "time": "2026-05-10",
+      "source": "公司培训系统"
+    }
+  ],
+  "employees": [
+    {
+      "id": "em-lc",
+      "name": "李成",
+      "code": "DZW-H-1088",
+      "org": "湿法分厂值班",
+      "job": "分厂值班员",
+      "team": "值班甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-lc",
+      "mobile": "138****1001",
+      "tagId": "TAG-1108",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "91%",
+      "tagHeartbeat": "09:18",
+      "note": ""
+    },
+    {
+      "id": "em-zwd",
+      "name": "张卫东",
+      "code": "DZW-H-1001",
+      "org": "湿法分厂",
+      "job": "萃取操作工",
+      "team": "萃取甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-zwd",
+      "mobile": "138****1002",
+      "tagId": "TAG-2201",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "82%",
+      "tagHeartbeat": "11:42",
+      "note": ""
+    },
+    {
+      "id": "em-ms",
+      "name": "穆萨",
+      "code": "DZW-H-1002",
+      "org": "湿法分厂",
+      "job": "电积巡检",
+      "team": "电积甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-ms",
+      "mobile": "138****1003",
+      "tagId": "TAG-3308",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "76%",
+      "tagHeartbeat": "11:40",
+      "note": ""
+    },
+    {
+      "id": "em-cl",
+      "name": "陈立",
+      "code": "DZW-C-2088",
+      "org": "湿法分厂",
+      "job": "外来承包商",
+      "team": "现场施工",
+      "kind": "承包商",
+      "status": "在册",
+      "userId": "u-cl",
+      "mobile": "139****2201",
+      "tagId": "TAG-8841",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "64%",
+      "tagHeartbeat": "11:32",
+      "note": ""
+    },
+    {
+      "id": "em-wh",
+      "name": "王慧",
+      "code": "DZW-H-1004",
+      "org": "湿法分厂",
+      "job": "浸出班长",
+      "team": "浸出甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-wh",
+      "mobile": "138****1004",
+      "tagId": "TAG-7712",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "48%",
+      "tagHeartbeat": "11:52",
+      "note": ""
+    },
+    {
+      "id": "em-kbl",
+      "name": "卡比拉",
+      "code": "DZW-T-3001",
+      "org": "尾矿库值班",
+      "job": "坝体巡视",
+      "team": "坝体巡视",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-kbl",
+      "mobile": "138****1005",
+      "tagId": "TAG-GPS-09",
+      "locMode": "GPS",
+      "tagStatus": "已绑定",
+      "tagBattery": "71%",
+      "tagHeartbeat": "11:45",
+      "note": ""
+    },
+    {
+      "id": "em-zn",
+      "name": "赵宁",
+      "code": "DZW-M-2001",
+      "org": "选矿分厂值班",
+      "job": "分厂值班员",
+      "team": "值班甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-zn",
+      "mobile": "138****2001",
+      "tagId": "",
+      "locMode": "",
+      "tagStatus": "未绑定",
+      "tagBattery": "",
+      "tagHeartbeat": "",
+      "note": ""
+    },
+    {
+      "id": "em-ly",
+      "name": "刘洋",
+      "code": "DZW-T-3008",
+      "org": "尾矿库值班",
+      "job": "分厂值班员",
+      "team": "值班甲班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-ly",
+      "mobile": "138****3001",
+      "tagId": "TAG-GPS-12",
+      "locMode": "GPS",
+      "tagStatus": "已绑定",
+      "tagBattery": "88%",
+      "tagHeartbeat": "11:46",
+      "note": ""
+    },
+    {
+      "id": "em-za",
+      "name": "周安",
+      "code": "DZW-A-4001",
+      "org": "安环部",
+      "job": "安环专工",
+      "team": "",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-za",
+      "mobile": "138****4001",
+      "tagId": "",
+      "locMode": "",
+      "tagStatus": "未绑定",
+      "tagBattery": "",
+      "tagHeartbeat": "",
+      "note": ""
+    },
+    {
+      "id": "em-zl",
+      "name": "张磊",
+      "code": "DZW-M-2011",
+      "org": "选矿分厂值班",
+      "job": "破碎巡检",
+      "team": "破碎班",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-zl",
+      "mobile": "138****2002",
+      "tagId": "TAG-6602",
+      "locMode": "UWB",
+      "tagStatus": "已绑定",
+      "tagBattery": "80%",
+      "tagHeartbeat": "11:41",
+      "note": ""
+    },
+    {
+      "id": "em-sc",
+      "name": "苏晨",
+      "code": "DZW-A-4002",
+      "org": "安环部",
+      "job": "公司领导",
+      "team": "",
+      "kind": "自有",
+      "status": "在册",
+      "userId": "u-sc",
+      "mobile": "138****4002",
+      "tagId": "",
+      "locMode": "",
+      "tagStatus": "未绑定",
+      "tagBattery": "",
+      "tagHeartbeat": "",
+      "note": ""
+    }
+  ],
+  "workFlows": [
+    {
+      "id": "wf-four",
+      "name": "四方签批",
+      "enabled": true,
+      "steps": [
+        {
+          "step": "作业单位意见",
+          "role": "作业负责人"
+        },
+        {
+          "step": "区域单位意见",
+          "role": "分厂值班员"
+        },
+        {
+          "step": "安全管理部门意见",
+          "role": "安环专工"
+        },
+        {
+          "step": "公司领导审批意见",
+          "role": "公司领导"
+        }
+      ]
+    },
+    {
+      "id": "wf-three",
+      "name": "三级签批",
+      "enabled": true,
+      "steps": [
+        {
+          "step": "作业单位意见",
+          "role": "作业负责人"
+        },
+        {
+          "step": "区域单位意见",
+          "role": "分厂值班员"
+        },
+        {
+          "step": "安全管理部门意见",
+          "role": "安环专工"
+        }
+      ]
+    }
+  ]
+}

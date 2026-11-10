@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>现场作业 · 工业平板</title>
+  <link rel="stylesheet" href="./css/mobile.css?v=9">
+</head>
+<body>
+  <div class="stage">
+    <div class="tablet" id="app">
+      <header class="bar dark-nav">
+        <div>
+          <strong>现场作业</strong>
+          <span class="bar-sub">工业平板 · 与值班台同一套待办</span>
+        </div>
+        <div class="bar-right">
+          <label class="post-pick">岗位
+            <select id="post" class="bar-select"></select>
+          </label>
+          <button type="button" class="bar-link" id="reset">重置演示</button>
+        </div>
+      </header>
+      <main id="main"></main>
+    </div>
+  </div>
+  <script src="./js/store.js?v=3"></script>
+  <script src="./js/mobile.js?v=12"></script>
+</body>
+</html>
