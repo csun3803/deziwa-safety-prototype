@@ -31,11 +31,11 @@ const TABS = [
     id: "t6",
     name: "安全分析",
     pages: [
-      { id: "stats", name: "安全事件统计", done: true, layout: "总览/驾驶舱型", desc: "事件与正式告警并列统计：类型、区域、等级、复核与处置。" },
-      { id: "heatmap", name: "安全告警热力分析", done: true, layout: "统计报表/分析型", desc: "区域热力、重复事件与重点点位，辅助调整巡查。" },
-      { id: "events", name: "事件档案", done: true, layout: "列表-详情型", desc: "事件全量留痕：定位/AI/人工上报；默认一对一正式告警。" },
-      { id: "alert-archive", name: "告警档案", done: true, layout: "列表-详情型", desc: "正式告警卷宗：派发、处置时间线及关联事件。" },
-      { id: "work-archive", name: "工单档案", done: true, layout: "列表-详情型", desc: "已归档作业单卷宗：审批与作业记录，支持查询与导出。" }
+      { id: "stats", name: "安全事件统计", group: "统计分析", done: true, layout: "总览/驾驶舱型", desc: "事件与正式告警并列统计：类型、区域、等级、复核与处置。" },
+      { id: "heatmap", name: "安全告警热力分析", group: "统计分析", done: true, layout: "统计报表/分析型", desc: "区域热力、重复事件与重点点位，辅助调整巡查。" },
+      { id: "events", name: "事件档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "事件全量留痕：定位/AI/人工上报；默认一对一正式告警。" },
+      { id: "alert-archive", name: "告警档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "正式告警卷宗：派发、处置时间线及关联事件。" },
+      { id: "work-archive", name: "工单档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "已归档作业单卷宗：审批与作业记录，支持查询与导出。" }
     ]
   },
   {
@@ -43,9 +43,15 @@ const TABS = [
     name: "配置中心",
     pages: [
       { id: "zones", name: "区域配置", group: "现场与空间", done: true, layout: "表单录入/编辑型", desc: "区域准入、围栏与定位告警（人员落点、越界等同一规则池）。" },
-      { id: "cameras", name: "视频监控", group: "现场与空间", done: true, layout: "列表-详情型", desc: "通道接入、三维标定与视频 AI 算法绑定。" },
+      { id: "cameras", name: "视频与告警", group: "现场与空间", done: true, layout: "列表-详情型", desc: "通道接入、三维标定、AI 识别与告警规则配置。" },
       { id: "work-flows", name: "审批流", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "作业签批节点模板；作业类型引用审批流。" },
-      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" },
+      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" }
+    ]
+  },
+  {
+    id: "t8",
+    name: "系统管理",
+    pages: [
       { id: "org", name: "组织管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "组织树与主数据属性，与人员系统同步。" },
       { id: "employees", name: "员工管理", group: "组织与人员", done: true, layout: "列表-详情型", desc: "现场人员档案与定位卡绑定；支持批量导入发卡；工单选人来源。" },
       { id: "users", name: "用户管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "账号、组织归属与角色。" },
@@ -523,7 +529,12 @@ function parseRoute() {
   if (tabId === "t4") {
     tabId = "t7";
   }
-  if (tabId === "t7" && pageId === "perms") {
+  const SYS_PAGES = new Set(["org", "employees", "users", "roles", "dict", "notify", "params", "audit", "perms"]);
+  if (tabId === "t7" && SYS_PAGES.has(pageId)) {
+    tabId = "t8";
+    if (pageId === "perms") pageId = "roles";
+  }
+  if (tabId === "t8" && pageId === "perms") {
     pageId = "roles";
   }
   if (tabId === "t7" && (pageId === "alert-hub" || pageId === "types" || pageId === "rules" || pageId === "report")) {
@@ -539,7 +550,8 @@ function parseRoute() {
   if (tabId === "t6" && pageId === "history") {
     pageId = "events";
   }
-  if (tabId === "t7" && (pageId === "shifts" || pageId === "duty")) {
+  if ((tabId === "t7" || tabId === "t8") && (pageId === "shifts" || pageId === "duty")) {
+    tabId = "t8";
     pageId = "org";
   }
   if (tabId === "t5" && pageId === "work-types") {
@@ -791,7 +803,7 @@ function openCount() {
 }
 
 function pendingReview() {
-  return videoEvents().filter((item) => ["待复核", "待核查"].includes(item.status)).length;
+  return reviewQueueEvents().filter((item) => ["待复核", "待核查"].includes(item.status)).length;
 }
 
 function allEvents() {
@@ -800,6 +812,19 @@ function allEvents() {
 
 function videoEvents() {
   return allEvents().filter((item) => item.source === "视频AI" || item.confidence != null);
+}
+
+function isLocReviewEvent(item) {
+  return item?.source === "定位" && ["待复核", "待核查", "真警", "误报"].includes(item.status);
+}
+
+/** 识别复核队列：视频 AI + 待裁决的定位/围栏事件 */
+function reviewQueueEvents() {
+  return allEvents().filter((item) => {
+    if (item.status === "已抑制") return false;
+    if (item.source === "视频AI" || item.confidence != null) return true;
+    return isLocReviewEvent(item);
+  });
 }
 
 function eventById(id) {
@@ -1107,8 +1132,12 @@ function renderPage() {
     if (route.page.id === "work-types") renderWorkTypesConfig(root, route.focus);
     else if (route.page.id === "work-flows") renderWorkFlowsConfig(root, route.focus);
     else if (route.page.id === "zones") renderZoneAccess(root, route.focus);
-    else if (route.page.id === "cameras") renderCameraPage(root, route.focus);
-    else if (route.page.id === "org") renderSysOrgPage(root, route.focus);
+    else if (route.page.id === "cameras") renderCameraPage(root, route);
+    else renderPlaceholder(root, route);
+    return;
+  }
+  if (route.tab.id === "t8") {
+    if (route.page.id === "org") renderSysOrgPage(root, route.focus);
     else if (route.page.id === "roles") renderSysRolesPage(root, route.focus);
     else if (route.page.id === "users") renderSysUsersPage(root, route.focus);
     else if (route.page.id === "employees") renderSysEmployeesPage(root, route.focus);
@@ -1447,6 +1476,27 @@ function renderOverview(root, route) {
       openPlantRosterDialog();
     });
   });
+  root.querySelectorAll("[data-open-plant-alerts]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      layers.alerts = true;
+      openPlantAlertsDialog();
+    });
+  });
+  root.querySelectorAll("[data-open-plant-cameras]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      layers.cameras = true;
+      openPlantCamerasDialog();
+    });
+  });
+  root.querySelectorAll("[data-open-plant-focus-zones]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      layers.zones = true;
+      openPlantFocusZonesDialog();
+    });
+  });
   bindCameraCalibPanel(root);
   bindLinkagePanel(root);
   root.querySelector("[data-close-panel]")?.addEventListener("click", () => {
@@ -1592,7 +1642,7 @@ function openLinkageCamModal(camId) {
   const cam = linkageCamById(camId);
   if (!cam) return;
   openAlertDialog(`实时画面 · ${cam.name}`, `
-    <div class="linkage-modal-video">${renderMonitor(cam, true)}</div>
+    <div class="linkage-modal-video">${renderMonitor(cam, true, "feed")}</div>
     <p class="meta linkage-modal-meta">${linkageCamMetaLine(cam)}</p>
   `, () => true, "关闭", true);
 }
@@ -1607,7 +1657,7 @@ function linkageSplitGridHtml(camIds, focusId) {
     <div class="video-grid ai-shots linkage-split-modal" id="linkage-split-grid">
       ${cams.map((cam) => `
         <button type="button" class="linkage-tile${cam.id === active ? " is-on" : ""}" data-linkage-split-pick="${cam.id}">
-          ${renderMonitor(cam, cam.id === active)}
+          ${renderMonitor(cam, cam.id === active, "tile")}
         </button>
       `).join("")}
     </div>
@@ -1775,35 +1825,40 @@ function openLinkageSplitModal(item) {
   });
 }
 
+function linkageNearbyCams(pack, primary) {
+  const seen = new Set(primary?.id ? [primary.id] : []);
+  const out = [];
+  const add = (cam) => {
+    if (cam?.id && !seen.has(cam.id)) {
+      seen.add(cam.id);
+      out.push(cam);
+    }
+  };
+  pack.recommended.forEach((row) => add(row.cam));
+  pack.grid.forEach(add);
+  return out;
+}
+
 function renderLinkagePanelHtml(item) {
   const pack = linkageCamsFor(item);
   if (!pack.primary && !pack.grid.length) {
     return `<p class="meta">暂无关联视频。请确认告警/区域已标定，且附近有在线摄像头。</p>`;
   }
   const primary = pack.primary || pack.grid[0];
+  const nearCams = linkageNearbyCams(pack, primary);
+  const activeNear = linkageFocusCamId || primary?.id;
   return `
     <section class="linkage-video-panel" data-linkage-context="${item.id}">
-      <div class="linkage-panel-head">
-        <h3 class="field-group-title">实时画面</h3>
-        <button type="button" class="btn btn-sm" data-linkage-split-open>多路分屏</button>
+      <h3 class="field-group-title">实时画面</h3>
+      <div class="linkage-primary">
+        ${renderMonitor(primary, true, "feed")}
       </div>
-      <button type="button" class="linkage-primary linkage-zoom-hit" data-linkage-zoom="${primary.id}" title="点击放大">
-        ${renderMonitor(primary, true)}
-        <span class="linkage-zoom-hint">点击放大</span>
-      </button>
-      ${pack.recommended.length ? `
-        <h3 class="field-group-title">推荐路</h3>
-        <div class="scene-cam-list">
-          ${pack.recommended.map((row) => `
-            <div class="linkage-rec-row">
-              <button type="button" class="scene-cam-row" data-linkage-zoom="${row.cam.id}" title="点击放大">
-                <span class="status-lamp">
-                  <i class="${row.cam.online ? "ok" : "off"}"></i>
-                  <span class="text-link linkage-cam-name" data-linkage-open-cam="${row.cam.id}" role="link" tabindex="-1">${row.cam.name}</span>
-                </span>
-                <span class="scene-cam-meta">${row.hint}</span>
-              </button>
-              <button type="button" class="btn btn-sm btn-ghost" data-linkage-live="${row.cam.id}">实时画面</button>
+      ${nearCams.length ? `
+        <h3 class="field-group-title">周边视频</h3>
+        <div class="zone-console-video video-grid linkage-near-grid">
+          ${nearCams.map((cam) => `
+            <div class="linkage-tile linkage-tile--static zone-console-cam${cam.id === activeNear ? " is-on" : ""}">
+              ${renderMonitor(cam, cam.id === activeNear, "tile")}
             </div>
           `).join("")}
         </div>
@@ -1814,17 +1869,6 @@ function renderLinkagePanelHtml(item) {
 
 function bindLinkagePanel(root) {
   if (sceneDetailTab !== "watch") return;
-  const ctxId = root.querySelector("[data-linkage-context]")?.dataset.linkageContext;
-  const ctx = ctxId ? lookup(ctxId) : selected;
-  root.querySelectorAll("[data-linkage-zoom]").forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      event.preventDefault();
-      openLinkageCamModal(btn.dataset.linkageZoom);
-    });
-  });
-  root.querySelector("[data-linkage-split-open]")?.addEventListener("click", () => {
-    if (ctx) openLinkageSplitModal(ctx);
-  });
   root.querySelectorAll("[data-linkage-live]").forEach((btn) => {
     btn.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -2248,7 +2292,7 @@ function alertSceneProfileHtml(alert) {
 
 function cameraSceneProfileHtml(cam) {
   const zoneName = data.zones.find((z) => z.id === cam.zone)?.name || "";
-  const openHere = (data.alerts || []).filter((row) => row.camera === cam.id && isOpenAlert(row)).length;
+  const openHere = (data.alerts || []).filter((row) => row.camera === cam.id && isOpenAlert(row) && row.status === "待签收").length;
   return sceneProfileHtml([
     ["通道编码", cam.code || cam.id],
     ["名称", cam.name],
@@ -2265,7 +2309,7 @@ function cameraSceneProfileHtml(cam) {
     ["型号", cam.model],
     ["NVR 通道", cam.nvrChannel],
     ["台账同步", cam.sync],
-    ["未关闭告警", openHere ? `${openHere} 条` : "无"],
+    ["未签收告警", openHere ? `${openHere} 条` : "无"],
     ["维护备注", cam.maintNote]
   ]);
 }
@@ -2302,7 +2346,7 @@ function sceneKind(item) {
 
 function sceneCamSection(item) {
   if (sceneKind(item) === "camera") {
-    return sceneBlockHtml("实时画面", `<div class="scene-video-grid">${renderMonitor(item, true)}</div>`);
+    return sceneBlockHtml("实时画面", `<div class="scene-calib-live">${renderMonitor(item, true, "feed")}</div>`);
   }
   const recs = relatedVideos(item);
   if (!recs.length) return "";
@@ -2386,7 +2430,6 @@ function openPlantRosterDialog() {
     });
   };
   openAlertDialog(`在区人员 · ${label}`, `
-    <p class="meta">当前 ${esc(label)} 共 <b>${all.length}</b> 人${abnormalCount ? `，<b>${abnormalCount}</b> 人状态异常` : ""}。点击姓名或「查看」打开地图人员面板。</p>
     ${plantRosterPlantSplitHtml()}
     <div class="alert-status-chips plant-roster-chips">
       <button type="button" class="chip${filter === "all" ? " is-on" : ""}" data-roster-filter="all">在区 ${all.length}</button>
@@ -2404,39 +2447,159 @@ function openPlantRosterDialog() {
   });
 }
 
+function plantSceneListHref(id) {
+  return `#/t1/overview?id=${encodeURIComponent(id)}`;
+}
+
+function plantAlertListHtml(rows) {
+  if (!rows.length) return `<p class="meta">当前范围无未结束告警。</p>`;
+  return `
+    <div class="table-wrap plant-roster-modal-table">
+      <table>
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>类型</th>
+            <th>地点</th>
+            <th>状态</th>
+            <th>等级</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td class="meta">${esc(row.id)}</td>
+              <td>${esc(row.type)}</td>
+              <td>${esc(row.place || "—")}</td>
+              <td>${statusCapsule(alertDisplayStatus(row))}</td>
+              <td><span class="lvl lvl-${row.level} lvl-sm">${LEVEL_NAME[row.level]}</span></td>
+              <td class="table-actions"><a class="btn btn-sm" href="${plantSceneListHref(row.id)}">查看</a></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function plantCameraListHtml(rows) {
+  if (!rows.length) return `<p class="meta">当前范围无摄像头。</p>`;
+  return `
+    <div class="table-wrap plant-roster-modal-table">
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>编码</th>
+            <th>监控分区</th>
+            <th>状态</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((cam) => `
+            <tr>
+              <td>${esc(cam.name)}</td>
+              <td class="meta">${esc(cam.code || cam.id)}</td>
+              <td>${esc(cam.area || "—")}</td>
+              <td><span class="dot ${cam.online ? "ok" : "warn"}">${cam.online ? "在线" : "离线"}</span></td>
+              <td class="table-actions"><a class="btn btn-sm" href="${plantSceneListHref(cam.id)}">查看</a></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function plantZoneListHtml(rows, opts = {}) {
+  if (!rows.length) return `<p class="meta">${opts.empty || "当前范围无区域。"}</p>`;
+  return `
+    <div class="table-wrap plant-roster-modal-table">
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>分厂</th>
+            <th>风险</th>
+            <th>围栏</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((zone) => `
+            <tr>
+              <td>${esc(zone.mapLabel || zone.name)}</td>
+              <td class="meta">${esc(plantName(zone.plant))}</td>
+              <td><span class="lvl lvl-${RISK_LVL[zone.risk] || 4} lvl-sm">${esc(zone.risk || "—")}</span></td>
+              <td class="meta">${esc(zone.fence || "—")}</td>
+              <td class="table-actions"><a class="btn btn-sm" href="${plantSceneListHref(zone.id)}">查看</a></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openPlantOverviewListDialog(title, tableHtml, layerId) {
+  const label = plant === "all" ? "全厂" : plantName(plant);
+  openAlertDialog(`${title} · ${label}`, tableHtml, () => true, "关闭", true, (dlg) => {
+    dlg.querySelector(".modal")?.classList.add("is-wide");
+    if (layerId && layers[layerId] !== undefined) layers[layerId] = true;
+  });
+}
+
+function openPlantAlertsDialog() {
+  const rows = (data.alerts || []).filter((row) => isOpenAlert(row) && inCurrentPlant(row));
+  openPlantOverviewListDialog("告警", plantAlertListHtml(rows), "alerts");
+}
+
+function openPlantCamerasDialog() {
+  const rows = (data.cameras || []).filter((cam) => inCurrentPlant(cam));
+  openPlantOverviewListDialog("摄像头", plantCameraListHtml(rows), "cameras");
+}
+
+function openPlantFocusZonesDialog() {
+  const rows = filteredZones().filter(isFocusZone);
+  openPlantOverviewListDialog(
+    "重点区域",
+    plantZoneListHtml(rows, { empty: "当前范围无重点区域。" }),
+    "zones"
+  );
+}
+
 function renderPlantBriefPanel() {
   const label = plant === "all" ? "全厂" : plantName(plant);
   const openAlerts = (data.alerts || []).filter((row) => isOpenAlert(row) && inCurrentPlant(row));
-  const pending = openAlerts.filter((row) => row.status === "待签收").length;
+  const unsignedAlerts = openAlerts.filter((row) => row.status === "待签收");
   const cams = (data.cameras || []).filter((cam) => inCurrentPlant(cam));
   const people = peopleInCurrentPlant();
   const abnormal = people.filter(personLocAbnormal).length;
   const keys = filteredZones().filter(isFocusZone);
   const infoBody = `
-      <div class="scene-kpi-grid scene-kpi-grid--brief">
-        <div class="kpi grad-border shadow-soft"><span>告警</span><strong class="num">${openAlerts.length}</strong></div>
-        <div class="kpi grad-border shadow-soft"><span>待签收告警</span><strong class="num">${pending}</strong></div>
+      <div class="scene-kpi-grid scene-kpi-grid--brief scene-kpi-grid--situation">
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-alerts>
+          <span>告警</span>
+          <strong class="num">${openAlerts.length}</strong>
+        </button>
         <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-roster>
           <span>在区人员</span>
           <strong class="num scene-kpi-value">${people.length}<em>${abnormal ? `${abnormal}人异常` : "状态正常"}</em></strong>
         </button>
-        <div class="kpi grad-border shadow-soft"><span>摄像头</span><strong class="num">${cams.length}</strong></div>
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-cameras>
+          <span>摄像头</span>
+          <strong class="num">${cams.length}</strong>
+        </button>
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-focus-zones>
+          <span>重点区域</span>
+          <strong class="num">${keys.length}</strong>
+        </button>
       </div>
-      <h3 class="field-group-title">重点区域</h3>
-      <div class="scene-brief-scroll scene-brief-zones">
-        ${keys.length ? keys.map((row) => `
-          <button type="button" class="scene-brief-zone grad-border shadow-soft" data-pick="${row.id}">
-            <div class="scene-todo-head">
-              <span>${row.mapLabel || row.name}</span>
-              <span class="lvl lvl-${RISK_LVL[row.risk] || 4}">${row.risk}</span>
-            </div>
-            <p class="meta">${plantName(row.plant)} · ${row.fence || "风险区"}</p>
-          </button>
-        `).join("") : `<p class="meta">当前范围无高风险围栏。</p>`}
-      </div>
-      <h3 class="field-group-title">未关闭告警</h3>
-      <div class="scene-brief-scroll scene-brief-alerts">
-        ${openAlerts.length ? openAlerts.map((row) => `
+      <h3 class="field-group-title">未签收告警</h3>
+      <div class="scene-brief-alerts">
+        ${unsignedAlerts.length ? unsignedAlerts.map((row) => `
           <div class="scene-brief-alert grad-border">
             <button type="button" class="scene-brief-alert-main" data-pick="${row.id}">
               <div class="scene-todo-head">
@@ -2447,7 +2610,7 @@ function renderPlantBriefPanel() {
             </button>
             <a class="btn btn-sm" href="#/t1/overview?id=${encodeURIComponent(row.id)}">查看</a>
           </div>
-        `).join("") : `<p class="meta">无未关闭告警。</p>`}
+        `).join("") : `<p class="meta">无未签收告警。</p>`}
       </div>
   `;
   return scenePanelChrome({
@@ -2469,18 +2632,43 @@ function scenePanelTabbedBody(item, kind, profileHtml) {
   return `${scenePanelTabsHtml(active, tabs)}${inner}`;
 }
 
+function zoneLinkageCameras(zone) {
+  const pack = linkageCamsFor(zone);
+  const out = [];
+  const seen = new Set();
+  const add = (cam) => {
+    if (cam?.id && !seen.has(cam.id)) {
+      seen.add(cam.id);
+      out.push(cam);
+    }
+  };
+  if (pack.primary) add(pack.primary);
+  pack.grid.forEach(add);
+  pack.recommended.forEach((row) => add(row.cam));
+  if (!out.length) relatedVideos(zone).forEach(add);
+  return out;
+}
+
 function zoneVideoTabHtml(zone) {
-  const cams = relatedVideos(zone);
+  const cams = zoneLinkageCameras(zone);
   if (!cams.length) return `<p class="meta">该区暂无关联视频。</p>`;
-  const cells = cams.slice(0, 4).map((cam) => (
-    `<div class="zone-console-cam" data-pick="${cam.id}">${renderMonitor(cam, fovFocusId === cam.id)}</div>`
-  )).join("");
-  return `<div class="zone-console-video">${cells}</div>`;
+  const active = linkageFocusCamId || cams[0]?.id;
+  return `
+    <section class="linkage-video-panel zone-linkage-video" data-linkage-context="${zone.id}">
+      <div class="zone-console-video video-grid">
+        ${cams.map((cam) => `
+          <div class="linkage-tile linkage-tile--static zone-console-cam${cam.id === active ? " is-on" : ""}">
+            ${renderMonitor(cam, cam.id === active, "tile")}
+          </div>
+        `).join("")}
+      </div>
+    </section>
+  `;
 }
 
 function zoneAlertsTabHtml(zone) {
   const openAlerts = alertsForZone(zone);
-  if (!openAlerts.length) return `<p class="meta">该区无未关闭告警。</p>`;
+  if (!openAlerts.length) return `<p class="meta">该区暂无进行中告警。</p>`;
   return openAlerts.map((row) => `
     <button type="button" class="scene-todo-card grad-border shadow-soft" data-pick="${row.id}">
       <div class="scene-todo-head">
@@ -2526,7 +2714,7 @@ function zonePanelHtml(zone) {
   const active = tabs.some((t) => t.id === sceneDetailTab)
     ? sceneDetailTab
     : (sceneDetailTab === "video" ? "watch" : "info");
-  const inner = active === "watch" ? renderLinkagePanelHtml(zone)
+  const inner = active === "watch" ? zoneVideoTabHtml(zone)
     : active === "alerts" ? zoneAlertsTabHtml(zone)
     : active === "people" ? zonePeopleTabHtml(zone)
     : sceneBlockHtml("基本信息", zoneSceneProfileHtml(zone));
@@ -2573,7 +2761,7 @@ function renderScenePanel(item) {
     const row = hydratePerson(item);
     const tr = trackForReplay(row.id);
     const replayHref = tr ? trackReplayDeepHash(row.id, { trackId: tr.id }) : "";
-    const empHref = row.employeeId ? `#/t7/employees?id=${encodeURIComponent(row.employeeId)}` : "";
+    const empHref = row.employeeId ? `#/t8/employees?id=${encodeURIComponent(row.employeeId)}` : "";
     const lamp = personLocAbnormal(row) ? "off" : "ok";
     return scenePanelChrome({
       title: "人员信息",
@@ -3385,7 +3573,22 @@ function alertEvidenceSpec(item, ev, cam, opts = {}) {
   const badge = opts.badge || (kind === "video" ? "抓拍视频" : "抓拍图片");
   const capLabel = opts.capLabel || `${capTime} · ${opts.titleSuffix ? `${title} · ${opts.titleSuffix}` : title}`;
   const metaLine = opts.metaExtra ? [meta, opts.metaExtra].filter(Boolean).join(" · ") : meta;
-  return { kind, title: opts.titleSuffix ? `${title} · ${opts.titleSuffix}` : title, cap: capLabel, meta: metaLine, badge };
+  const still = sceneStillSrc({
+    cam,
+    type: ev?.type || item?.type,
+    place: ev?.place || item?.place,
+    seed: `${item?.id || ""}-${ev?.id || ""}-${opts.titleSuffix || kind}`,
+    variant: opts.variant || kind
+  });
+  return {
+    kind,
+    title: opts.titleSuffix ? `${title} · ${opts.titleSuffix}` : title,
+    cap: capLabel,
+    meta: metaLine,
+    badge,
+    src: still.src,
+    pos: still.pos
+  };
 }
 
 function alertEvidenceItems(item, opts = {}) {
@@ -3451,33 +3654,43 @@ function alertEvidenceItems(item, opts = {}) {
   if (!opts.archiveOnly) {
     const nearby = nearbyCams(item.x, item.y).filter((c) => c.id !== item.camera).slice(0, 2);
     nearby.forEach((cam, i) => {
+      const still = sceneStillSrc({ cam, seed: `${item.id}-near-${cam.id}`, variant: String(i) });
       push({
         kind: i === 0 ? "image" : "video",
         title: "关联通道",
         cap: `${item.time} · ${cam.mapLabel || cam.name}`,
         meta: `${cam.name} · 同期${i === 0 ? "抓拍" : "片段"}`,
-        badge: i === 0 ? "抓拍图片" : "抓拍视频"
+        badge: i === 0 ? "抓拍图片" : "抓拍视频",
+        src: still.src,
+        pos: still.pos
       });
     });
   }
   return out;
 }
 
+function sceneStillStyleAttr(spec) {
+  if (!spec?.src) return "";
+  return ` style="background-image:url('${spec.src}');background-position:${spec.pos || "center"}"`;
+}
+
 function renderAlertEvidenceThumb(spec) {
   const kind = spec.kind === "video" ? "video" : "image";
   const badge = spec.badge || (kind === "video" ? "抓拍视频" : "抓拍图片");
+  const mediaClass = spec.src ? " alert-evidence-thumb-media has-scene" : "alert-evidence-thumb-media";
   return `
     <button type="button" class="alert-evidence-thumb alert-evidence-thumb--${kind}"
       data-alert-evidence data-kind="${kind}"
       data-title="${esc(spec.title)}"
       data-cap="${esc(spec.cap)}"
       data-meta="${esc(spec.meta || "")}"
-      aria-label="放大查看${badge}">
-      <span class="alert-evidence-thumb-media" aria-hidden="true">${kind === "video" ? '<span class="alert-evidence-play">▶</span>' : ""}</span>
+      data-src="${esc(spec.src || "")}"
+      data-pos="${esc(spec.pos || "")}"
+      aria-label="${esc(spec.title || badge)}">
+      <span class="${mediaClass.trim()}" aria-hidden="true"${sceneStillStyleAttr(spec)}>${kind === "video" ? '<span class="alert-evidence-play">▶</span>' : ""}</span>
       <span class="alert-evidence-thumb-badge">${badge}</span>
       <span class="alert-evidence-thumb-cap">${esc(spec.cap)}</span>
       <span class="alert-evidence-thumb-meta">${esc(spec.meta) || "—"}</span>
-      <span class="alert-evidence-zoom">放大查看</span>
     </button>
   `;
 }
@@ -3504,9 +3717,10 @@ function renderArchiveEvidenceHtml(event, alert) {
 function alertEvidenceLightboxHtml(dataset) {
   const kind = dataset.kind === "video" ? "video" : "image";
   const title = dataset.title || "证据";
+  const hasScene = !!dataset.src;
   return `
     <div class="alert-evidence-lightbox alert-evidence-lightbox--${kind}">
-      <div class="alert-evidence-stage${kind === "image" ? " alert-evidence-stage--still" : ""}" role="img" aria-label="${kind === "video" ? "抓拍视频" : "抓拍图片"}">
+      <div class="alert-evidence-stage${kind === "image" ? " alert-evidence-stage--still" : ""}${hasScene ? " has-scene" : ""}" role="img" aria-label="${kind === "video" ? "抓拍视频" : "抓拍图片"}"${sceneStillStyleAttr({ src: dataset.src, pos: dataset.pos })}>
         ${kind === "video" ? '<span class="alert-evidence-play alert-evidence-play--lg" aria-hidden="true">▶</span>' : ""}
       </div>
       <p class="alert-evidence-lightbox-title"><strong>${esc(title)}</strong></p>
@@ -3528,6 +3742,11 @@ function bindAlertEvidenceViewer(root) {
       );
     });
   });
+  root.querySelectorAll("[data-alert-nearby-zoom]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openLinkageCamModal(btn.dataset.alertNearbyZoom);
+    });
+  });
 }
 
 function renderAlertSnapshot(item, cam, ev) {
@@ -3535,7 +3754,7 @@ function renderAlertSnapshot(item, cam, ev) {
 }
 
 function renderAlertVideoTab(item) {
-  const nearby = nearbyCams(item.x, item.y).slice(0, 4);
+  const nearby = nearbyCams(item.x, item.y).slice(0, 3);
   return `
     <div class="alert-evidence-stack">
       <div class="white-card flush">
@@ -3543,11 +3762,15 @@ function renderAlertVideoTab(item) {
         ${renderAlertEvidenceBlock(item)}
       </div>
       <div class="white-card flush">
-        <h3>周边关联视频</h3>
-        <div class="video-grid ai-shots">
+        <h3>周边视频</h3>
+        <div class="alert-nearby-video">
           ${nearby.length
-    ? nearby.map((c) => renderMonitor(c, c.id === item.camera)).join("")
-    : ""}
+    ? nearby.map((c) => `
+            <button type="button" class="linkage-tile alert-nearby-cam${c.id === item.camera ? " is-on" : ""}"
+              data-alert-nearby-zoom="${c.id}" title="放大查看">
+              ${renderMonitor(c, c.id === item.camera, "tile")}
+            </button>`).join("")
+    : `<p class="meta">附近无在线摄像头。</p>`}
         </div>
       </div>
     </div>
@@ -3894,13 +4117,85 @@ function renderMiniScene(layerState, pickId) {
   `;
 }
 
-function renderMonitor(cam, active) {
+const SCENE_STILLS = {
+  sx: "./assets/scenes/scene-sx.jpg",
+  crush: "./assets/scenes/scene-crush.jpg",
+  tail: "./assets/scenes/scene-tail.jpg",
+  sub: "./assets/scenes/scene-sub.jpg",
+  wh: "./assets/scenes/scene-wh.jpg",
+  fence: "./assets/scenes/scene-fence.jpg",
+  helmet: "./assets/scenes/scene-helmet.jpg",
+  fire: "./assets/scenes/scene-fire.jpg",
+  ppe: "./assets/scenes/scene-ppe.jpg",
+  leach: "./assets/scenes/scene-leach.jpg",
+  road: "./assets/scenes/scene-road.jpg"
+};
+
+function sceneStillFromType(type) {
+  const s = String(type || "");
+  if (/安全帽/.test(s)) return "helmet";
+  if (/劳保/.test(s)) return "ppe";
+  if (/烟火|明火|烟雾/.test(s)) return "fire";
+  if (/入侵|闯入/.test(s)) return "fence";
+  return "";
+}
+
+function sceneStillFromPlace(text) {
+  const s = String(text || "");
+  if (/萃取|电积|洗涤|反萃|CCD/.test(s)) return "sx";
+  if (/磨矿|破碎|筛分/.test(s)) return "crush";
+  if (/高位水池|尾矿|坝/.test(s)) return "tail";
+  if (/总降|变电|柴油|配电/.test(s)) return "sub";
+  if (/仓库/.test(s)) return "wh";
+  if (/浸出/.test(s)) return "leach";
+  if (/围栏|大门/.test(s)) return "fence";
+  return "";
+}
+
+function sceneStillSrc({ cam, type, place, seed, variant } = {}) {
+  const key = sceneStillFromType(type)
+    || sceneStillFromPlace(place)
+    || sceneStillFromPlace([cam?.area, cam?.name, cam?.zone].filter(Boolean).join(" "))
+    || "road";
+  const h = hashText(`${seed || cam?.id || key}:${variant || ""}`);
+  const pos = ["center", "28% 42%", "72% 48%", "46% 68%", "58% 32%"][h % 5];
+  return { src: SCENE_STILLS[key] || SCENE_STILLS.road, pos, key };
+}
+
+function renderMonitor(cam, active, layout = "default") {
   if (!cam) {
     return `<div class="monitor is-off"><span>未选摄像头</span><b>请从左侧选择通道</b></div>`;
   }
+  const still = sceneStillSrc({ cam, seed: cam.id });
+  const feedBar = (main, sub) => `
+    <div class="monitor-feed-bar">
+      <span class="monitor-feed-name">${esc(main)}</span>
+      <span class="monitor-feed-meta">${esc(sub)}</span>
+    </div>
+  `;
+  if (layout === "feed" || layout === "tile") {
+    const off = cam.online ? "" : " is-off";
+    const unitCls = `monitor-unit monitor-unit--${layout}${active ? " is-on" : ""}${off}`;
+    const viewCls = `monitor-view has-scene${off}`;
+    if (!cam.online) {
+      return `
+      <div class="${unitCls}">
+        <div class="${viewCls}"${sceneStillStyleAttr(still)}></div>
+        ${feedBar(cam.name, "离线")}
+      </div>`;
+    }
+    const sub = layout === "feed"
+      ? [cam.code || cam.id, cam.area].filter(Boolean).join(" · ")
+      : "LIVE";
+    return `
+      <div class="${unitCls}">
+        <div class="${viewCls}"${sceneStillStyleAttr(still)}></div>
+        ${feedBar(cam.name, layout === "feed" ? `${sub} · LIVE` : sub)}
+      </div>`;
+  }
   if (!cam.online) {
     return `
-      <div class="monitor is-off${active ? " is-on" : ""}">
+      <div class="monitor is-off has-scene${active ? " is-on" : ""}"${sceneStillStyleAttr(still)}>
         <span>${cam.name} · ${cam.code || cam.id}</span>
         <b>通道离线，不能当误报依据</b>
         <p>保留抓拍和录像入口，稍后再调。</p>
@@ -3908,7 +4203,7 @@ function renderMonitor(cam, active) {
     `;
   }
   return `
-    <div class="monitor${active ? " is-on" : ""}">
+    <div class="monitor has-scene${active ? " is-on" : ""}"${sceneStillStyleAttr(still)}>
       <span>${cam.name} · ${cam.code || cam.id}</span>
       <b>LIVE</b>
       <p>${cam.area || ""}　朝向 ${cam.heading}°</p>
@@ -4084,6 +4379,11 @@ function cameraAiSummary(cam) {
     })
     .filter(Boolean);
   return rows;
+}
+
+function cameraAiSummaryText(cam) {
+  const names = cameraAiSummary(cam);
+  return names.length ? names.join("、") : "";
 }
 
 function defaultAiBinding(algo) {
@@ -4498,26 +4798,47 @@ function readCameraFromDialog(dlg) {
   };
 }
 
-function cameraAlgoDialogHtml(cam) {
-  const bound = Object.fromEntries(cameraAiBindings(cam).map((row) => [row.algoId, row]));
-  const body = aiAlgos().map((algo) => {
-    const row = bound[algo.id];
-    const on = !!row;
-    const conf = on ? (row.confidence ?? algo.confidence) : algo.confidence;
-    const roi = on ? (row.roi || algo.roi) : algo.roi;
-    const interval = on ? (row.interval ?? algo.interval) : algo.interval;
-    const strategy = on
-      ? normalizeAlertStrategy(row.strategy, algo.strategy)
-      : normalizeAlertStrategy(algo.strategy);
-    const locked = algo.enabled === false;
-    const rowStatus = on ? (row.enabled !== false ? "启用" : "停用") : "停用";
-    const dis = locked;
-  return `
-        <tr class="cam-algo-row${rowStatus === "启用" ? " is-on" : ""}${locked ? " is-locked" : ""}" data-algo-id="${algo.id}">
+function aiAlgosByEventName() {
+  const order = [];
+  const map = new Map();
+  aiAlgos().forEach((algo) => {
+    const key = algo.eventName || algo.name;
+    if (!map.has(key)) {
+      map.set(key, []);
+      order.push(key);
+    }
+    map.get(key).push(algo);
+  });
+  return order.map((eventName) => ({ eventName, algos: map.get(eventName) }));
+}
+
+function cameraAlgoRowHtml(cam, algo, bound, opts = {}) {
+  const row = bound[algo.id];
+  const on = !!row;
+  const conf = on ? (row.confidence ?? algo.confidence) : algo.confidence;
+  const roi = on ? (row.roi || algo.roi) : algo.roi;
+  const interval = on ? (row.interval ?? algo.interval) : algo.interval;
+  const strategy = on
+    ? normalizeAlertStrategy(row.strategy, algo.strategy)
+    : normalizeAlertStrategy(algo.strategy);
+  const locked = algo.enabled === false;
+  const rowStatus = on ? (row.enabled !== false ? "启用" : "停用") : "停用";
+  const dis = locked;
+  const eventLabel = opts.eventName || algo.eventName || algo.name;
+  const algoMeta = `${esc(algo.name)}<span class="meta"> · ${esc(algo.code)}${locked ? " · 模型已停用" : ""}</span>`;
+  const nameCell = opts.childAlgo
+    ? `
+          <td class="cam-algo-name cam-algo-name--child">
+            <div class="cam-algo-sub">${algoMeta}</div>
+          </td>`
+    : `
           <td class="cam-algo-name">
-            <strong>${esc(algo.name)}</strong>
-            <div class="meta">${esc(algo.code)} · ${esc(algo.category)}${locked ? " · 模型已停用" : ""}</div>
-          </td>
+            <strong>${esc(eventLabel)}</strong>
+            <div class="cam-algo-sub">${algoMeta}</div>
+          </td>`;
+  return `
+        <tr class="cam-algo-row${locked ? " is-locked" : ""}" data-algo-id="${algo.id}">
+          ${nameCell}
           <td>
             <select class="field field-compact" name="st-${algo.id}"${locked ? " disabled" : ""}>
               ${CAM_ALGO_ROW_STATUS.map((name) => (
@@ -4542,13 +4863,21 @@ function cameraAlgoDialogHtml(cam) {
             <input class="field field-compact" name="int-${algo.id}" type="number" min="5" max="600" value="${interval}"${dis ? " disabled" : ""}>
           </td>
         </tr>`;
-  }).join("");
+}
+
+function cameraAlgoDialogHtml(cam) {
+  const bound = Object.fromEntries(cameraAiBindings(cam).map((row) => [row.algoId, row]));
+  const body = aiAlgosByEventName().flatMap(({ eventName, algos }) => (
+    algos.map((algo, idx) => cameraAlgoRowHtml(cam, algo, bound, idx === 0
+      ? { eventName }
+      : { childAlgo: true }))
+  )).join("");
   return `
     <div class="table-wrap cam-algo-table-wrap">
       <table class="cam-algo-table">
         <thead>
           <tr>
-            <th>算法</th>
+            <th>告警</th>
             <th>状态</th>
             <th>告警规则</th>
             <th>置信度</th>
@@ -4584,9 +4913,9 @@ function bindCameraAlgoDialog(dlg) {
     dlg.querySelectorAll("[name^='st-']").forEach((sel) => {
       const row = sel.closest(".cam-algo-row");
       const locked = row?.classList.contains("is-locked");
-      row?.classList.toggle("is-on", sel.value === "启用");
+      const off = sel.value !== "启用";
       row?.querySelectorAll("select:not([name^='st-']), input[type=number]").forEach((el) => {
-        el.disabled = locked;
+        el.disabled = locked || off;
       });
     });
   };
@@ -4599,12 +4928,9 @@ function bindCameraAlgoDialog(dlg) {
 function cameraEditDialogHtml(cam) {
   return `
     <div class="camera-edit-modal">
-      <div class="alert-panel-switch camera-edit-tabs">
-        <button type="button" class="btn btn-sm is-on" data-cam-edit-tab="base">基本信息</button>
-        <button type="button" class="btn btn-sm" data-cam-edit-tab="algo">识别算法</button>
-      </div>
-      <div class="camera-edit-pane" data-cam-edit-pane="base">${cameraFormFields(cam)}</div>
-      <div class="camera-edit-pane" data-cam-edit-pane="algo" hidden>${cameraAlgoDialogHtml(cam)}</div>
+      ${cameraFormFields(cam)}
+      <h4 class="camera-modal-section-title">通道告警</h4>
+      ${cameraAlgoDialogHtml(cam)}
     </div>
   `;
 }
@@ -4612,15 +4938,6 @@ function cameraEditDialogHtml(cam) {
 function bindCameraEditDialog(dlg) {
   dlg.querySelector(".modal")?.classList.add("algo-modal");
   bindCameraAlgoDialog(dlg);
-  dlg.querySelectorAll("[data-cam-edit-tab]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.camEditTab;
-      dlg.querySelectorAll("[data-cam-edit-tab]").forEach((b) => b.classList.toggle("is-on", b.dataset.camEditTab === id));
-      dlg.querySelectorAll("[data-cam-edit-pane]").forEach((pane) => {
-        pane.hidden = pane.dataset.camEditPane !== id;
-      });
-    });
-  });
 }
 
 function aiAlgoCatalogHtml() {
@@ -4679,7 +4996,17 @@ function openCameraView(cam) {
   openAlertDialog(`查看 · ${cam.name}`, cameraViewDialogHtml(cam), () => true, "关闭", true);
 }
 
-function openCameraEdit(cam, after) {
+function openCameraAlertConfig(cam, after) {
+  if (!cam) return;
+  openAlertDialog(`告警配置 · ${cam.name}`, cameraAlgoDialogHtml(cam), (dlg) => {
+    cam.aiBindings = readCameraAlgoBindings(dlg, cam);
+    persist();
+    after?.();
+    return true;
+  }, "保存", true, bindCameraAlgoDialog);
+}
+
+function openCameraEdit(cam, after, opts) {
   openAlertDialog(`编辑 · ${cam.name}`, cameraEditDialogHtml(cam), (dlg, err) => {
     const patch = readCameraFromDialog(dlg);
     if (!patch.code || !patch.name) {
@@ -4696,7 +5023,12 @@ function openCameraEdit(cam, after) {
     persist();
     after();
     return true;
-  }, "保存", true, bindCameraEditDialog);
+  }, "保存", true, (dlg) => {
+    bindCameraEditDialog(dlg);
+    if (opts?.tab === "algo") {
+      dlg.querySelector(".cam-algo-table-wrap")?.scrollIntoView({ block: "nearest" });
+    }
+  });
 }
 
 function openCameraCreate(after) {
@@ -5002,7 +5334,13 @@ function listPagerHtml(page, totalPages, totalRows) {
   `;
 }
 
-function renderCameraPage(root, focusId) {
+function renderCameraPage(root, routeOrFocus) {
+  const focusId = typeof routeOrFocus === "string" || !routeOrFocus
+    ? routeOrFocus
+    : routeOrFocus.focus;
+  const openAlertOnLoad = typeof routeOrFocus === "object" && routeOrFocus
+    && (routeOrFocus.view === "alert" || routeOrFocus.view === "algo");
+  let autoOpenedAlert = false;
   let statusFilter = "全部";
   let plantFilter = "全部";
   let areaFilter = "全部";
@@ -5166,9 +5504,10 @@ function renderCameraPage(root, focusId) {
                 <td><span class="dot ${cam.sync === "待并表" ? "warn" : "ok"}">${cam.sync || "已对齐"}</span></td>
                 <td>
                   <div class="table-actions">
-                    <a class="btn btn-primary" href="${cameraCalibOverviewHref(cam.id)}">标定</a>
                     <button type="button" class="btn" data-cam-view="${cam.id}">查看</button>
                     <button type="button" class="btn" data-cam-edit="${cam.id}">编辑</button>
+                    <button type="button" class="btn" data-cam-alert="${cam.id}">告警</button>
+                    <a class="btn" href="${cameraCalibOverviewHref(cam.id)}">标定</a>
                     <button type="button" class="btn" data-cam-del="${cam.id}">删除</button>
                   </div>
                 </td>
@@ -5227,6 +5566,12 @@ function renderCameraPage(root, focusId) {
         if (cam) openCameraEdit(cam, paint);
       });
     });
+    root.querySelectorAll("[data-cam-alert]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const cam = data.cameras.find((item) => item.id === btn.dataset.camAlert);
+        if (cam) openCameraAlertConfig(cam, paint);
+      });
+    });
     root.querySelectorAll("[data-cam-del]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const cam = data.cameras.find((item) => item.id === btn.dataset.camDel);
@@ -5242,6 +5587,11 @@ function renderCameraPage(root, focusId) {
       });
     });
     if (focusId) root.querySelector(`tr[data-cam="${focusId}"]`)?.scrollIntoView({ block: "nearest" });
+    if (openAlertOnLoad && !autoOpenedAlert && focusId) {
+      autoOpenedAlert = true;
+      const cam = data.cameras.find((item) => item.id === focusId);
+      if (cam) openCameraAlertConfig(cam, paint);
+    }
   }
   paint();
 }
@@ -6447,23 +6797,68 @@ function suppressAlertByWork(alert, order) {
   });
 }
 
-function suppressEventByWork(event, order) {
-  if (!event) return;
-  event.status = "已抑制";
+function reviewEventWorkOrderId(item) {
+  if (!item) return "";
+  if (item.workOrderId) return item.workOrderId;
+  const hit = matchingSuppressWorkOrders({
+    place: item.place,
+    eventType: item.type,
+    person: item.person,
+    at: workStampFromRecord(item)
+  })[0];
+  return hit?.id || "";
+}
+
+function reviewEventWorkOrderCell(item) {
+  const id = reviewEventWorkOrderId(item);
+  if (!id) return "—";
+  return `<a class="text-link" href="#/t5/tickets?id=${encodeURIComponent(id)}">${esc(id)}</a>`;
+}
+
+function reviewEventSourceLabel(item) {
+  if (!item) return "—";
+  if (item.source === "定位") {
+    const trigger = item.locTrigger || "";
+    if (trigger.includes("围栏")) return "定位 · 围栏";
+    if (trigger.includes("人员")) return "定位 · 人员";
+    return trigger ? `定位 · ${trigger}` : "定位";
+  }
+  if (item.source) return item.source;
+  return item.confidence != null ? "视频AI" : "—";
+}
+
+function reviewLocSubjectLine(item) {
+  if (item?.source !== "定位") return "";
+  return [item.person, item.deviceId].filter(Boolean).join(" · ") || "—";
+}
+
+/** 仅展示多路识别融合说明，工单提示走「关联工单」与说明字段 */
+function reviewFusionNoteHtml(item) {
+  const text = String(item?.fusionNote || "").trim();
+  if (!text) return "";
+  if (item.workOrderId && /关联工单|升告警前须核对|作业票抑制|作业关联/.test(text)) return "";
+  return `<dt>融合</dt><dd>${esc(text)}</dd>`;
+}
+
+function linkReviewEventToWorkOrder(event, order) {
+  if (!event || !order) return;
   event.workOrderId = order.id;
-  event.note = event.note || `有效工单 ${order.id} 抑制升告警`;
-  event.fusionNote = event.fusionNote || "作业关联，不进告警中心";
+  event.note = event.note || `关联有效工单 ${order.id}，请先核对作业许可`;
   recordWorkSuppression(order, {
     eventId: event.id,
     type: event.type,
     time: event.time,
     place: event.place,
-    note: "视频识别未升告警"
+    note: "识别复核关联工单"
   });
   if (event.alertId) {
     const linked = (data.alerts || []).find((row) => row.id === event.alertId);
     if (linked) suppressAlertByWork(linked, order);
   }
+}
+
+function suppressEventByWork(event, order) {
+  linkReviewEventToWorkOrder(event, order);
 }
 
 function isManualAlert(alert) {
@@ -6485,13 +6880,14 @@ function applyWorkAlertSuppression() {
   });
   videoEvents().forEach((event) => {
     if (!["待复核", "待核查", "真警"].includes(event.status)) return;
+    if (event.workOrderId) return;
     const hits = matchingSuppressWorkOrders({
       place: event.place,
       eventType: event.type,
       person: event.person,
       at: workStampFromRecord(event)
     });
-    if (hits[0]) suppressEventByWork(event, hits[0]);
+    if (hits[0]) linkReviewEventToWorkOrder(event, hits[0]);
   });
   ensureWorkSuppressDemo();
 }
@@ -6514,7 +6910,7 @@ function ensureWorkSuppressDemo() {
       typeCode: "FIRE",
       algo: "fire-v2.1",
       level: 2,
-      status: "已抑制",
+      status: "待复核",
       confidence: 88,
       time: "10:18",
       camera: cam.id || "",
@@ -6522,15 +6918,14 @@ function ensureWorkSuppressDemo() {
       plant: "选矿分厂",
       x: cam.x,
       y: cam.y,
-      summary: "焊接火花，有效动火票抑制升告警",
+      summary: "焊接火花，关联动火票待复核",
       workOrderId: order.id,
-      note: `有效工单 ${order.id} 抑制升告警`,
-      fusionNote: "作业关联，不进告警中心",
+      note: `关联有效工单 ${order.id}，请先核对作业许可`,
       payload: { algo: "fire-v2.1", camera_id: cam.id || "" }
     };
     data.events.unshift(ev);
   }
-  suppressEventByWork(ev, order);
+  linkReviewEventToWorkOrder(ev, order);
 }
 
 function renderAlertLinkedWorkOrders(item) {
@@ -7089,7 +7484,7 @@ function defaultWorkTypeSeeds() {
         hotWorker: false,
         maxHours: 8
       },
-      suppressEventTypes: ["非法闯入"]
+      suppressEventTypes: ["非法闯入", "区域入侵"]
     }
   ];
 }
@@ -9344,7 +9739,16 @@ function reviewEvidenceItems(item) {
     { kind: "video", badge: "抓拍视频", title: item.type, cap: `${t} · 前后 6s`, meta: [camName, "触发前后各 3 秒"].filter(Boolean).join(" · ") },
     { kind: "image", badge: "抓拍图片", title: item.type, cap: `${t} · 特写帧`, meta: [camName, "二次抓拍"].filter(Boolean).join(" · ") },
     { kind: "video", badge: "抓拍视频", title: item.type, cap: `${t} · 完整片段`, meta: [camName, "约 15 秒"].filter(Boolean).join(" · ") }
-  ];
+  ].map((row, i) => {
+    const still = sceneStillSrc({
+      cam,
+      type: item.type,
+      place: item.place,
+      seed: item.id,
+      variant: `${row.kind}-${i}`
+    });
+    return { ...row, src: still.src, pos: still.pos };
+  });
 }
 
 function reviewLiveCameras(item) {
@@ -9360,9 +9764,10 @@ function reviewLiveCameras(item) {
 function renderAlertEvidenceDisplay(spec) {
   const kind = spec.kind === "video" ? "video" : "image";
   const badge = spec.badge || (kind === "video" ? "抓拍视频" : "抓拍图片");
+  const mediaClass = spec.src ? "alert-evidence-thumb-media has-scene" : "alert-evidence-thumb-media";
   return `
     <div class="alert-evidence-thumb alert-evidence-thumb--${kind} alert-evidence-thumb--static" aria-label="${badge}">
-      <span class="alert-evidence-thumb-media" aria-hidden="true">${kind === "video" ? '<span class="alert-evidence-play">▶</span>' : ""}</span>
+      <span class="${mediaClass}" aria-hidden="true"${sceneStillStyleAttr(spec)}>${kind === "video" ? '<span class="alert-evidence-play">▶</span>' : ""}</span>
       <span class="alert-evidence-thumb-badge">${badge}</span>
       <span class="alert-evidence-thumb-cap">${esc(spec.cap)}</span>
       <span class="alert-evidence-thumb-meta">${esc(spec.meta) || "—"}</span>
@@ -9391,11 +9796,10 @@ function renderAiQueue(root, focusId) {
   let liveCamId = "";
   let mediaFocusId = "";
 
-  const rowsOf = () => videoEvents().filter((item) => {
+  const rowsOf = () => reviewQueueEvents().filter((item) => {
     if (filter === "待办") return ["待复核", "待核查"].includes(item.status);
     if (filter === "真警") return item.status === "真警";
     if (filter === "误报") return item.status === "误报";
-    if (filter === "已抑制") return item.status === "已抑制";
     return true;
   }).sort((a, b) => a.level - b.level);
 
@@ -9450,7 +9854,7 @@ function renderAiQueue(root, focusId) {
     const rows = list();
     let item = rows.find((row) => row.id === focus) || null;
     if (!item && focus) {
-      item = videoEvents().find((row) => row.id === focus) || null;
+      item = reviewQueueEvents().find((row) => row.id === focus) || null;
     }
     if (!item) item = rows[0] || null;
     focus = item?.id || null;
@@ -9469,13 +9873,13 @@ function renderAiQueue(root, focusId) {
     const sceneCam = mediaMode === "live" ? liveCam : cam;
     const aiTypes = [...new Set([
       ...aiAlgos().map((row) => row.eventName),
-      ...videoEvents().map((row) => row.type).filter(Boolean)
+      ...reviewQueueEvents().map((row) => row.type).filter(Boolean)
     ])];
-    const aiPlaces = [...new Set(videoEvents().flatMap((row) => [row.place, row.plant].filter(Boolean)))];
-    const aiCams = [...new Set(videoEvents().map((row) => row.camera).filter(Boolean))];
+    const aiPlaces = [...new Set(reviewQueueEvents().flatMap((row) => [row.place, row.plant].filter(Boolean)))];
+    const aiCams = [...new Set(reviewQueueEvents().map((row) => row.camera).filter(Boolean))];
     root.innerHTML = `
       <div class="filter-row alert-toolbar">
-        ${toolbarStatusFilterHtml("ai-status-filter", filter, ["待办", "全部", "真警", "误报", "已抑制"])}
+        ${toolbarStatusFilterHtml("ai-status-filter", filter, ["待办", "全部", "真警", "误报"])}
         <span class="alert-toolbar-sep" aria-hidden="true"></span>
         <label class="cam-field-label"><span class="cam-field-label-name">编号</span>
           <input type="search" class="field alert-q-field" id="ai-q-id" value="${draftId.replace(/"/g, "&quot;")}" autocomplete="off">
@@ -9506,7 +9910,7 @@ function renderAiQueue(root, focusId) {
                   <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
                 </div>
                 <p>${row.type} · ${row.place}</p>
-                <p class="meta">${row.status} · 置信度 ${row.confidence}% · ${row.time}</p>
+                <p class="meta">${row.status} · 置信度 ${row.confidence}% · ${row.time}${reviewEventWorkOrderId(row) ? ` · ${esc(reviewEventWorkOrderId(row))}` : ""}</p>
               </button>
             `).join("") : ""}
           </aside>
@@ -9522,7 +9926,7 @@ function renderAiQueue(root, focusId) {
             </header>
             <section class="review-media-stage">
               ${mediaMode === "live"
-                ? `<div class="review-media-frame review-media-live">${renderMonitor(liveCam, true)}</div>`
+                ? `<div class="review-media-frame review-media-live">${renderMonitor(liveCam, true, "feed")}</div>`
                 : renderReviewShotStage(shotSpecs[shotIndex])}
             </section>
             ${mediaMode === "live" ? `
@@ -9551,17 +9955,20 @@ function renderAiQueue(root, focusId) {
                   <span class="lvl lvl-${item.level} lvl-sm">${LEVEL_NAME[item.level]}</span>
                 </div>
                 <dl class="kv review-facts">
+                  <dt>来源</dt><dd>${esc(reviewEventSourceLabel(item))}</dd>
+                  <dt>关联工单</dt><dd>${reviewEventWorkOrderCell(item)}</dd>
                   <dt>位置</dt><dd>${esc([item.plant, item.place].filter(Boolean).join(" ") || "—")}</dd>
                   <dt>状态</dt><dd>${esc(item.status || "—")}</dd>
                   <dt>时间</dt><dd class="num">${esc(item.time || "—")}</dd>
-                  <dt>摄像头</dt><dd>${cam ? `${cam.name} ${cam.online ? "在线" : "离线"}` : item.camera}${cam ? `　<a class="text-link" href="#/t7/cameras?id=${cam.id}">算法配置</a>` : ""}</dd>
-                  <dt>识别算法</dt><dd>${aiAlgoLabel(item)}</dd>
-                  <dt>定位精度</dt><dd>${item.precision}</dd>
+                  ${item.source === "定位"
+    ? `<dt>定位对象</dt><dd>${esc(reviewLocSubjectLine(item))}</dd>`
+    : `<dt>摄像头</dt><dd>${cam ? `${cam.name} ${cam.online ? "在线" : "离线"}` : item.camera || "—"}${cam ? `　<a class="text-link" href="#/t7/cameras?id=${encodeURIComponent(cam.id)}&view=alert">告警配置</a>` : ""}</dd>
+                  <dt>识别算法</dt><dd>${aiAlgoLabel(item)}</dd>`}
+                  <dt>落点精度</dt><dd>${esc(item.coordPrecision || item.precision || "—")}</dd>
                   <dt>识别编号</dt><dd>${item.id}${item.alertId ? `　已挂 ${item.alertId}` : "　尚未转正式告警"}</dd>
-                  <dt>置信度</dt><dd>${item.confidence}%</dd>
-                  ${item.fusionNote ? `<dt>融合</dt><dd>${item.fusionNote}</dd>` : ""}
+                  <dt>置信度</dt><dd>${item.confidence != null ? `${item.confidence}%` : "—"}</dd>
+                  ${reviewFusionNoteHtml(item)}
                 </dl>
-                ${renderAiFieldBlock(item)}
                 ${renderAiJudgeExtras(item)}
               </div>
             </div>
@@ -9635,23 +10042,16 @@ function renderAiQueue(root, focusId) {
 }
 
 function aiButtons(item) {
-  if (item.status === "已抑制") {
-    return item.workOrderId ? `<a class="btn btn-primary" href="#/t5/tickets?id=${encodeURIComponent(item.workOrderId)}">查看作业工单</a>` : "";
-  }
   if (item.status === "真警" || item.status === "误报") {
     return item.alertId ? `<a class="btn btn-primary" href="#/t2/alerts?id=${item.alertId}">查看正式告警</a>` : "";
   }
   if (item.status !== "待复核" && item.status !== "待核查") {
     return "";
   }
-  const buttons = [
+  return [
     `<button class="btn btn-primary" data-ai-act="true" data-id="${item.id}">真警，转正式告警</button>`,
     `<button class="btn" data-ai-act="false" data-id="${item.id}">误报</button>`
-  ];
-  if (item.status === "待复核") {
-    buttons.push(`<button class="btn" data-ai-act="field" data-id="${item.id}">送现场确认</button>`);
-  }
-  return buttons.join("");
+  ].join("");
 }
 
 function renderAiJudgeExtras(item) {
@@ -9669,14 +10069,6 @@ function renderAiJudgeExtras(item) {
         <dt>误报原因</dt><dd>${item.reason || "—"}</dd>
         <dt>说明</dt><dd>${item.note || "—"}</dd>
         <dt>复核人</dt><dd>${item.reviewer || "—"}</dd>
-      </dl>
-    `;
-  }
-  if (item.status === "已抑制") {
-    return `
-      <dl class="kv review-readonly">
-        <dt>说明</dt><dd>${item.note || "有效作业票抑制升告警"}</dd>
-        <dt>作业工单</dt><dd>${item.workOrderId ? `<a class="text-link" href="#/t5/tickets?id=${encodeURIComponent(item.workOrderId)}">${item.workOrderId}</a>` : "—"}</dd>
       </dl>
     `;
   }
@@ -9734,7 +10126,7 @@ function showAiFalseDialog(target, refresh) {
 function bindAiActions(root, item, refresh) {
   root.querySelectorAll("[data-ai-act]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const target = data.aiEvents.find((row) => row.id === btn.dataset.id);
+      const target = eventById(btn.dataset.id);
       if (!target) return;
       const act = btn.getAttribute("data-ai-act");
       const note = root.querySelector("#ai-note")?.value.trim() || "";
@@ -9750,10 +10142,10 @@ function bindAiActions(root, item, refresh) {
           at: workStampFromRecord(target)
         });
         if (hits[0]) {
-          suppressEventByWork(target, hits[0]);
+          linkReviewEventToWorkOrder(target, hits[0]);
           data.kpis.openAlerts = openCount();
           persist();
-          refresh({ filter: "已抑制", focus: target.id });
+          refresh({ filter: "待办", focus: target.id });
           return;
         }
         target.status = "真警";
@@ -9788,18 +10180,6 @@ function bindAiActions(root, item, refresh) {
         persist();
         refresh({ filter: "真警", focus: target.id });
         return;
-      }
-      if (act === "field") {
-        target.status = "待核查";
-        target.fieldTo = aiFieldContact(target.plant);
-        target.fieldSentAt = nowTime();
-        target.fieldAsk = note || `请现场确认：${target.type}，${target.place}，抓拍 ${target.time}，置信度 ${target.confidence}%`;
-        target.fieldReply = "";
-        target.fieldReplyAt = "";
-        target.note = note || "识别结果已推送现场确认";
-        data.kpis.openAlerts = openCount();
-        persist();
-        refresh({ focus: target.id });
       }
     });
   });
@@ -11580,7 +11960,7 @@ function sysUserTable(rows, focusId) {
       <td>${esc(row.name)}</td>
       <td>${esc(row.org || "—")}</td>
       <td>${esc(row.role || "—")}</td>
-      <td>${emp ? `<a class="text-link" href="#/t7/employees?id=${encodeURIComponent(emp.id)}">${esc(emp.id)}</a>` : "—"}</td>
+      <td>${emp ? `<a class="text-link" href="#/t8/employees?id=${encodeURIComponent(emp.id)}">${esc(emp.id)}</a>` : "—"}</td>
       <td>${esc(row.plant || "—")}</td>
       <td>${esc(row.status || "—")}</td>
       ${sysTableActions(row.id)}
@@ -12768,7 +13148,7 @@ function renderSysDictPage(root, focusId) {
 
 const NOTIFY_CHANNEL_KINDS = ["系统内", "运营商", "语音网关", "现场设备", "第三方"];
 const NOTIFY_PROTOCOLS = ["—", "HTTP", "TCP", "Modbus-TCP"];
-const NOTIFY_TEMPLATE_SOURCES = ["告警中心", "识别复核", "作业管理", "安全分析", "配置中心"];
+const NOTIFY_TEMPLATE_SOURCES = ["告警中心", "识别复核", "作业管理", "安全分析", "配置中心", "系统管理"];
 const NOTIFY_TEMPLATE_TARGETS = ["责任组织", "现场值班", "当班值班员", "推送对象", "安环部", "审批岗位"];
 const SYS_NOTIFY_FILTER_DEFAULTS = { name: "", source: "全部", status: "全部" };
 const SYS_NOTIFY_FILTER_FIELDS = [
@@ -13329,7 +13709,7 @@ function bindChrome() {
 }
 
 async function boot() {
-  data = await fetch("./data/safety.json?v=36").then((res) => res.json());
+  data = await fetch("./data/safety.json?v=40").then((res) => res.json());
   try {
     const mapZones = await fetch("./data/deziwa-map-zones.json", { cache: "no-store" }).then((res) => res.json());
     if (Array.isArray(mapZones) && mapZones.length) data.zones = mapZones;
