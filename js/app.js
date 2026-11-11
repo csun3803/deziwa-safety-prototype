@@ -51,6 +51,7 @@ const TABS = [
       { id: "users", name: "用户管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "账号、组织归属与角色。" },
       { id: "roles", name: "角色权限", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "菜单、数据范围、操作与对象引用。" },
       { id: "dict", name: "字典管理", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "等级、误报原因等枚举字典。" },
+      { id: "notify", name: "消息管理", group: "系统运行", done: true, layout: "列表-详情型", desc: "通知渠道、推送协议与消息模板。" },
       { id: "params", name: "运行参数", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "告警、定位、视频 AI、复核等运行参数。" },
       { id: "audit", name: "操作审计", group: "系统运行", done: true, layout: "列表-详情型", desc: "按用户、模块、时间查操作记录。" }
     ]
@@ -524,9 +525,6 @@ function parseRoute() {
   }
   if (tabId === "t7" && pageId === "perms") {
     pageId = "roles";
-  }
-  if (tabId === "t7" && pageId === "notify") {
-    pageId = "audit";
   }
   if (tabId === "t7" && (pageId === "alert-hub" || pageId === "types" || pageId === "rules" || pageId === "report")) {
     tabId = "t2";
@@ -1115,6 +1113,7 @@ function renderPage() {
     else if (route.page.id === "users") renderSysUsersPage(root, route.focus);
     else if (route.page.id === "employees") renderSysEmployeesPage(root, route.focus);
     else if (route.page.id === "dict") renderSysDictPage(root, route.focus);
+    else if (route.page.id === "notify") renderSysNotifyPage(root, route.focus);
     else if (route.page.id === "params") renderSysParamsPage(root, route.focus);
     else if (route.page.id === "audit") renderSysAudit(root, route);
     else renderPlaceholder(root, route);
@@ -5887,6 +5886,66 @@ function normalizeZoneDetailTab() {
   if (zoneDetailTab !== "basic" && zoneDetailTab !== "access") zoneDetailTab = "basic";
 }
 
+function configListPanelHtml(title, cardsHtml, addButtonHtml = "") {
+  return `
+    <aside class="alert-list-panel config-list-panel">
+      <div class="sys-panel-head">
+        <span class="sys-panel-title">${esc(title)}</span>
+        ${addButtonHtml}
+      </div>
+      <div class="sys-panel-body">${cardsHtml}</div>
+    </aside>`;
+}
+
+function openZoneCreateDialog(after) {
+  const plants = (data.plants || []).filter((p) => p.id !== "all");
+  const defaultPlant = plants[0]?.id || "";
+  openAlertDialog("新增区域", `
+    <div class="form-fields">
+      <label>区域 ID<input class="field" name="zone-id" placeholder="z-xxx" autocomplete="off"></label>
+      <label>区域名称<input class="field" name="zone-name" autocomplete="off"></label>
+      <label>分厂
+        <select class="field" name="zone-plant">${plants.map((p) => (
+          `<option value="${p.id}"${p.id === defaultPlant ? " selected" : ""}>${esc(p.name)}</option>`
+        )).join("")}</select>
+      </label>
+      <label>风险等级<select class="field" name="zone-risk">${optionList(RISK_NAMES, "中")}</select></label>
+      <label>风险类型<select class="field" name="zone-fence-type">${optionList(FENCE_KINDS, "风险区")}</select></label>
+    </div>
+  `, (dlg) => {
+    const id = formVal(dlg, "zone-id").trim();
+    const name = formVal(dlg, "zone-name").trim();
+    if (!id || !name) {
+      const err = dlg.querySelector("#modal-err");
+      err.hidden = false;
+      err.textContent = "请填写区域 ID 与名称。";
+      return false;
+    }
+    if ((data.zones || []).some((row) => row.id === id)) {
+      const err = dlg.querySelector("#modal-err");
+      err.hidden = false;
+      err.textContent = "区域 ID 已存在。";
+      return false;
+    }
+    const fresh = {
+      id,
+      name,
+      plant: formVal(dlg, "zone-plant") || defaultPlant,
+      risk: formVal(dlg, "zone-risk") || "中",
+      fence: formVal(dlg, "zone-fence-type") || "风险区",
+      admissions: [],
+      note: ""
+    };
+    ensureZoneFenceAlert(fresh);
+    ensureZoneAdmissions(fresh);
+    data.zones = data.zones || [];
+    data.zones.push(fresh);
+    persist();
+    after?.(id);
+    return true;
+  }, "保存", true);
+}
+
 function renderZoneAccess(root, focusId) {
   let focus = focusId;
   let zoneEditing = false;
@@ -5896,27 +5955,34 @@ function renderZoneAccess(root, focusId) {
     const rows = data.zones;
     const item = rows.find((row) => row.id === focus) || rows[0];
     focus = item?.id;
+    const listCards = rows.map((row) => {
+      const fa = ensureZoneFenceAlert(row);
+      const alertOn = fa.status === "启用";
+      return `
+        <button type="button" class="alert-card${row.id === item.id ? " is-on" : ""}" data-id="${row.id}">
+          <div class="row">
+            <strong>${row.name}</strong>
+            <span class="lvl lvl-${RISK_LVL[row.risk] || 4}">${row.risk}</span>
+          </div>
+          <p class="meta">${plantName(row.plant)} · ${row.fence}${alertOn ? " · 定位告警启" : ""}</p>
+        </button>`;
+    }).join("");
     root.innerHTML = `
       <div class="alert-layout">
-        <aside class="alert-list-panel">
-          ${rows.map((row) => {
-            const fa = ensureZoneFenceAlert(row);
-            const alertOn = fa.status === "启用";
-            return `
-            <button type="button" class="alert-card${row.id === item.id ? " is-on" : ""}" data-id="${row.id}">
-              <div class="row">
-                <strong>${row.name}</strong>
-                <span class="lvl lvl-${RISK_LVL[row.risk] || 4}">${row.risk}</span>
-              </div>
-              <p class="meta">${plantName(row.plant)} · ${row.fence}${alertOn ? " · 定位告警启" : ""}</p>
-            </button>`;
-          }).join("")}
-        </aside>
+        ${configListPanelHtml("区域列表", listCards, `<button type="button" class="btn btn-sm btn-primary" data-zone-add>新增</button>`)}
         <section class="alert-detail">
           ${item ? zoneForm(item, zoneEditing) : ""}
         </section>
       </div>
     `;
+    root.querySelector("[data-zone-add]")?.addEventListener("click", () => {
+      openZoneCreateDialog((id) => {
+        focus = id;
+        zoneEditing = true;
+        zoneDetailTab = "basic";
+        paint();
+      });
+    });
     root.querySelectorAll("[data-id]").forEach((btn) => {
       btn.addEventListener("click", () => {
         focus = btn.dataset.id;
@@ -7755,22 +7821,18 @@ function renderWorkTypesConfig(root, focusId) {
     const all = data.workTypes || [];
     const item = all.find((row) => row.id === focus) || all[0];
     focus = item?.id;
+    const listCards = all.map((row) => `
+      <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-id="${row.id}">
+        <div class="row">
+          <strong>${esc(row.name)}</strong>
+          <span class="dot ${workStatusTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span>
+        </div>
+        <p class="meta">${esc(row.code)} · ${esc(workTypeLevelsText(row))} · ${esc(workFlowName(row.flowId))}</p>
+      </button>
+    `).join("");
     root.innerHTML = `
       <div class="alert-layout">
-        <aside class="alert-list-panel">
-          ${all.map((row) => `
-            <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-id="${row.id}">
-              <div class="row">
-                <strong>${esc(row.name)}</strong>
-                <span class="dot ${workStatusTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span>
-              </div>
-              <p class="meta">${esc(row.code)} · ${esc(workTypeLevelsText(row))} · ${esc(workFlowName(row.flowId))}</p>
-            </button>
-          `).join("")}
-          <div class="list-foot">
-            <button type="button" class="btn" data-add>新增</button>
-          </div>
-        </aside>
+        ${configListPanelHtml("作业类型", listCards)}
         <section class="alert-detail">
           ${item ? renderWorkTypeDetail(item, workTypeEditing) : ""}
         </section>
@@ -7796,33 +7858,6 @@ function renderWorkTypesConfig(root, focusId) {
     });
     root.querySelector("[data-wt-cancel]")?.addEventListener("click", () => {
       workTypeEditing = false;
-      paint();
-    });
-    root.querySelector("[data-add]")?.addEventListener("click", () => {
-      const fresh = normalizeWorkType({
-        id: `wt-${Date.now()}`,
-        code: "NEW",
-        name: "新作业类型",
-        level: 2,
-        levelSet: "normal",
-        levels: [1, 2, 3],
-        enabled: false,
-        zoneIds: [],
-        quals: [{ role: "作业人", cert: "", required: true }],
-        measures: [],
-        flowId: "wf-four",
-        approval: WORK_APPROVAL_DEFAULT.map((row) => ({ ...row })),
-        riskOptions: [],
-        validityHours: 8,
-        night: false,
-        extras: {},
-        suppressEventTypes: []
-      });
-      data.workTypes = data.workTypes || [];
-      data.workTypes.push(fresh);
-      persist();
-      focus = fresh.id;
-      workTypeEditing = true;
       paint();
     });
     root.querySelector("[data-wt-save]")?.addEventListener("click", () => {
@@ -12731,6 +12766,313 @@ function renderSysDictPage(root, focusId) {
   paint();
 }
 
+const NOTIFY_CHANNEL_KINDS = ["系统内", "运营商", "语音网关", "现场设备", "第三方"];
+const NOTIFY_PROTOCOLS = ["—", "HTTP", "TCP", "Modbus-TCP"];
+const NOTIFY_TEMPLATE_SOURCES = ["告警中心", "识别复核", "作业管理", "安全分析", "配置中心"];
+const NOTIFY_TEMPLATE_TARGETS = ["责任组织", "现场值班", "当班值班员", "推送对象", "安环部", "审批岗位"];
+const SYS_NOTIFY_FILTER_DEFAULTS = { name: "", source: "全部", status: "全部" };
+const SYS_NOTIFY_FILTER_FIELDS = [
+  { key: "name", name: "nt-name" },
+  { key: "source", name: "nt-source", type: "select" },
+  { key: "status", name: "nt-status", type: "select" }
+];
+
+function notifyChannelOptions() {
+  const fromDict = (data.sysDicts || []).find((row) => row.code === "NOTIFY_CHANNEL")?.items
+    ?.filter((row) => row.enabled)
+    .map((row) => row.label || row.value) || [];
+  const fromCfg = (data.sysNotifyChannels || []).filter((row) => row.status === "启用").map((row) => row.name);
+  return [...new Set([...fromDict, ...fromCfg, "待办", "短信", "电话"])];
+}
+
+function ensureSysNotify() {
+  if (!Array.isArray(data.sysNotify) || !data.sysNotify.length) {
+    data.sysNotify = [
+      { id: "n-ack", name: "告警待签收", source: "告警中心", target: "责任组织", channels: ["待办", "短信"], template: "【告警】${type} ${place}，请尽快签收 ${id}", enabled: true }
+    ];
+  }
+  const seedChannels = [
+    { id: "nc-todo", name: "待办", kind: "系统内", protocol: "—", endpoint: "平台待办", status: "启用" },
+    { id: "nc-sms", name: "短信", kind: "运营商", protocol: "HTTP", endpoint: "https://sms.plant.local/send", status: "启用" },
+    { id: "nc-phone", name: "电话", kind: "语音网关", protocol: "TCP", endpoint: "10.12.8.40:5060", status: "启用" },
+    { id: "nc-modbus", name: "声光联动", kind: "现场设备", protocol: "Modbus-TCP", endpoint: "10.152.25.80:502", status: "停用" }
+  ];
+  data.sysNotifyChannels = data.sysNotifyChannels || [];
+  seedChannels.forEach((seed) => {
+    if (!data.sysNotifyChannels.some((row) => row.id === seed.id)) data.sysNotifyChannels.push({ ...seed });
+  });
+}
+
+function notifyTemplateMatches(row, f) {
+  if (f.source && f.source !== "全部" && row.source !== f.source) return false;
+  if (f.status && f.status !== "全部") {
+    const on = !!row.enabled;
+    if (f.status === "启用" && !on) return false;
+    if (f.status === "停用" && on) return false;
+  }
+  if (f.name) {
+    const hay = `${row.name} ${row.target || ""} ${(row.channels || []).join(" ")}`.toLowerCase();
+    if (!hay.includes(f.name)) return false;
+  }
+  return true;
+}
+
+function notifyChannelFormHtml(item) {
+  return `
+    <div class="form-fields">
+      <label>名称<input class="field" name="name" value="${esc(item?.name || "")}"></label>
+      <label>类型<select class="field" name="kind">${optionList(NOTIFY_CHANNEL_KINDS, item?.kind || "系统内")}</select></label>
+      <label>协议<select class="field" name="protocol">${optionList(NOTIFY_PROTOCOLS, item?.protocol || "HTTP")}</select></label>
+      <label>状态<select class="field" name="status">${optionList(["启用", "停用"], item?.status || "启用")}</select></label>
+      <label class="span-2">接入地址<input class="field" name="endpoint" value="${esc(item?.endpoint || "")}" placeholder="URL 或 IP:端口"></label>
+    </div>`;
+}
+
+function applyNotifyChannelForm(dlg, item) {
+  const name = formVal(dlg, "name");
+  if (!name) {
+    const err = dlg.querySelector("#modal-err");
+    err.hidden = false;
+    err.textContent = "请填写名称。";
+    return false;
+  }
+  item.name = name;
+  item.kind = formVal(dlg, "kind") || item.kind;
+  item.protocol = formVal(dlg, "protocol") || item.protocol;
+  item.status = formVal(dlg, "status") || "启用";
+  item.endpoint = formVal(dlg, "endpoint");
+  return true;
+}
+
+function notifyTemplateFormHtml(item) {
+  const channels = item?.channels || ["待办"];
+  return `
+    <div class="form-fields">
+      <label>模板名称<input class="field" name="name" value="${esc(item?.name || "")}"></label>
+      <label>来源模块<select class="field" name="source">${optionList(NOTIFY_TEMPLATE_SOURCES, item?.source || "告警中心")}</select></label>
+      <label>接收对象<select class="field" name="target">${optionList(NOTIFY_TEMPLATE_TARGETS, item?.target || "责任组织")}</select></label>
+      <label>状态<select class="field" name="enabled">${optionList(["启用", "停用"], item?.enabled === false ? "停用" : "启用")}</select></label>
+      <label class="span-2">通知渠道${checkBoxes("channels", notifyChannelOptions(), channels)}</label>
+      <label class="span-2">消息模板<textarea class="field" name="template" rows="3">${esc(item?.template || "")}</textarea></label>
+    </div>`;
+}
+
+function applyNotifyTemplateForm(dlg, item) {
+  const name = formVal(dlg, "name");
+  if (!name) {
+    const err = dlg.querySelector("#modal-err");
+    err.hidden = false;
+    err.textContent = "请填写模板名称。";
+    return false;
+  }
+  const picked = [...dlg.querySelectorAll('input[name="channels"]:checked')].map((el) => el.value);
+  item.name = name;
+  item.source = formVal(dlg, "source") || item.source;
+  item.target = formVal(dlg, "target") || item.target;
+  item.enabled = formVal(dlg, "enabled") !== "停用";
+  item.channels = picked.length ? picked : ["待办"];
+  item.template = formVal(dlg, "template");
+  return true;
+}
+
+function showNotifyChannelEditor(item, after) {
+  const isNew = !item?.id;
+  const draft = item || { id: `nc-${Date.now()}`, name: "", kind: "系统内", protocol: "HTTP", endpoint: "", status: "启用" };
+  openAlertDialog(isNew ? "新增渠道" : `编辑渠道 · ${item.name}`, notifyChannelFormHtml(draft), (dlg) => {
+    if (!applyNotifyChannelForm(dlg, draft)) return false;
+    data.sysNotifyChannels = data.sysNotifyChannels || [];
+    if (isNew) data.sysNotifyChannels.push(draft);
+    persist();
+    after?.();
+    return true;
+  }, "保存", true);
+}
+
+function showNotifyTemplateEditor(item, after) {
+  const isNew = !item?.id;
+  const draft = item || {
+    id: `n-${Date.now()}`,
+    name: "",
+    source: "告警中心",
+    target: "责任组织",
+    channels: ["待办"],
+    template: "",
+    enabled: true
+  };
+  openAlertDialog(isNew ? "新增模板" : `编辑模板 · ${item.name}`, notifyTemplateFormHtml(draft), (dlg) => {
+    if (!applyNotifyTemplateForm(dlg, draft)) return false;
+    data.sysNotify = data.sysNotify || [];
+    if (isNew) data.sysNotify.push(draft);
+    persist();
+    after?.();
+    return true;
+  }, "保存", true);
+}
+
+function showNotifyTemplateView(item) {
+  if (!item) return;
+  openAlertDialog(`消息模板 · ${item.name}`, `
+    <div class="alert-facts">
+      ${archiveDetailFact("来源模块", esc(item.source || "—"))}
+      ${archiveDetailFact("接收对象", esc(item.target || "—"))}
+      ${archiveDetailFact("状态", `<span class="dot ${sysTone(item.enabled ? "启用" : "停用")}">${item.enabled ? "启用" : "停用"}</span>`)}
+      ${archiveDetailFact("通知渠道", esc((item.channels || []).join("、") || "—"), true)}
+      ${archiveDetailFact("消息模板", esc(item.template || "—"), true)}
+    </div>
+  `, () => true, "关闭", true);
+}
+
+function showNotifyChannelView(item) {
+  if (!item) return;
+  openAlertDialog(`通知渠道 · ${item.name}`, `
+    <div class="alert-facts">
+      ${archiveDetailFact("类型", esc(item.kind || "—"))}
+      ${archiveDetailFact("协议", esc(item.protocol || "—"))}
+      ${archiveDetailFact("状态", `<span class="dot ${sysTone(item.status)}">${esc(item.status || "—")}</span>`)}
+      ${archiveDetailFact("接入地址", esc(item.endpoint || "—"), true)}
+    </div>
+  `, () => true, "关闭", true);
+}
+
+function renderSysNotifyPage(root, focusId) {
+  ensureSysNotify();
+  let tab = "templates";
+  let focus = focusId || "";
+  const search = { page: 1, ...sysFilterBlank(SYS_NOTIFY_FILTER_DEFAULTS) };
+
+  function paint() {
+    ensureSysNotify();
+    const templates = data.sysNotify || [];
+    const channels = data.sysNotifyChannels || [];
+    const filtered = templates.filter((row) => notifyTemplateMatches(row, search.filters));
+    if (focus && !templates.some((row) => row.id === focus) && !channels.some((row) => row.id === focus)) focus = "";
+    root.innerHTML = `
+      <div class="sys-stack">
+        <div class="detail-tabs" role="tablist">
+          <button type="button" class="detail-tab${tab === "templates" ? " is-on" : ""}" data-notify-tab="templates">消息模板</button>
+          <button type="button" class="detail-tab${tab === "channels" ? " is-on" : ""}" data-notify-tab="channels">通知渠道</button>
+        </div>
+        ${tab === "templates" ? `
+          ${sysListFilterToolbar(`
+            ${sysFilterFieldText("名称", "nt-name", search.draft.name)}
+            ${sysFilterFieldSelect("来源", "nt-source", search.draft.source, ["全部", ...NOTIFY_TEMPLATE_SOURCES])}
+            ${sysFilterFieldSelect("状态", "nt-status", search.draft.status, ["全部", "启用", "停用"])}
+          `, "新增模板")}
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>模板</th>
+                  <th>来源</th>
+                  <th>接收对象</th>
+                  <th>渠道</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${filtered.length ? filtered.map((row) => `
+                  <tr class="${row.id === focus ? "is-on" : ""}" data-id="${row.id}">
+                    <td>${esc(row.name)}</td>
+                    <td>${esc(row.source || "—")}</td>
+                    <td>${esc(row.target || "—")}</td>
+                    <td>${esc((row.channels || []).join("、") || "—")}</td>
+                    <td><span class="dot ${sysTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span></td>
+                    ${sysTableActions(row.id)}
+                  </tr>
+                `).join("") : `<tr><td colspan="6" class="meta">无匹配模板。</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        ` : `
+          <div class="sys-table-toolbar">
+            <button type="button" class="btn btn-primary" data-add-channel>新增渠道</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>渠道</th>
+                  <th>类型</th>
+                  <th>协议</th>
+                  <th>接入地址</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${channels.length ? channels.map((row) => `
+                  <tr class="${row.id === focus ? "is-on" : ""}" data-id="${row.id}">
+                    <td>${esc(row.name)}</td>
+                    <td>${esc(row.kind || "—")}</td>
+                    <td class="mono">${esc(row.protocol || "—")}</td>
+                    <td class="mono">${esc(row.endpoint || "—")}</td>
+                    <td><span class="dot ${sysTone(row.status)}">${esc(row.status || "—")}</span></td>
+                    ${sysTableActions(row.id)}
+                  </tr>
+                `).join("") : `<tr><td colspan="6" class="meta">没有通知渠道。</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+        `}
+      </div>
+    `;
+    root.querySelectorAll("[data-notify-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tab = btn.dataset.notifyTab || "templates";
+        paint();
+      });
+    });
+    if (tab === "templates") {
+      bindSysListFilterToolbar(root, search, SYS_NOTIFY_FILTER_FIELDS, SYS_NOTIFY_FILTER_DEFAULTS, paint);
+      root.querySelector("[data-add]")?.addEventListener("click", () => showNotifyTemplateEditor(null, paint));
+    }
+    root.querySelector("[data-add-channel]")?.addEventListener("click", () => showNotifyChannelEditor(null, paint));
+    root.querySelectorAll("tr[data-id]").forEach((row) => {
+      row.addEventListener("click", (ev) => {
+        if (ev.target.closest(".table-actions")) return;
+        focus = row.dataset.id;
+        paint();
+      });
+    });
+    root.querySelectorAll("[data-view-row]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.viewRow;
+        if (tab === "templates") showNotifyTemplateView(templates.find((row) => row.id === id));
+        else showNotifyChannelView(channels.find((row) => row.id === id));
+      });
+    });
+    root.querySelectorAll("[data-edit-row]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.editRow;
+        if (tab === "templates") showNotifyTemplateEditor(templates.find((row) => row.id === id), paint);
+        else showNotifyChannelEditor(channels.find((row) => row.id === id), paint);
+      });
+    });
+    root.querySelectorAll("[data-del-row]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.delRow;
+        if (tab === "templates") {
+          const hit = templates.find((row) => row.id === id);
+          if (!hit || !window.confirm(`确定删除模板「${hit.name}」？`)) return;
+          data.sysNotify = templates.filter((row) => row.id !== id);
+        } else {
+          const hit = channels.find((row) => row.id === id);
+          if (!hit || !window.confirm(`确定删除渠道「${hit.name}」？`)) return;
+          data.sysNotifyChannels = channels.filter((row) => row.id !== id);
+        }
+        persist();
+        if (focus === id) focus = "";
+        paint();
+      });
+    });
+  }
+  paint();
+}
+
 const PARAM_GROUP_ORDER = ["告警", "定位", "视频AI", "识别复核", "值班"];
 
 function paramGroupsFromData(params) {
@@ -12987,7 +13329,7 @@ function bindChrome() {
 }
 
 async function boot() {
-  data = await fetch("./data/safety.json?v=35").then((res) => res.json());
+  data = await fetch("./data/safety.json?v=36").then((res) => res.json());
   try {
     const mapZones = await fetch("./data/deziwa-map-zones.json", { cache: "no-store" }).then((res) => res.json());
     if (Array.isArray(mapZones) && mapZones.length) data.zones = mapZones;
@@ -13016,6 +13358,7 @@ async function boot() {
   ensureWorkCatalog();
   applyWorkAlertSuppression();
   ensureAlertAssignees();
+  ensureSysNotify();
   data.kpis.openAlerts = openCount();
   bindChrome();
   const draw = () => {
@@ -13040,6 +13383,7 @@ async function boot() {
       ensureWorkCatalog();
       applyWorkAlertSuppression();
       ensureAlertAssignees();
+      ensureSysNotify();
       data.kpis.openAlerts = openCount();
       draw();
     });

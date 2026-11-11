@@ -2683,6 +2683,52 @@
       ],
       "template": "【升级】${id} ${type} 已升级",
       "enabled": true
+    },
+    {
+      "id": "n-ticket",
+      "name": "作业待审批",
+      "source": "作业管理",
+      "target": "审批岗位",
+      "channels": [
+        "待办",
+        "短信"
+      ],
+      "template": "【作业】${id} ${type} 待审批",
+      "enabled": true
+    }
+  ],
+  "sysNotifyChannels": [
+    {
+      "id": "nc-todo",
+      "name": "待办",
+      "kind": "系统内",
+      "protocol": "—",
+      "endpoint": "平台待办",
+      "status": "启用"
+    },
+    {
+      "id": "nc-sms",
+      "name": "短信",
+      "kind": "运营商",
+      "protocol": "HTTP",
+      "endpoint": "https://sms.plant.local/send",
+      "status": "启用"
+    },
+    {
+      "id": "nc-phone",
+      "name": "电话",
+      "kind": "语音网关",
+      "protocol": "TCP",
+      "endpoint": "10.12.8.40:5060",
+      "status": "启用"
+    },
+    {
+      "id": "nc-modbus",
+      "name": "声光联动",
+      "kind": "现场设备",
+      "protocol": "Modbus-TCP",
+      "endpoint": "10.152.25.80:502",
+      "status": "停用"
     }
   ],
   "sysAudits": [

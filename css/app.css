@@ -3447,6 +3447,19 @@ td.empty {
   min-height: 0;
 }
 
+.config-list-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.config-list-panel .sys-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
 .alert-card {
   display: block;
   width: 100%;
@@ -3558,6 +3571,11 @@ td.empty {
 .sys-table-toolbar {
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.sys-stack > .detail-tabs {
+  margin-top: 0;
 }
 
 .sys-user-layout {
