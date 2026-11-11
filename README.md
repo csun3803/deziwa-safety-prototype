@@ -2,6 +2,10 @@
 
 纯静态 HTML/JS，无构建步骤。通过 **GitHub Pages** 发布：仓库可为 **Private**，演示链接仍可公网访问。
 
+## 离线 / 弱网说明
+
+第三方脚本与样式已放入 `vendor/`（Ant Design、React、ECharts、Moment），不再依赖 jsdelivr、npmmirror、Google Fonts。观众只需能访问 **Netlify / GitHub Pages 站点本身**即可（非洲等地区建议以此方式分发）。
+
 ## 本地预览
 
 ```powershell
