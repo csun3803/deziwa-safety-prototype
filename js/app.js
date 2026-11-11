@@ -124,6 +124,8 @@ let trackSearch = {
   searched: false
 };
 let trackSearchResults = [];
+/** 历史轨迹面板：查询区是否收起 */
+let trackSearchCollapsed = false;
 
 function personById(id) {
   const row = (data.people || []).find((item) => item.id === id) || null;
@@ -402,17 +404,24 @@ function trackReplayPanelHtml() {
   const n = pts.length;
   const label = pt && !pt.gap ? `${pt.t || ""}${pt.note ? ` · ${pt.note}` : ""}` : "定位缺口";
   return `
-    <section class="track-replay-panel grad-border" role="region" aria-label="轨迹回放">
-      <h3 class="field-group-title">当前回放</h3>
-      <p class="meta track-replay-summary">${person.name} · ${tr.label || "历史轨迹"}</p>
-      <div class="track-replay-row track-replay-controls">
-        <button type="button" class="btn btn-ghost-sm" data-track-step="-1"${idx <= 0 ? " disabled" : ""} title="上一帧">◀</button>
-        <input type="range" class="track-replay-scrub" min="0" max="${Math.max(0, n - 1)}" value="${idx}" data-track-scrub aria-label="时间位置" />
-        <button type="button" class="btn btn-ghost-sm" data-track-step="1"${idx >= n - 1 ? " disabled" : ""} title="下一帧">▶</button>
-        <button type="button" class="btn btn-ghost-sm track-replay-play" data-track-play>${trackReplay.playing ? "暂停" : "播放"}</button>
+    <section class="track-replay-panel" role="region" aria-label="轨迹回放">
+      <div class="track-replay-title-row">
+        <div class="track-replay-heading">
+          <h3 class="field-group-title">当前回放</h3>
+          <p class="meta track-replay-summary">${esc(person.name)} · ${esc(tr.label || "历史轨迹")}</p>
+        </div>
+        <button type="button" class="btn btn-sm track-replay-exit" data-track-exit>结束</button>
       </div>
-      <p class="meta track-replay-meta">${label}（${idx + 1}/${n}）</p>
-      <button type="button" class="btn btn-sm track-replay-exit" data-track-exit>结束回放</button>
+      <div class="track-replay-row track-replay-controls">
+        <button type="button" class="btn-ghost-sm track-replay-play" data-track-play>${trackReplay.playing ? "暂停" : "播放"}</button>
+        <button type="button" class="btn-ghost-sm" data-track-step="-1"${idx <= 0 ? " disabled" : ""} title="上一帧">◀</button>
+        <input type="range" class="track-replay-scrub" min="0" max="${Math.max(0, n - 1)}" value="${idx}" data-track-scrub aria-label="时间位置" />
+        <button type="button" class="btn-ghost-sm" data-track-step="1"${idx >= n - 1 ? " disabled" : ""} title="下一帧">▶</button>
+      </div>
+      <div class="track-replay-meta-row">
+        <p class="meta track-replay-meta">${esc(label)}</p>
+        <span class="meta num">${idx + 1}/${n}</span>
+      </div>
     </section>
   `;
 }
@@ -2186,13 +2195,23 @@ function renderTrackHistoryPanel() {
   const replayHtml = trackReplayPanelHtml();
   return `
     <aside class="scene-float-panel is-expanded is-track-fixed glass-card glass-glow" id="track-history-panel" aria-label="历史轨迹检索">
-      <header class="scene-panel-head hairline-b">
+      <header class="scene-panel-head hairline-b track-history-head">
         <div class="scene-panel-title-row">
           <strong>历史轨迹</strong>
           <span class="track-mode-badge">轨迹模式</span>
         </div>
+        <button type="button" class="track-search-toggle" data-track-search-toggle
+          aria-expanded="${!trackSearchCollapsed}"
+          aria-label="${trackSearchCollapsed ? "展开查询" : "收起查询"}"
+          title="${trackSearchCollapsed ? "展开查询" : "收起查询"}">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            ${trackSearchCollapsed
+              ? '<path d="M4 6.5 8 10.5 12 6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'
+              : '<path d="M4 9.5 8 5.5 12 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'}
+          </svg>
+        </button>
       </header>
-      <div class="track-history-form-wrap track-search-body">
+      <div class="track-history-form-wrap track-search-body${trackSearchCollapsed ? " is-collapsed" : ""}">
         <div class="track-search-form">
           <label class="track-field">
             <span>日期</span>
@@ -2255,11 +2274,15 @@ function bindTrackHistoryPanel(root) {
     trackSearchResults = [];
     renderPage();
   });
+  root.querySelector("[data-track-search-toggle]")?.addEventListener("click", () => {
+    trackSearchCollapsed = !trackSearchCollapsed;
+    renderPage();
+  });
   root.querySelectorAll("[data-track-replay-row]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const personId = btn.dataset.trackReplayRow;
       const trackId = btn.dataset.trackRowId;
-      if (startTrackReplay(personId, { trackId })) renderPage();
+      if (startTrackReplay(personId, { trackId, tIndex: 0 })) renderPage();
     });
   });
 }

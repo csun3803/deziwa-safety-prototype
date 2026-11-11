@@ -1896,9 +1896,54 @@ summary {
   flex-direction: column;
 }
 
+.track-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-right: 20px;
+}
+
+.track-history-head .scene-panel-title-row {
+  min-width: 0;
+  flex: 1;
+}
+
+.track-search-toggle {
+  appearance: none;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--canvas-line);
+  border-radius: var(--radius-md);
+  background: oklch(1 0 0 / 0.06);
+  color: var(--canvas-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.track-search-toggle:hover {
+  color: var(--canvas-text);
+  border-color: color-mix(in oklab, var(--canvas-accent) 45%, transparent);
+  background: oklch(1 0 0 / 0.1);
+}
+
 .scene-float-panel.is-track-fixed .track-history-form-wrap {
   flex-shrink: 0;
   padding: 12px 20px 0;
+}
+
+.scene-float-panel.is-track-fixed .track-history-form-wrap.is-collapsed {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.scene-float-panel.is-track-fixed .track-history-form-wrap.is-collapsed .track-search-form {
+  display: none;
 }
 
 .scene-float-panel.is-track-fixed .track-history-results {
@@ -1911,7 +1956,7 @@ summary {
 .track-replay-dock {
   flex-shrink: 0;
   display: none;
-  padding: 0 20px 14px;
+  padding: 10px 16px 14px;
   background: inherit;
 }
 
@@ -1921,8 +1966,10 @@ summary {
 
 .track-replay-dock .track-replay-panel {
   margin: 0;
-  padding: 12px 0 0;
-  border-top: none;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--canvas-line);
+  border-radius: var(--radius-md);
+  background: oklch(1 0 0 / 0.04);
 }
 
 .scene-float-panel .track-zone-select-host .ant-select-selector {
@@ -2194,15 +2241,36 @@ summary {
   border-top: 1px solid var(--canvas-line);
 }
 
+.track-replay-heading {
+  min-width: 0;
+  flex: 1;
+}
+
 .track-replay-summary {
-  margin: 0 0 8px;
+  margin: 2px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .track-replay-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.track-replay-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.track-replay-title-row .field-group-title {
+  margin: 0;
+  font-size: 12px;
 }
 
 .track-replay-title {
@@ -2211,24 +2279,41 @@ summary {
 }
 
 .track-replay-controls {
-  margin-top: 8px;
-  gap: 6px;
+  margin-top: 0;
+}
+
+.track-replay-play {
+  flex-shrink: 0;
+  min-width: 44px;
 }
 
 .track-replay-scrub {
   flex: 1;
-  min-width: 80px;
+  min-width: 0;
   height: 6px;
   accent-color: var(--canvas-accent, #38bdf8);
 }
 
+.track-replay-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+
 .track-replay-meta {
-  margin: 8px 0 0;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .track-replay-exit {
-  margin-top: 10px;
-  width: 100%;
+  margin: 0;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .btn-ghost-sm {
