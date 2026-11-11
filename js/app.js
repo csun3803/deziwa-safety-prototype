@@ -34,25 +34,25 @@ const TABS = [
       { id: "stats", name: "安全事件统计", done: true, layout: "总览/驾驶舱型", desc: "事件与正式告警并列统计：类型、区域、等级、复核与处置。" },
       { id: "heatmap", name: "安全告警热力分析", done: true, layout: "统计报表/分析型", desc: "区域热力、重复事件与重点点位，辅助调整巡查。" },
       { id: "events", name: "事件档案", done: true, layout: "列表-详情型", desc: "事件全量留痕：定位/AI/人工上报；默认一对一正式告警。" },
-      { id: "alert-archive", name: "告警档案", done: true, layout: "列表-详情型", desc: "正式告警卷宗：派发、处置时间线及关联事件。" }
+      { id: "alert-archive", name: "告警档案", done: true, layout: "列表-详情型", desc: "正式告警卷宗：派发、处置时间线及关联事件。" },
+      { id: "work-archive", name: "工单档案", done: true, layout: "列表-详情型", desc: "已归档作业单卷宗：审批与作业记录，支持查询与导出。" }
     ]
   },
   {
     id: "t7",
     name: "配置中心",
     pages: [
-      { id: "zones", name: "区域与定位告警", group: "告警配置", done: true, layout: "表单录入/编辑型", desc: "区域准入与定位类告警（含人员落点、围栏越界，同一规则池）。" },
-      { id: "work-types", name: "作业类型", group: "作业配置", done: true, layout: "表单录入/编辑型", desc: "按作业类型配置等级、区域、资格、措施与审批流。" },
-      { id: "work-flows", name: "审批流", group: "作业配置", done: true, layout: "表单录入/编辑型", desc: "配置作业工单签批节点，作业类型引用审批流。" },
-      { id: "org", name: "组织管理", group: "系统基础", done: true, layout: "表单录入/编辑型", desc: "组织树与主数据属性，与人员系统同步。" },
-      { id: "roles", name: "角色与权限", group: "系统基础", done: true, layout: "表单录入/编辑型", desc: "菜单、数据范围、操作与对象引用。" },
-      { id: "users", name: "用户管理", group: "系统基础", done: true, layout: "表单录入/编辑型", desc: "账号、组织归属与角色。" },
-      { id: "employees", name: "员工管理", group: "系统基础", done: true, layout: "列表-详情型", desc: "现场人员档案与定位卡绑定；支持批量导入发卡；工单选人来源。" },
-      { id: "cameras", name: "摄像头管理", group: "系统基础", done: true, layout: "列表-详情型", desc: "通道接入、三维标定与视频 AI 算法绑定。" },
-      { id: "dict", name: "字典管理", group: "系统基础", done: true, layout: "表单录入/编辑型", desc: "等级、误报原因等枚举字典。" },
-      { id: "params", name: "运行参数", group: "系统基础", done: true, layout: "表单录入/编辑型", desc: "告警、定位、视频 AI、复核等运行参数。" },
-      { id: "audit", name: "操作审计", group: "系统基础", done: true, layout: "列表-详情型", desc: "按用户、模块、时间查操作记录。" },
-      { id: "base", name: "安全基础管理", group: "系统基础", done: true, layout: "列表-详情型", desc: "隐患、应急、事故、证照等台账入口。" }
+      { id: "zones", name: "区域配置", group: "现场与空间", done: true, layout: "表单录入/编辑型", desc: "区域准入、围栏与定位告警（人员落点、越界等同一规则池）。" },
+      { id: "cameras", name: "视频监控", group: "现场与空间", done: true, layout: "列表-详情型", desc: "通道接入、三维标定与视频 AI 算法绑定。" },
+      { id: "work-flows", name: "审批流", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "作业签批节点模板；作业类型引用审批流。" },
+      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" },
+      { id: "org", name: "组织管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "组织树与主数据属性，与人员系统同步。" },
+      { id: "employees", name: "员工管理", group: "组织与人员", done: true, layout: "列表-详情型", desc: "现场人员档案与定位卡绑定；支持批量导入发卡；工单选人来源。" },
+      { id: "users", name: "用户管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "账号、组织归属与角色。" },
+      { id: "roles", name: "角色权限", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "菜单、数据范围、操作与对象引用。" },
+      { id: "dict", name: "字典管理", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "等级、误报原因等枚举字典。" },
+      { id: "params", name: "运行参数", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "告警、定位、视频 AI、复核等运行参数。" },
+      { id: "audit", name: "操作审计", group: "系统运行", done: true, layout: "列表-详情型", desc: "按用户、模块、时间查操作记录。" }
     ]
   }
 ];
@@ -88,8 +88,15 @@ const LAYER_BTNS = [
 let selected = null;
 let scenePanelExpanded = true;
 let sceneDetailTab = "info";
-/** 区域详情：fence=围栏与告警（默认），admission=准入与名单 */
-let zoneDetailTab = "fence";
+/** 区域详情：basic=基础配置（默认），access=告警与准入 */
+let zoneDetailTab = "basic";
+/** 作业类型详情：basic | measure | flow（qual 已并入 basic） */
+let workTypeDetailTab = "basic";
+
+function normalizeWorkTypeDetailTab() {
+  if (workTypeDetailTab === "qual") workTypeDetailTab = "basic";
+  if (!["basic", "measure", "flow"].includes(workTypeDetailTab)) workTypeDetailTab = "basic";
+}
 /** 在区人员弹窗筛选：all | abnormal */
 let plantRosterFilter = "all";
 /** 点选摄像头时仅绘制该路可视域；点图层「可视域」为展示全部 */
@@ -541,8 +548,11 @@ function parseRoute() {
     tabId = "t7";
     pageId = "work-types";
   }
-  if (tabId === "t5" && (pageId === "permit" || pageId === "archive" || pageId === "tickets")) {
-    if (pageId === "archive" && !params.get("filter")) params.set("filter", "已归档");
+  if (tabId === "t5" && pageId === "archive") {
+    tabId = "t6";
+    pageId = "work-archive";
+  }
+  if (tabId === "t5" && (pageId === "permit" || pageId === "tickets")) {
     pageId = "tickets";
   }
   return {
@@ -890,11 +900,7 @@ function alertForEvent(event) {
 }
 
 function historyArchiveEvents() {
-  return allEvents().filter((row) => {
-    if (row.mergedIntoId) return false;
-    if (HISTORY_EVENT_QUEUE.includes(row.status)) return false;
-    return true;
-  });
+  return allEvents().filter((row) => !row.mergedIntoId);
 }
 
 function ruleLineForEvent(event) {
@@ -1036,10 +1042,14 @@ function renderShell() {
 
   document.getElementById("sidenav").innerHTML = hasL2 ? `
     ${tabSidenavGroups(tab).map((group) => `
-      ${group.label ? `<h3 class="sidenav-group">${group.label}</h3>` : ""}
-      ${group.pages.map((item) => (
-        `<a href="#/${tab.id}/${item.id}" class="${item.id === page.id ? "is-active" : ""}">${item.name}</a>`
-      )).join("")}
+      <div class="sidenav-section">
+        ${group.label ? `<h3 class="sidenav-group">${group.label}</h3>` : ""}
+        <div class="sidenav-links">
+          ${group.pages.map((item) => (
+            `<a href="#/${tab.id}/${item.id}" class="${item.id === page.id ? "is-active" : ""}">${item.name}</a>`
+          )).join("")}
+        </div>
+      </div>
     `).join("")}
   ` : "";
 
@@ -1091,6 +1101,7 @@ function renderPage() {
     if (route.page.id === "stats") renderEventStats(root);
     else if (route.page.id === "heatmap") renderHeatAnalysis(root, route.focus);
     else if (route.page.id === "alert-archive") renderAlertArchive(root, route);
+    else if (route.page.id === "work-archive") renderWorkArchive(root, route);
     else renderEventArchive(root, route);
     return;
   }
@@ -1106,7 +1117,7 @@ function renderPage() {
     else if (route.page.id === "dict") renderSysDictPage(root, route.focus);
     else if (route.page.id === "params") renderSysParamsPage(root, route.focus);
     else if (route.page.id === "audit") renderSysAudit(root, route);
-    else renderSysBase(root, route.focus);
+    else renderPlaceholder(root, route);
     return;
   }
   if (route.page.done) {
@@ -2527,7 +2538,7 @@ function zonePanelHtml(zone) {
     badge: `<span class="lvl lvl-${RISK_LVL[zone.risk] || 4}">${zone.risk || "区域"}</span>`,
     body: `${scenePanelTabsHtml(active, tabs)}${inner}`,
     actions: `
-      <a class="btn" href="#/t7/zones?id=${encodeURIComponent(zone.id)}">区域与定位</a>
+      <a class="btn" href="#/t7/zones?id=${encodeURIComponent(zone.id)}">区域配置</a>
       <button type="button" class="btn" data-overview-up>返回上层</button>
     `
   });
@@ -3003,7 +3014,6 @@ function openManualAlertDialog(after) {
   const zones = (data.zones || []).filter((z) => !defaultPlant || z.plant === defaultPlant.id);
   const cams = (data.cameras || []).filter((c) => !defaultPlant || c.plant === defaultPlant.id).slice(0, 200);
   openAlertDialog("登记告警", `
-    <p class="meta">现场发现隐患或需跟进的异常，登记后按类型匹配派发规则进入告警流程。</p>
     <div class="form-fields">
       <label>告警类型
         <select class="field" name="ma-type" id="ma-type">
@@ -3380,7 +3390,7 @@ function alertEvidenceSpec(item, ev, cam, opts = {}) {
   return { kind, title: opts.titleSuffix ? `${title} · ${opts.titleSuffix}` : title, cap: capLabel, meta: metaLine, badge };
 }
 
-function alertEvidenceItems(item) {
+function alertEvidenceItems(item, opts = {}) {
   const out = [];
   const seen = new Set();
   const push = (spec) => {
@@ -3440,16 +3450,18 @@ function alertEvidenceItems(item) {
       }));
     }
   }
-  const nearby = nearbyCams(item.x, item.y).filter((c) => c.id !== item.camera).slice(0, 2);
-  nearby.forEach((cam, i) => {
-    push({
-      kind: i === 0 ? "image" : "video",
-      title: "关联通道",
-      cap: `${item.time} · ${cam.mapLabel || cam.name}`,
-      meta: `${cam.name} · 同期${i === 0 ? "抓拍" : "片段"}`,
-      badge: i === 0 ? "抓拍图片" : "抓拍视频"
+  if (!opts.archiveOnly) {
+    const nearby = nearbyCams(item.x, item.y).filter((c) => c.id !== item.camera).slice(0, 2);
+    nearby.forEach((cam, i) => {
+      push({
+        kind: i === 0 ? "image" : "video",
+        title: "关联通道",
+        cap: `${item.time} · ${cam.mapLabel || cam.name}`,
+        meta: `${cam.name} · 同期${i === 0 ? "抓拍" : "片段"}`,
+        badge: i === 0 ? "抓拍图片" : "抓拍视频"
+      });
     });
-  });
+  }
   return out;
 }
 
@@ -3472,10 +3484,23 @@ function renderAlertEvidenceThumb(spec) {
   `;
 }
 
-function renderAlertEvidenceBlock(item) {
-  const specs = alertEvidenceItems(item);
+function renderAlertEvidenceBlock(item, opts = {}) {
+  const specs = alertEvidenceItems(item, opts);
   if (!specs.length) return `<p class="meta">暂无抓拍图片或视频。</p>`;
   return `<div class="alert-evidence-grid">${specs.map(renderAlertEvidenceThumb).join("")}</div>`;
+}
+
+function renderArchiveEvidenceHtml(event, alert) {
+  const item = alert || {
+    camera: event?.camera,
+    time: event?.time,
+    type: event?.type,
+    x: event?.x,
+    y: event?.y,
+    person: event?.person,
+    id: event?.alertId || event?.id
+  };
+  return renderAlertEvidenceBlock(item, { archiveOnly: true });
 }
 
 function alertEvidenceLightboxHtml(dataset) {
@@ -3943,6 +3968,7 @@ const CAM_CODECS = ["H.264", "H.265"];
 const CAM_CALIB_STATES = ["未标定", "标定中", "已标定"];
 const CAM_SYNC_STATES = ["已对齐", "待并表"];
 const AI_ROI_OPTS = ["全画面", "关联区域", "下半区"];
+const CAM_ALGO_ROW_STATUS = ["启用", "停用"];
 const DEFAULT_AI_ALGOS = [
   {
     id: "helmet",
@@ -3955,7 +3981,7 @@ const DEFAULT_AI_ALGOS = [
     confidence: 80,
     interval: 30,
     roi: "全画面",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     level: 2,
     desc: "作业区未佩戴安全帽，覆盖矿区冶炼厂常见违章。"
   },
@@ -3970,7 +3996,7 @@ const DEFAULT_AI_ALGOS = [
     confidence: 75,
     interval: 60,
     roi: "全画面",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     level: 3,
     desc: "作业区未按规定穿戴劳保服。"
   },
@@ -3985,7 +4011,7 @@ const DEFAULT_AI_ALGOS = [
     confidence: 70,
     interval: 20,
     roi: "全画面",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     level: 2,
     desc: "矿区冶炼厂烟雾异常，可与明火结果融合上屏。"
   },
@@ -4000,7 +4026,7 @@ const DEFAULT_AI_ALGOS = [
     confidence: 78,
     interval: 15,
     roi: "全画面",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     level: 1,
     desc: "明火识别，覆盖焊接误报比对。"
   },
@@ -4015,9 +4041,9 @@ const DEFAULT_AI_ALGOS = [
     confidence: 72,
     interval: 20,
     roi: "关联区域",
-    strategy: "真警才进正式告警",
+    strategy: "先复核后告警",
     level: 1,
-    desc: "视频入侵；置信度偏低时先复核。"
+    desc: "视频入侵；置信度偏低时先复核再进告警中心。"
   }
 ];
 
@@ -4273,7 +4299,7 @@ function ensureAiCatalog() {
     name: "劳保服缺失",
     level: 3,
     source: "视频AI",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     sla: "30分钟",
     enabled: true,
     desc: "作业区未穿戴劳保服。",
@@ -4285,7 +4311,7 @@ function ensureAiCatalog() {
     name: "烟雾",
     level: 2,
     source: "视频AI",
-    strategy: "先告警后复核",
+    strategy: "先复核后告警",
     sla: "15分钟",
     enabled: true,
     desc: "烟雾识别，可与明火融合上屏。",
@@ -4476,59 +4502,77 @@ function readCameraFromDialog(dlg) {
 
 function cameraAlgoDialogHtml(cam) {
   const bound = Object.fromEntries(cameraAiBindings(cam).map((row) => [row.algoId, row]));
+  const body = aiAlgos().map((algo) => {
+    const row = bound[algo.id];
+    const on = !!row;
+    const conf = on ? (row.confidence ?? algo.confidence) : algo.confidence;
+    const roi = on ? (row.roi || algo.roi) : algo.roi;
+    const interval = on ? (row.interval ?? algo.interval) : algo.interval;
+    const strategy = on
+      ? normalizeAlertStrategy(row.strategy, algo.strategy)
+      : normalizeAlertStrategy(algo.strategy);
+    const locked = algo.enabled === false;
+    const rowStatus = on ? (row.enabled !== false ? "启用" : "停用") : "停用";
+    const dis = locked;
   return `
-    <p class="meta">本通道可绑定多种识别算法，按需启停；告警等级与复核策略沿用算法模型默认。</p>
-    <div class="cam-algo-list">
-      ${aiAlgos().map((algo) => {
-        const row = bound[algo.id];
-        const on = !!row;
-        const enabled = on ? row.enabled !== false : true;
-        const conf = on ? (row.confidence ?? algo.confidence) : algo.confidence;
-        const roi = on ? (row.roi || algo.roi) : algo.roi;
-        const interval = on ? (row.interval ?? algo.interval) : algo.interval;
-        const locked = algo.enabled === false;
-        return `
-          <div class="cam-algo-card${on ? " is-on" : ""}${locked ? " is-locked" : ""}">
-            <div class="cam-algo-card-head">
-              <input type="checkbox" name="algo-bind" value="${algo.id}"${on ? " checked" : ""}${!on && locked ? " disabled" : ""}>
-              <div>
-                <strong>${algo.name}</strong>
-                <p class="meta">${algo.code} · ${algo.category}${locked ? " · 模型已停用" : ""}</p>
-              </div>
-            </div>
-            <div class="cam-algo-card-fields" data-algo-fields="${algo.id}">
-              <label>启用
-                <select class="field" name="en-${algo.id}"${!on || locked ? " disabled" : ""}>
-                  <option value="1"${enabled ? " selected" : ""}>启用</option>
-                  <option value="0"${!enabled ? " selected" : ""}>停用</option>
-                </select>
-              </label>
-              <label>置信度
-                <input class="field" name="conf-${algo.id}" type="number" min="1" max="99" value="${conf}"${!on || locked ? " disabled" : ""}>
-              </label>
-              <label>检测区域
-                <select class="field" name="roi-${algo.id}"${!on || locked ? " disabled" : ""}>
-                  ${AI_ROI_OPTS.map((opt) => `<option${opt === roi ? " selected" : ""}>${opt}</option>`).join("")}
-                </select>
-              </label>
-              <label>告警间隔（秒）
-                <input class="field" name="int-${algo.id}" type="number" min="5" max="600" value="${interval}"${!on || locked ? " disabled" : ""}>
-              </label>
-            </div>
-          </div>
-        `;
-      }).join("")}
+        <tr class="cam-algo-row${rowStatus === "启用" ? " is-on" : ""}${locked ? " is-locked" : ""}" data-algo-id="${algo.id}">
+          <td class="cam-algo-name">
+            <strong>${esc(algo.name)}</strong>
+            <div class="meta">${esc(algo.code)} · ${esc(algo.category)}${locked ? " · 模型已停用" : ""}</div>
+          </td>
+          <td>
+            <select class="field field-compact" name="st-${algo.id}"${locked ? " disabled" : ""}>
+              ${CAM_ALGO_ROW_STATUS.map((name) => (
+                `<option${name === rowStatus ? " selected" : ""}>${name}</option>`
+              )).join("")}
+            </select>
+          </td>
+          <td>
+            <select class="field field-compact" name="strat-${algo.id}"${dis ? " disabled" : ""}>
+              ${STRATEGIES.map((name) => `<option${name === strategy ? " selected" : ""}>${name}</option>`).join("")}
+            </select>
+          </td>
+          <td>
+            <input class="field field-compact" name="conf-${algo.id}" type="number" min="1" max="99" value="${conf}"${dis ? " disabled" : ""}>
+          </td>
+          <td>
+            <select class="field field-compact" name="roi-${algo.id}"${dis ? " disabled" : ""}>
+              ${AI_ROI_OPTS.map((opt) => `<option${opt === roi ? " selected" : ""}>${opt}</option>`).join("")}
+            </select>
+          </td>
+          <td>
+            <input class="field field-compact" name="int-${algo.id}" type="number" min="5" max="600" value="${interval}"${dis ? " disabled" : ""}>
+          </td>
+        </tr>`;
+  }).join("");
+  return `
+    <div class="table-wrap cam-algo-table-wrap">
+      <table class="cam-algo-table">
+        <thead>
+          <tr>
+            <th>算法</th>
+            <th>状态</th>
+            <th>告警规则</th>
+            <th>置信度</th>
+            <th>检测区域</th>
+            <th>间隔(秒)</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table>
     </div>
   `;
 }
 
-function readCameraAlgoBindings(dlg) {
+function readCameraAlgoBindings(dlg, cam) {
+  const wasBound = new Set(cameraAiBindings(cam).map((row) => row.algoId));
   return aiAlgos().map((algo) => {
-    const box = dlg.querySelector(`[name="algo-bind"][value="${algo.id}"]`);
-    if (!box?.checked) return null;
+    const st = dlg.querySelector(`[name="st-${algo.id}"]`)?.value || "停用";
+    if (st === "停用" && !wasBound.has(algo.id)) return null;
     return {
       algoId: algo.id,
-      enabled: dlg.querySelector(`[name="en-${algo.id}"]`)?.value !== "0",
+      enabled: st === "启用",
+      strategy: normalizeAlertStrategy(dlg.querySelector(`[name="strat-${algo.id}"]`)?.value, algo.strategy),
       confidence: Number(dlg.querySelector(`[name="conf-${algo.id}"]`)?.value) || algo.confidence,
       roi: dlg.querySelector(`[name="roi-${algo.id}"]`)?.value || algo.roi,
       interval: Number(dlg.querySelector(`[name="int-${algo.id}"]`)?.value) || algo.interval
@@ -4539,17 +4583,17 @@ function readCameraAlgoBindings(dlg) {
 function bindCameraAlgoDialog(dlg) {
   dlg.querySelector(".modal")?.classList.add("algo-modal");
   const sync = () => {
-    dlg.querySelectorAll("[name=algo-bind]").forEach((box) => {
-      const card = box.closest(".cam-algo-card");
-      card?.classList.toggle("is-on", box.checked);
-      const locked = card?.classList.contains("is-locked");
-      card?.querySelectorAll("select, input[type=number]").forEach((el) => {
-        el.disabled = !box.checked || locked;
+    dlg.querySelectorAll("[name^='st-']").forEach((sel) => {
+      const row = sel.closest(".cam-algo-row");
+      const locked = row?.classList.contains("is-locked");
+      row?.classList.toggle("is-on", sel.value === "启用");
+      row?.querySelectorAll("select:not([name^='st-']), input[type=number]").forEach((el) => {
+        el.disabled = locked;
       });
     });
   };
-  dlg.querySelectorAll("[name=algo-bind]").forEach((box) => {
-    box.addEventListener("change", sync);
+  dlg.querySelectorAll("[name^='st-']").forEach((sel) => {
+    sel.addEventListener("change", sync);
   });
   sync();
 }
@@ -4649,7 +4693,7 @@ function openCameraEdit(cam, after) {
     }
     Object.assign(cam, patch, {
       streamConfigured: true,
-      aiBindings: readCameraAlgoBindings(dlg)
+      aiBindings: readCameraAlgoBindings(dlg, cam)
     });
     persist();
     after();
@@ -4715,6 +4759,211 @@ function listPagerPageNums(current, total) {
   }
   if (current >= total - 2) return [1, "ellipsis", total - 2, total - 1, total];
   return [1, "ellipsis", current - 1, current, current + 1, "ellipsis", total];
+}
+
+function bindListPager(root, pager, totalPages, paint) {
+  root.querySelector("[data-page=prev]")?.addEventListener("click", () => {
+    if (pager.page > 1) {
+      pager.page -= 1;
+      paint();
+    }
+  });
+  root.querySelector("[data-page=next]")?.addEventListener("click", () => {
+    if (pager.page < totalPages) {
+      pager.page += 1;
+      paint();
+    }
+  });
+  root.querySelectorAll("[data-page-num]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      pager.page = Number(btn.dataset.pageNum) || 1;
+      paint();
+    });
+  });
+}
+
+const SYS_ORG_FILTER_DEFAULTS = { name: "", code: "", kind: "全部", status: "全部" };
+const SYS_USER_FILTER_DEFAULTS = { name: "", account: "", org: "全部", role: "全部", plant: "全部", status: "全部" };
+const SYS_EMP_FILTER_DEFAULTS = { name: "", code: "", org: "全部", status: "全部", kind: "全部", tagId: "" };
+
+function sysFilterBlank(defaults) {
+  return { draft: { ...defaults }, filters: { ...defaults } };
+}
+
+function sysFilterFieldText(label, name, value) {
+  return `<label class="cam-field-label"><span class="cam-field-label-name">${esc(label)}</span>
+    <input type="search" class="field alert-q-field" name="${esc(name)}" value="${esc(value)}" autocomplete="off"></label>`;
+}
+
+function sysFilterFieldSelect(label, name, value, options) {
+  return `<label class="cam-field-label"><span class="cam-field-label-name">${esc(label)}</span>
+    <select class="field alert-q-field cam-filter-sel" name="${esc(name)}">
+      ${options.map((opt) => `<option value="${esc(opt)}"${opt === value ? " selected" : ""}>${esc(opt)}</option>`).join("")}
+    </select></label>`;
+}
+
+function sysListFilterToolbar(fieldsHtml, addLabel, extraActions = "") {
+  return `
+    <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-search sys-list-toolbar">
+      ${fieldsHtml}
+      <div class="camera-toolbar-actions">
+        <button type="button" class="btn btn-primary alert-q-submit" data-sys-search>搜索</button>
+        <button type="button" class="btn btn-ghost alert-q-reset" data-sys-reset>重置</button>
+        ${extraActions}
+        <button type="button" class="btn btn-primary" data-add>${esc(addLabel)}</button>
+      </div>
+    </div>`;
+}
+
+function bindSysListFilterToolbar(root, state, fields, defaults, paint) {
+  const readDraftFromDom = () => {
+    fields.forEach((field) => {
+      const el = root.querySelector(`[name="${field.name}"]`);
+      if (el) state.draft[field.key] = el.value;
+    });
+  };
+  const applyFilters = () => {
+    readDraftFromDom();
+    fields.forEach((field) => {
+      let v = state.draft[field.key] ?? "";
+      if (field.type !== "select") v = String(v).trim().toLowerCase();
+      state.filters[field.key] = v;
+    });
+    state.page = 1;
+    paint();
+  };
+  fields.forEach((field) => {
+    const el = root.querySelector(`[name="${field.name}"]`);
+    if (!el) return;
+    const sync = () => { state.draft[field.key] = el.value; };
+    el.addEventListener("input", sync);
+    el.addEventListener("change", sync);
+    if (field.type !== "select") {
+      el.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") applyFilters();
+      });
+    }
+  });
+  root.querySelector("[data-sys-search]")?.addEventListener("click", applyFilters);
+  root.querySelector("[data-sys-reset]")?.addEventListener("click", () => {
+    state.draft = { ...defaults };
+    state.filters = { ...defaults };
+    state.page = 1;
+    paint();
+  });
+}
+
+function sysOrgNamesForFilter() {
+  return ["全部", ...[...new Set((data.sysOrgs || []).map((row) => row.name).filter(Boolean))].sort()];
+}
+
+function sysRoleNamesForFilter() {
+  return ["全部", ...(data.sysRoles || []).map((row) => row.name).filter(Boolean)];
+}
+
+function sysPlantNamesForFilter() {
+  return ["全部", ...data.plants.filter((row) => row.id !== "all").map((row) => row.name), "全厂"];
+}
+
+function sysOrgFilterToolbar(draft) {
+  return sysListFilterToolbar(`
+    ${sysFilterFieldText("名称", "org-name", draft.name)}
+    ${sysFilterFieldText("组织编码", "org-code", draft.code)}
+    ${sysFilterFieldSelect("组织类型", "org-kind", draft.kind, ["全部", ...SYS_ORG_KINDS])}
+    ${sysFilterFieldSelect("状态", "org-status", draft.status, ["全部", "启用", "停用"])}
+  `, "新建");
+}
+
+function sysUserFilterToolbar(draft) {
+  return sysListFilterToolbar(`
+    ${sysFilterFieldText("姓名", "user-name", draft.name)}
+    ${sysFilterFieldText("账号", "user-account", draft.account)}
+    ${sysFilterFieldSelect("组织", "user-org", draft.org, sysOrgNamesForFilter())}
+    ${sysFilterFieldSelect("角色", "user-role", draft.role, sysRoleNamesForFilter())}
+    ${sysFilterFieldSelect("分厂 / 范围", "user-plant", draft.plant, sysPlantNamesForFilter())}
+    ${sysFilterFieldSelect("状态", "user-status", draft.status, ["全部", ...SYS_USER_STATUS])}
+  `, "新建");
+}
+
+function sysEmployeeFilterToolbar(draft, extraActions) {
+  return sysListFilterToolbar(`
+    ${sysFilterFieldText("姓名", "emp-name", draft.name)}
+    ${sysFilterFieldText("工号", "emp-code", draft.code)}
+    ${sysFilterFieldSelect("组织", "emp-org", draft.org, sysOrgNamesForFilter())}
+    ${sysFilterFieldSelect("状态", "emp-status", draft.status, ["全部", ...EMPLOYEE_STATUS])}
+    ${sysFilterFieldSelect("人员类型", "emp-kind", draft.kind, ["全部", ...EMPLOYEE_KINDS])}
+    ${sysFilterFieldText("定位卡", "emp-tag", draft.tagId)}
+  `, "新建", extraActions);
+}
+
+const SYS_ORG_FILTER_FIELDS = [
+  { key: "name", name: "org-name" },
+  { key: "code", name: "org-code" },
+  { key: "kind", name: "org-kind", type: "select" },
+  { key: "status", name: "org-status", type: "select" }
+];
+const SYS_USER_FILTER_FIELDS = [
+  { key: "name", name: "user-name" },
+  { key: "account", name: "user-account" },
+  { key: "org", name: "user-org", type: "select" },
+  { key: "role", name: "user-role", type: "select" },
+  { key: "plant", name: "user-plant", type: "select" },
+  { key: "status", name: "user-status", type: "select" }
+];
+const SYS_EMP_FILTER_FIELDS = [
+  { key: "name", name: "emp-name" },
+  { key: "code", name: "emp-code" },
+  { key: "org", name: "emp-org", type: "select" },
+  { key: "status", name: "emp-status", type: "select" },
+  { key: "kind", name: "emp-kind", type: "select" },
+  { key: "tagId", name: "emp-tag" }
+];
+
+function sysTableActions(id) {
+  return `
+    <td class="table-actions">
+      <button type="button" class="btn btn-sm" data-view-row="${id}">查看</button>
+      <button type="button" class="btn btn-sm" data-edit-row="${id}">编辑</button>
+      <button type="button" class="btn btn-sm btn-ghost" data-del-row="${id}">删除</button>
+    </td>`;
+}
+
+function hasOrgListFilters(f) {
+  return !!(f.name || f.code || (f.kind && f.kind !== "全部") || (f.status && f.status !== "全部"));
+}
+
+function orgMatchesFilters(org, f) {
+  if (f.kind && f.kind !== "全部" && org.kind !== f.kind) return false;
+  if (f.status && f.status !== "全部" && (org.status || "启用") !== f.status) return false;
+  if (f.name) {
+    const hay = `${org.name} ${org.abbr || ""}`.toLowerCase();
+    if (!hay.includes(f.name)) return false;
+  }
+  if (f.code) {
+    const hay = `${sysOrgDisplayCode(org)} ${org.id || ""}`.toLowerCase();
+    if (!hay.includes(f.code)) return false;
+  }
+  return true;
+}
+
+function userMatchesFilters(row, f) {
+  if (f.org && f.org !== "全部" && row.org !== f.org) return false;
+  if (f.role && f.role !== "全部" && row.role !== f.role) return false;
+  if (f.plant && f.plant !== "全部" && row.plant !== f.plant) return false;
+  if (f.status && f.status !== "全部" && row.status !== f.status) return false;
+  if (f.name && !String(row.name || "").toLowerCase().includes(f.name)) return false;
+  if (f.account && !String(row.account || "").toLowerCase().includes(f.account)) return false;
+  return true;
+}
+
+function employeeMatchesFilters(row, f) {
+  if (f.org && f.org !== "全部" && row.org !== f.org) return false;
+  if (f.status && f.status !== "全部" && row.status !== f.status) return false;
+  if (f.kind && f.kind !== "全部" && row.kind !== f.kind) return false;
+  if (f.name && !String(row.name || "").toLowerCase().includes(f.name)) return false;
+  if (f.code && !String(row.code || "").toLowerCase().includes(f.code)) return false;
+  if (f.tagId && !String(row.tagId || "").toLowerCase().includes(f.tagId)) return false;
+  return true;
 }
 
 function listPagerHtml(page, totalPages, totalRows) {
@@ -4877,7 +5126,6 @@ function renderCameraPage(root, focusId) {
             <button type="button" class="btn btn-ghost alert-q-reset" data-cam-reset>重置</button>
             <button type="button" class="btn" data-cam-import>导入</button>
             <button type="button" class="btn" data-cam-export>导出</button>
-            <button type="button" class="btn" data-cam-algos>算法模型</button>
             <button type="button" class="btn btn-primary" data-cam-add>新增</button>
           </div>
         </div>
@@ -4969,9 +5217,6 @@ function renderCameraPage(root, focusId) {
         go("t7", "cameras", `id=${encodeURIComponent(id)}`);
       });
     });
-    root.querySelector("[data-cam-algos]")?.addEventListener("click", () => {
-      openAiAlgoCatalogDialog(paint);
-    });
     root.querySelectorAll("[data-cam-view]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const cam = data.cameras.find((item) => item.id === btn.dataset.camView);
@@ -5006,8 +5251,39 @@ function renderCameraPage(root, focusId) {
 const RISK_LVL = { "重大": 1, "高": 2, "较高": 3, "中": 4, "低": 5 };
 const RULE_STATUSES = ["启用", "停用"];
 const ALERT_EVENT_SOURCES = ["视频AI", "人工上报"];
-const STRATEGIES = ["直接进正式告警", "先告警后复核", "真警才进正式告警"];
+const STRATEGIES = ["直接进正式告警", "先复核后告警"];
+const LEGACY_ALERT_STRATEGIES = {
+  "先告警后复核": "先复核后告警",
+  "真警才进正式告警": "先复核后告警"
+};
 const NOTIFY_WAYS = ["待办", "待办 + 短信", "待办 + 电话"];
+
+function normalizeAlertStrategy(value, fallback = "直接进正式告警") {
+  const pick = LEGACY_ALERT_STRATEGIES[value] || value || fallback;
+  return STRATEGIES.includes(pick) ? pick : STRATEGIES[0];
+}
+
+function migrateAlertStrategies() {
+  (data.eventTypes || []).forEach((et) => {
+    if (et.strategy) et.strategy = normalizeAlertStrategy(et.strategy);
+  });
+  (data.aiAlgos || []).forEach((row) => {
+    if (row.strategy) row.strategy = normalizeAlertStrategy(row.strategy);
+  });
+  (data.zones || []).forEach((zone) => {
+    if (zone.fenceAlert?.strategy) {
+      zone.fenceAlert.strategy = normalizeAlertStrategy(zone.fenceAlert.strategy);
+    }
+  });
+  (data.cameras || []).forEach((cam) => {
+    (cam.aiBindings || []).forEach((row) => {
+      if (row.strategy) row.strategy = normalizeAlertStrategy(row.strategy);
+    });
+  });
+  [...(data.videoEvents || []), ...(data.events || [])].forEach((row) => {
+    if (row.entryPath) row.entryPath = normalizeAlertStrategy(row.entryPath);
+  });
+}
 const FENCE_KINDS = ["电子围栏", "风险区"];
 const RISK_NAMES = ["重大", "高", "较高", "中", "低"];
 
@@ -5017,6 +5293,32 @@ function formVal(root, name) {
 
 function formChecks(root, name) {
   return [...root.querySelectorAll(`[name="${name}"]:checked`)].map((item) => item.value);
+}
+
+function formMultiSelect(root, name) {
+  const el = root.querySelector(`[name="${name}"]`);
+  if (!el || el.tagName !== "SELECT") return formChecks(root, name);
+  return [...(el.selectedOptions || [])].map((opt) => opt.value);
+}
+
+function configMultiSelectField(label, name, options, selected, opts = {}) {
+  const chosen = new Set(selected || []);
+  const rows = (options || []).map((row) => {
+    const value = typeof row === "string" ? row : row.value;
+    const text = typeof row === "string" ? row : row.label;
+    return { value, text };
+  });
+  const size = opts.size ?? Math.min(8, Math.max(4, rows.length || 4));
+  const hint = opts.hint ? `<p class="meta field-hint">${opts.hint}</p>` : "";
+  return `
+    <label class="span-2">${label}
+      ${hint}
+      <select class="field field-multi" name="${name}" multiple size="${size}">
+        ${rows.map((row) => (
+          `<option value="${esc(row.value)}"${chosen.has(row.value) ? " selected" : ""}>${esc(row.text)}</option>`
+        )).join("") || `<option disabled>暂无可选项</option>`}
+      </select>
+    </label>`;
 }
 
 function bumpVersion(version) {
@@ -5051,8 +5353,14 @@ function locRulesForZone(zoneId) {
 }
 
 function ensureZoneFenceAlert(zone) {
-  if (zone.fenceAlert && typeof zone.fenceAlert === "object") return zone.fenceAlert;
+  if (zone.fenceAlert && typeof zone.fenceAlert === "object") {
+    const locRule = locRulesForZone(zone.id)[0];
+    const et = eventTypeForRule(locRule) || eventTypeByName(zone.fenceAlert.eventType || locRule?.type);
+    zone.fenceAlert.strategy = normalizeAlertStrategy(zone.fenceAlert.strategy, et?.strategy);
+    return zone.fenceAlert;
+  }
   const locRule = locRulesForZone(zone.id)[0];
+  const et = eventTypeForRule(locRule) || eventTypeByName(locRule?.type || "非法闯入");
   const riskLevel = RISK_LVL[zone.risk] || 3;
   zone.fenceAlert = {
     status: locRule?.status === "启用" ? "启用" : "停用",
@@ -5067,7 +5375,8 @@ function ensureZoneFenceAlert(zone) {
     role: locRule?.role || "",
     notify: locRule?.notify || NOTIFY_WAYS[0],
     shift: locRule?.shift || zone.hours || "",
-    note: locRule?.note || ""
+    note: locRule?.note || "",
+    strategy: normalizeAlertStrategy(et?.strategy, "直接进正式告警")
   };
   return zone.fenceAlert;
 }
@@ -5100,7 +5409,7 @@ function normalizeAdmissionRow(row, zone) {
   const next = {
     person: row?.person || "",
     hours: row?.hours || zone?.hours || "全天",
-    permit: !!row?.permit,
+    permit: false,
     startDate: row?.startDate || range.startDate,
     endDate: row?.endDate || range.endDate
   };
@@ -5120,8 +5429,7 @@ function ensureZoneAdmissions(zone) {
     people.forEach((person) => {
       rows.push(normalizeAdmissionRow({
         person,
-        hours: zone.hours || "全天",
-        permit: !!zone.permit
+        hours: zone.hours || "全天"
       }, zone));
     });
   }
@@ -5140,7 +5448,7 @@ function syncZoneLegacyFromAdmissions(zone) {
   const nonJobs = rows.map((r) => r.person).filter((p) => !jobsCatalog.includes(p));
   zone.whitelist = nonJobs.join("、");
   zone.hours = rows[0]?.hours || zone.hours || "全天";
-  zone.permit = rows.some((r) => r.permit);
+  zone.permit = false;
 }
 
 function admissionDateText(row) {
@@ -5165,7 +5473,6 @@ function readAdmissionFromDialog(dlg, zone) {
   return normalizeAdmissionRow({
     person: dlg.querySelector("#adm-person")?.value.trim() || "",
     hours: dlg.querySelector("#adm-hours")?.value.trim() || "",
-    permit: dlg.querySelector("#adm-permit")?.checked || false,
     startDate: dlg.querySelector("#adm-start")?.value || "",
     endDate: dlg.querySelector("#adm-end")?.value || ""
   }, zone);
@@ -5188,16 +5495,6 @@ function admissionDialogFields(row) {
       <label>结束日期
         <input type="date" id="adm-end" class="field" value="${row.endDate || ""}">
       </label>
-      <div class="span-2 admission-modal-permit">
-        <span class="admission-modal-permit-label">作业票</span>
-        <label class="switch-row">
-          <label class="switch">
-            <input type="checkbox" id="adm-permit"${row.permit ? " checked" : ""}>
-            <span class="switch-ui"></span>
-          </label>
-          <span>进入须持有效作业票</span>
-        </label>
-      </div>
     </div>
   `;
 }
@@ -5233,10 +5530,30 @@ function openAdmissionDialog(zone, idx, after) {
   });
 }
 
+function zoneOwnerText(zone) {
+  if (zone.owner) return zone.owner;
+  const fa = zone.fenceAlert;
+  if (fa?.org && fa?.role) return `${fa.org} · ${fa.role}`;
+  if (fa?.role) return fa.role;
+  if (fa?.org) return fa.org;
+  return "—";
+}
+
+function persistZoneBasic(root, zone) {
+  const name = formVal(root, "zone-name");
+  if (name) zone.name = name;
+  zone.plant = formVal(root, "zone-plant") || zone.plant;
+  zone.risk = formVal(root, "zone-risk") || zone.risk;
+  zone.fence = formVal(root, "zone-fence-type") || zone.fence;
+  zone.owner = formVal(root, "zone-owner");
+  zone.note = formVal(root, "zone-note");
+  const mapLabel = formVal(root, "zone-map-label");
+  if (mapLabel) zone.mapLabel = mapLabel;
+  const ver = zone.version || "v1";
+  zone.version = bumpVersion(ver.includes(".") ? ver : `${ver}.0`);
+}
+
 function persistZoneFence(root, zone) {
-  if (!root.querySelector("[name=fence]")) return;
-  zone.fence = formVal(root, "fence");
-  zone.risk = formVal(root, "risk");
   const ver = zone.version || "v1";
   zone.version = bumpVersion(ver.includes(".") ? ver : `${ver}.0`);
   readZoneFenceAlert(root, zone);
@@ -5257,7 +5574,10 @@ function readZoneFenceAlert(root, zone) {
   fa.role = formVal(root, "za-role");
   fa.notify = formVal(root, "za-notify");
   fa.shift = formVal(root, "za-shift");
-  fa.note = formVal(root, "za-note");
+  if (fa.status === "启用") {
+    const strat = formVal(root, "za-strategy");
+    if (strat) fa.strategy = normalizeAlertStrategy(strat, fa.strategy);
+  }
 }
 
 function syncFenceAlertToRules(zone) {
@@ -5278,6 +5598,9 @@ function syncFenceAlertToRules(zone) {
     rule.notify = fa.notify;
     rule.shift = fa.shift;
     rule.note = fa.note;
+    if (fa.status !== "启用") return;
+    const et = eventTypeForRule(rule);
+    if (et && fa.strategy) et.strategy = normalizeAlertStrategy(fa.strategy, et.strategy);
   });
 }
 
@@ -5387,7 +5710,7 @@ function eventWithRuleDetailHtml(et, rule) {
   `;
   return `
     <div class="detail-head">
-      <div><h2>${et.name}</h2><p class="meta">定位类（人员落点、围栏越界）在「区域与定位告警」配置；视频 AI 在「摄像头管理」按通道绑定算法。</p></div>
+      <div><h2>${et.name}</h2><p class="meta">定位类（人员落点、围栏越界）在「区域配置」维护；视频 AI 在「摄像头」按通道绑定算法。</p></div>
       <div class="detail-head-tags">
         <span class="dot ${et.enabled ? "ok" : "off"}">${et.enabled ? "启用" : "停用"}</span>
         <span class="dot ${statusTone(rawStatus)}">${rawStatus}</span>
@@ -5560,10 +5883,17 @@ function renderAlertRulesConfig(root, focusId) {
   }
   paint();
 }
+function normalizeZoneDetailTab() {
+  if (zoneDetailTab === "fence" || zoneDetailTab === "admission") zoneDetailTab = "access";
+  if (zoneDetailTab !== "basic" && zoneDetailTab !== "access") zoneDetailTab = "basic";
+}
+
 function renderZoneAccess(root, focusId) {
   let focus = focusId;
+  let zoneEditing = false;
 
   function paint() {
+    normalizeZoneDetailTab();
     const rows = data.zones;
     const item = rows.find((row) => row.id === focus) || rows[0];
     focus = item?.id;
@@ -5584,24 +5914,26 @@ function renderZoneAccess(root, focusId) {
           }).join("")}
         </aside>
         <section class="alert-detail">
-          ${item ? zoneForm(item) : ""}
+          ${item ? zoneForm(item, zoneEditing) : ""}
         </section>
       </div>
     `;
     root.querySelectorAll("[data-id]").forEach((btn) => {
       btn.addEventListener("click", () => {
         focus = btn.dataset.id;
+        zoneEditing = false;
         paint();
       });
     });
     root.querySelectorAll("[data-zone-tab]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        zoneDetailTab = btn.dataset.zoneTab || "fence";
+        zoneDetailTab = btn.dataset.zoneTab || "basic";
+        zoneEditing = false;
         paint();
       });
     });
     const refreshAdmission = () => {
-      zoneDetailTab = "admission";
+      zoneDetailTab = "access";
       paint();
     };
     root.querySelector("[data-admission-add]")?.addEventListener("click", () => {
@@ -5620,11 +5952,27 @@ function renderZoneAccess(root, focusId) {
         refreshAdmission();
       });
     });
-    const persistFence = () => {
-      persistZoneFence(root, item);
-    };
-    root.querySelectorAll("[data-zone-panel=fence] .field, [data-zone-panel=fence] select, [data-zone-panel=fence] textarea").forEach((el) => {
-      el.addEventListener("change", persistFence);
+    root.querySelector("[data-zone-edit]")?.addEventListener("click", () => {
+      zoneEditing = true;
+      paint();
+    });
+    root.querySelector("[data-zone-cancel]")?.addEventListener("click", () => {
+      zoneEditing = false;
+      paint();
+    });
+    root.querySelector("[data-zone-save]")?.addEventListener("click", () => {
+      if (zoneDetailTab === "basic") persistZoneBasic(root, item);
+      else persistZoneFence(root, item);
+      persist();
+      zoneEditing = false;
+      paint();
+    });
+    root.querySelector("[name=za-status]")?.addEventListener("change", (event) => {
+      if (!zoneEditing) return;
+      const fa = ensureZoneFenceAlert(item);
+      const st = event.currentTarget.value;
+      fa.status = RULE_STATUSES.includes(st) ? st : "停用";
+      paint();
     });
   }
   paint();
@@ -5652,12 +6000,6 @@ function zoneAdmissionListHtml(item) {
           <td>${row.person || "—"}</td>
           <td>${row.hours || "—"}</td>
           <td>${admissionDateText(row)}</td>
-          <td class="zone-adm-check">
-            <label class="switch is-readonly">
-              <input type="checkbox" disabled${row.permit ? " checked" : ""}>
-              <span class="switch-ui"></span>
-            </label>
-          </td>
           <td><span class="dot ${admissionStatusTone(st)}">${st}</span></td>
           <td class="zone-adm-actions">
             <button type="button" class="btn btn-sm" data-admission-edit data-idx="${i}">编辑</button>
@@ -5665,20 +6007,15 @@ function zoneAdmissionListHtml(item) {
           </td>
         </tr>`;
     }).join("")
-    : `<tr><td colspan="6" class="meta">暂无准入条目</td></tr>`;
+    : `<tr><td colspan="5" class="meta">暂无准入条目</td></tr>`;
   return `
     <div class="white-card zone-admission-list">
-      <div class="zone-admission-toolbar">
-        <h3>准入名单</h3>
-        <button type="button" class="btn btn-sm btn-primary" data-admission-add>新增</button>
-      </div>
       <table class="zone-admission-grid">
         <thead>
           <tr>
             <th>岗位或人员</th>
             <th>有效时段</th>
             <th>有效期</th>
-            <th>作业票</th>
             <th>状态</th>
             <th class="zone-adm-actions">操作</th>
           </tr>
@@ -5689,20 +6026,96 @@ function zoneAdmissionListHtml(item) {
   `;
 }
 
-function zoneFenceAlertBlock(item) {
+function zoneSpatialBoundsText(item) {
+  if (item.x == null || item.y == null) return "—";
+  return `x ${item.x}, y ${item.y} · ${item.w ?? 0}×${item.h ?? 0}`;
+}
+
+function zoneBasicBlock(item, editing) {
+  const plantIds = (data.plants || []).filter((p) => p.id !== "all").map((p) => p.id);
+  const plantSelect = plantIds.map((id) => (
+    `<option value="${id}"${id === item.plant ? " selected" : ""}>${plantName(id)}</option>`
+  )).join("");
+  const mapQuery = `<a class="btn btn-sm" href="#/t1/overview?id=${encodeURIComponent(item.id)}">地图查询</a>`;
+  if (!editing) {
+    return `
+      <div class="white-card zone-basic-card">
+        <div class="alert-facts">
+          ${archiveDetailFact("区域名称", esc(item.name))}
+          ${archiveDetailFact("分厂", plantName(item.plant))}
+          ${archiveDetailFact("风险等级", `<span class="lvl lvl-${RISK_LVL[item.risk] || 4}">${esc(item.risk || "—")}</span>`)}
+          ${archiveDetailFact("风险类型", esc(item.fence || "—"))}
+          ${archiveDetailFact("责任人", esc(zoneOwnerText(item)))}
+          ${archiveDetailFact("注意事项", esc(item.note || "—"), true)}
+        </div>
+        <p class="work-form-legend">空间标识</p>
+        <div class="alert-facts">
+          ${archiveDetailFact("区域 ID", esc(item.id))}
+          ${archiveDetailFact("地图标注", esc(item.mapLabel || item.name || "—"))}
+          ${archiveDetailFact("孪生边界框", zoneSpatialBoundsText(item))}
+        </div>
+        <div class="zone-spatial-actions">${mapQuery}</div>
+      </div>`;
+  }
+  return `
+    <div class="white-card zone-basic-card">
+      <div class="form-fields">
+        <label>区域名称<input class="field" name="zone-name" value="${esc(item.name || "")}"></label>
+        <label>分厂<select class="field" name="zone-plant">${plantSelect}</select></label>
+        <label>风险等级<select class="field" name="zone-risk">${optionList(RISK_NAMES, item.risk)}</select></label>
+        <label>风险类型<select class="field" name="zone-fence-type">${optionList(FENCE_KINDS, item.fence)}</select></label>
+        <label>责任人<input class="field" name="zone-owner" value="${esc(item.owner || "")}" placeholder="姓名或岗位"></label>
+        <label class="span-2">注意事项<textarea class="field" name="zone-note" rows="2">${esc(item.note || "")}</textarea></label>
+      </div>
+      <p class="work-form-legend">空间标识</p>
+      <div class="form-fields">
+        <label>区域 ID<input class="field" value="${esc(item.id)}" readonly></label>
+        <label>地图标注<input class="field" name="zone-map-label" value="${esc(item.mapLabel || "")}" placeholder="${esc(item.name || "")}"></label>
+        <label class="span-2">孪生边界框<input class="field" value="${zoneSpatialBoundsText(item)}" readonly></label>
+      </div>
+      <p class="meta">边界坐标由孪生维护，本页仅支持标注与地图查询。</p>
+      <div class="zone-spatial-actions">${mapQuery}</div>
+    </div>`;
+}
+
+function zoneFenceAlertBlock(item, editing) {
   const fa = ensureZoneFenceAlert(item);
   const st = RULE_STATUSES.includes(fa.status) ? fa.status : "停用";
-  return `
-    <div class="white-card zone-fence-alert">
-      <h3>定位类告警</h3>
-      <p class="meta" style="margin:0 0 10px">人员定位落点与围栏越界统一由此配置，生成「定位」事件；默认一事件升一正式告警，规则显式开启时才合并多源。</p>
-      <div class="form-fields">
-        <label>告警状态
+  const fieldsOff = st === "停用";
+  const strategyVal = normalizeAlertStrategy(fa.strategy);
+  const statusRead = archiveDetailFact("定位告警", `<span class="dot ${statusTone(st)}">${st}</span>`);
+  if (!editing) {
+    return `
+      <div class="white-card zone-fence-alert">
+        <div class="alert-facts">
+          ${statusRead}
+          ${fieldsOff ? "" : `
+          ${archiveDetailFact("告警规则", esc(strategyVal))}
+          ${archiveDetailFact("告警名称", esc(fa.name || "—"))}
+          ${archiveDetailFact("停留时长", `${fa.stay ?? 0} 秒`)}
+          ${archiveDetailFact("统计窗口", `${fa.window ?? 0} 秒`)}
+          ${archiveDetailFact("恢复时长", `${fa.recover ?? 0} 秒`)}
+          ${archiveDetailFact("告警等级", `<span class="lvl lvl-${fa.level}">${LEVEL_NAME[fa.level] || "—"}</span>`)}
+          ${archiveDetailFact("处置时限", esc(fa.sla || "—"))}
+          ${archiveDetailFact("责任组织", esc(fa.org || "—"))}
+          ${archiveDetailFact("责任岗位", esc(fa.role || "—"))}
+          ${archiveDetailFact("通知方式", esc(fa.notify || "—"))}
+          ${archiveDetailFact("生效班次", esc(fa.shift || "—"))}`}
+        </div>
+        ${fieldsOff ? `<p class="meta config-empty">定位告警已停用，启用后可配置参数。</p>` : ""}
+      </div>`;
+  }
+  const statusField = `
+        <label>定位告警
           <select class="field" name="za-status">
             ${RULE_STATUSES.map((name) => `<option${name === st ? " selected" : ""}>${name}</option>`).join("")}
           </select>
+        </label>`;
+  const detailFields = fieldsOff ? "" : `
+        <label>告警规则
+          <select class="field" name="za-strategy">${optionList(STRATEGIES, strategyVal)}</select>
         </label>
-        <label>告警名称<input class="field" name="za-name" value="${fa.name || ""}"></label>
+        <label>告警名称<input class="field" name="za-name" value="${esc(fa.name || "")}"></label>
         <label>停留时长（秒）<input class="field" type="number" name="za-stay" value="${fa.stay ?? 0}"></label>
         <label>统计窗口（秒）<input class="field" type="number" name="za-window" value="${fa.window ?? 0}"></label>
         <label>恢复时长（秒）<input class="field" type="number" name="za-recover" value="${fa.recover ?? 0}"></label>
@@ -5711,61 +6124,78 @@ function zoneFenceAlertBlock(item) {
             ${[1, 2, 3, 4].map((n) => `<option value="${n}"${n === fa.level ? " selected" : ""}>${LEVEL_NAME[n]}</option>`).join("")}
           </select>
         </label>
-        <label>处置时限<input class="field" name="za-sla" value="${fa.sla || ""}"></label>
+        <label>处置时限<input class="field" name="za-sla" value="${esc(fa.sla || "")}"></label>
         <label>责任组织
           <select class="field" name="za-org">${optionList(data.orgs || [], fa.org)}</select>
         </label>
-        <label>责任岗位<input class="field" name="za-role" value="${fa.role || ""}"></label>
+        <label>责任岗位<input class="field" name="za-role" value="${esc(fa.role || "")}"></label>
         <label>通知方式
           <select class="field" name="za-notify">${optionList(NOTIFY_WAYS, fa.notify)}</select>
         </label>
-        <label>生效班次<input class="field" name="za-shift" value="${fa.shift || ""}"></label>
-        <label class="span-2">说明<textarea name="za-note" rows="2">${fa.note || ""}</textarea></label>
+        <label>生效班次<input class="field" name="za-shift" value="${esc(fa.shift || "")}"></label>`;
+  return `
+    <div class="white-card zone-fence-alert">
+      <div class="form-fields">
+        ${statusField}
+        ${detailFields || `<p class="meta span-2">定位告警为停用时不可配置告警规则与参数，请先启用。</p>`}
       </div>
     </div>
   `;
 }
 
-function zoneForm(item) {
-  const tab = zoneDetailTab === "admission" ? "admission" : "fence";
-  const tabsHtml = `
-    <div class="zone-detail-tabs alert-panel-switch">
-      <button type="button" class="btn btn-sm${tab === "fence" ? " is-on" : ""}" data-zone-tab="fence">定位告警</button>
-      <button type="button" class="btn btn-sm${tab === "admission" ? " is-on" : ""}" data-zone-tab="admission">准入与名单</button>
-    </div>
-  `;
-  const fencePanel = `
-    <div class="zone-detail-panel${tab === "fence" ? " is-active" : ""}" data-zone-panel="fence">
-      <div class="white-card">
-        <div class="form-fields">
-          <label>围栏类型
-            <select class="field" name="fence">${optionList(FENCE_KINDS, item.fence)}</select>
-          </label>
-          <label>区域风险等级
-            <select class="field" name="risk">${optionList(RISK_NAMES, item.risk)}</select>
-          </label>
+function zoneAccessCombinedPanel(item, editing) {
+  return `
+    <div class="zone-access-stack">
+      <p class="work-form-legend">定位告警</p>
+      ${zoneFenceAlertBlock(item, editing)}
+      <div class="zone-admission-toolbar">
+        <div>
+          <h3>准入与名单</h3>
+          <p class="meta">岗位、人员与有效期</p>
         </div>
+        <button type="button" class="btn btn-sm btn-primary" data-admission-add>新增</button>
       </div>
-      ${zoneFenceAlertBlock(item)}
-    </div>
-  `;
-  const admissionPanel = `
-    <div class="zone-detail-panel${tab === "admission" ? " is-active" : ""}" data-zone-panel="admission">
       ${zoneAdmissionListHtml(item)}
+    </div>`;
+}
+
+function zoneForm(item, editing) {
+  const tab = zoneDetailTab === "access" ? "access" : "basic";
+  const tabsHtml = `
+    <div class="detail-tabs zone-detail-tabs" role="tablist">
+      <button type="button" class="detail-tab${tab === "basic" ? " is-on" : ""}" data-zone-tab="basic">基础配置</button>
+      <button type="button" class="detail-tab${tab === "access" ? " is-on" : ""}" data-zone-tab="access">告警与准入</button>
     </div>
   `;
+  const basicPanel = `
+    <div class="zone-detail-panel${tab === "basic" ? " is-active" : ""}" data-zone-panel="basic">
+      ${zoneBasicBlock(item, editing)}
+    </div>
+  `;
+  const accessPanel = `
+    <div class="zone-detail-panel${tab === "access" ? " is-active" : ""}" data-zone-panel="access">
+      ${zoneAccessCombinedPanel(item, editing)}
+    </div>
+  `;
+  const headActions = editing
+    ? `<button type="button" class="btn" data-zone-cancel>取消</button><button type="button" class="btn btn-primary" data-zone-save>保存</button>`
+    : `<button type="button" class="btn btn-primary" data-zone-edit>编辑</button>`;
   return `
     <div class="detail-head">
-      <div>
-        <h2>${item.name}</h2>
-        <p class="meta">${plantName(item.plant)} · ${item.id} · 边界由孪生维护</p>
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${esc(item.name)}</h2>
+        </div>
+        <p class="meta">${item.id} · 边界由孪生维护</p>
       </div>
-      <span class="lvl lvl-${RISK_LVL[item.risk] || 4}">${item.risk}</span>
+      <div class="detail-head-side">
+        <div class="work-order-actions" role="toolbar">${headActions}</div>
+      </div>
     </div>
     ${tabsHtml}
     <div class="zone-detail-panels">
-      ${fencePanel}
-      ${admissionPanel}
+      ${basicPanel}
+      ${accessPanel}
     </div>
   `;
 }
@@ -6049,7 +6479,7 @@ function renderAlertLinkedWorkOrders(item) {
     ? `<ul class="alert-related-list">${rows.map((row) => (
       `<li>
         <div class="alert-related-head">
-          <a class="text-link" href="#/t5/tickets?id=${encodeURIComponent(row.id)}">${esc(row.id)}</a>
+          <a class="text-link" href="#/${row.status === "已归档" ? "t6/work-archive" : "t5/tickets"}?id=${encodeURIComponent(row.id)}">${esc(row.id)}</a>
           <span class="meta">${esc(workOrderTypeLabel(row))} · ${esc(row.status)}</span>
         </div>
       </li>`
@@ -6890,16 +7320,16 @@ function ensureWorkCatalog() {
   });
 }
 
-function workCfgTable(title, headers, body, addAttr) {
+function workCfgTable(title, headers, body, addAttr, editing) {
   return `
     <div class="white-card">
       <div class="zone-admission-toolbar">
         <h3>${title}</h3>
-        <button type="button" class="btn btn-sm btn-primary" ${addAttr}>新增</button>
+        ${editing ? `<button type="button" class="btn btn-sm btn-primary" ${addAttr}>新增</button>` : ""}
       </div>
       <div class="table-wrap work-cfg-table">
         <table>
-          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}<th>操作</th></tr></thead>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}${editing ? "<th>操作</th>" : ""}</tr></thead>
           <tbody>${body}</tbody>
         </table>
       </div>
@@ -6907,27 +7337,33 @@ function workCfgTable(title, headers, body, addAttr) {
   `;
 }
 
+function configYesNo(value) {
+  return value ? "是" : "否";
+}
+
+function configZoneNames(zoneIds) {
+  const names = (zoneIds || [])
+    .map((id) => (data.zones || []).find((z) => z.id === id)?.name)
+    .filter(Boolean);
+  return names.length ? esc(names.join("、")) : `<span class="meta">未选择</span>`;
+}
+
+function configTagsHtml(names, empty = "未选择") {
+  const rows = (names || []).filter(Boolean);
+  if (!rows.length) return `<span class="meta">${empty}</span>`;
+  return `<div class="config-tags">${rows.map((name) => `<span class="config-tag">${esc(name)}</span>`).join("")}</div>`;
+}
+
 function workTypeFromForm(root, item) {
   item.name = formVal(root, "name") || item.name;
-  item.code = formVal(root, "code") || item.code;
   item.enabled = formVal(root, "enabled") === "启用";
-  item.validityHours = Number(formVal(root, "validityHours")) || 8;
-  item.night = root.querySelector("[name=night]")?.checked || false;
-  item.zoneIds = formChecks(root, "zone");
+  if (root._wtZoneSelect) item.zoneIds = root._wtZoneSelect.getValue();
+  else if (root.querySelector('[name="zone"]')) item.zoneIds = formMultiSelect(root, "zone");
+  if (root._wtSuppressSelect) item.suppressEventTypes = root._wtSuppressSelect.getValue();
+  else if (root.querySelector('[name="suppress-et"]')) item.suppressEventTypes = formMultiSelect(root, "suppress-et");
   const levels = formChecks(root, "wlevel").map(Number);
   item.levels = levels.length ? levels : workTypeAllowedLevels(item);
   item.level = item.levels[0] ?? item.level ?? 2;
-  item.extras = {
-    ...(item.extras || {}),
-    gas: root.querySelector("[name=extra-gas]")?.checked || false,
-    heightRequired: root.querySelector("[name=extra-height]")?.checked || false,
-    hotWorker: root.querySelector("[name=extra-hot]")?.checked || false,
-    gasStandard: formVal(root, "gasStandard"),
-    gasHint: formVal(root, "gasHint"),
-    gasLimit: Number(formVal(root, "gasLimit")) || 20,
-    maxHours: Number(formVal(root, "maxHours")) || item.validityHours
-  };
-  item.suppressEventTypes = formChecks(root, "suppress-et");
   item.flowId = formVal(root, "flowId") || item.flowId || "wf-four";
   item.approval = workTypeApprovalChain(item).map((row) => ({ step: row.step, role: row.role }));
 }
@@ -7184,12 +7620,13 @@ function renderWorkFlowsConfig(root, focusId) {
     if (focus && !rows.some((row) => row.id === focus)) focus = rows[0]?.id || null;
     root.innerHTML = `
       <div class="sys-stack">
-        <div class="filter-row alert-toolbar">
+        <div class="zone-admission-toolbar">
           <div class="alert-status-chips">
             ${["全部", "启用", "停用"].map((name) => (
               `<button type="button" class="chip${filter === name ? " is-on" : ""}" data-filter="${name}">${name}</button>`
             )).join("")}
           </div>
+          <button type="button" class="btn btn-sm btn-primary" data-add>新增审批流</button>
         </div>
         <div class="table-wrap">
           <table>
@@ -7217,12 +7654,6 @@ function renderWorkFlowsConfig(root, focusId) {
             </tbody>
           </table>
         </div>
-        <div class="sys-table-toolbar">
-          <button type="button" class="btn" data-add>新增审批流</button>
-          <a class="btn" href="#/t7/work-types">作业类型</a>
-          <a class="btn" href="#/t5/tickets">作业工单</a>
-        </div>
-        <p class="meta">作业类型引用审批流 ID；工单提交时按当时节点生成签批，已开工单不随流变更改写。</p>
       </div>
     `;
     root.querySelectorAll("[data-filter]").forEach((btn) => {
@@ -7281,29 +7712,56 @@ function renderWorkFlowsConfig(root, focusId) {
   paint();
 }
 
+function destroyWorkTypeMultiSelects(root) {
+  root._wtZoneSelect?.destroy();
+  root._wtSuppressSelect?.destroy();
+  root._wtZoneSelect = null;
+  root._wtSuppressSelect = null;
+}
+
+function bindWorkTypeMultiSelects(root, item) {
+  destroyWorkTypeMultiSelects(root);
+  const zoneHost = root.querySelector("#wt-zone-select");
+  const suppressHost = root.querySelector("#wt-suppress-select");
+  if (!zoneHost && !suppressHost) return;
+  const zoneOptions = (data.zones || []).map((zone) => ({ value: zone.id, label: zone.name }));
+  const suppressOptions = workSuppressableEventTypes().map((et) => ({
+    value: et.name,
+    label: `${et.name} · ${et.source}`
+  }));
+  if (zoneHost) {
+    root._wtZoneSelect = mountWorkPeopleSelect(zoneHost, {
+      value: item.zoneIds || [],
+      placeholder: "搜索并选择区域",
+      options: zoneOptions,
+      optionLabelProp: "label",
+      notFoundContent: "无匹配区域"
+    });
+  }
+  if (suppressHost) {
+    root._wtSuppressSelect = mountWorkPeopleSelect(suppressHost, {
+      value: item.suppressEventTypes || [],
+      placeholder: "搜索并选择告警类型",
+      options: suppressOptions,
+      notFoundContent: "无匹配类型"
+    });
+  }
+}
+
 function renderWorkTypesConfig(root, focusId) {
   let focus = focusId;
-  let filter = "全部";
+  let workTypeEditing = false;
 
   function paint() {
+    destroyWorkTypeMultiSelects(root);
     ensureWorkCatalog();
     const all = data.workTypes || [];
-    const rows = all.filter((row) => {
-      if (filter === "启用") return row.enabled;
-      if (filter === "停用") return !row.enabled;
-      return true;
-    });
-    const item = rows.find((row) => row.id === focus) || all.find((row) => row.id === focus) || rows[0] || all[0];
+    const item = all.find((row) => row.id === focus) || all[0];
     focus = item?.id;
     root.innerHTML = `
-      <div class="filter-row tight">
-        ${["全部", "启用", "停用"].map((name) => (
-          `<button type="button" class="chip${filter === name ? " is-on" : ""}" data-filter="${name}">${name}</button>`
-        )).join("")}
-      </div>
       <div class="alert-layout">
         <aside class="alert-list-panel">
-          ${(rows.length ? rows : all).map((row) => `
+          ${all.map((row) => `
             <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-id="${row.id}">
               <div class="row">
                 <strong>${esc(row.name)}</strong>
@@ -7317,15 +7775,31 @@ function renderWorkTypesConfig(root, focusId) {
           </div>
         </aside>
         <section class="alert-detail">
-          ${item ? renderWorkTypeDetail(item) : ""}
+          ${item ? renderWorkTypeDetail(item, workTypeEditing) : ""}
         </section>
       </div>
     `;
-    root.querySelectorAll("[data-filter]").forEach((btn) => {
-      btn.addEventListener("click", () => { filter = btn.dataset.filter; paint(); });
+    root.querySelectorAll("[data-wt-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        workTypeDetailTab = btn.dataset.wtTab || "basic";
+        paint();
+      });
     });
     root.querySelectorAll("[data-id]").forEach((btn) => {
-      btn.addEventListener("click", () => { focus = btn.dataset.id; paint(); });
+      btn.addEventListener("click", () => {
+        focus = btn.dataset.id;
+        workTypeEditing = false;
+        workTypeDetailTab = "basic";
+        paint();
+      });
+    });
+    root.querySelector("[data-wt-edit]")?.addEventListener("click", () => {
+      workTypeEditing = true;
+      paint();
+    });
+    root.querySelector("[data-wt-cancel]")?.addEventListener("click", () => {
+      workTypeEditing = false;
+      paint();
     });
     root.querySelector("[data-add]")?.addEventListener("click", () => {
       const fresh = normalizeWorkType({
@@ -7351,12 +7825,14 @@ function renderWorkTypesConfig(root, focusId) {
       data.workTypes.push(fresh);
       persist();
       focus = fresh.id;
+      workTypeEditing = true;
       paint();
     });
-    root.querySelector("[data-save]")?.addEventListener("click", () => {
+    root.querySelector("[data-wt-save]")?.addEventListener("click", () => {
       workTypeFromForm(root, item);
       applyWorkAlertSuppression();
       persist();
+      workTypeEditing = false;
       paint();
     });
     const bindRow = (attr, kind, list) => {
@@ -7372,7 +7848,8 @@ function renderWorkTypesConfig(root, focusId) {
         });
       });
     };
-    if (item) {
+    if (item && workTypeEditing) {
+      bindWorkTypeMultiSelects(root, item);
       bindRow("data-qual", "qual", item.quals);
       bindRow("data-measure", "measure", item.measures);
       bindRow("data-risk", "risk", item.riskOptions);
@@ -7380,114 +7857,109 @@ function renderWorkTypesConfig(root, focusId) {
         openWorkFlowPickerDialog(item, paint);
       });
     }
+    root.querySelector("[name=enabled]")?.addEventListener("change", (event) => {
+      if (!workTypeEditing) return;
+      item.enabled = event.currentTarget.value === "启用";
+      paint();
+    });
   }
   paint();
 }
 
-function renderWorkTypeDetail(item) {
-  const extras = workExtras(item);
+function renderWorkTypeDetail(item, editing) {
   const allowed = workTypeAllowedLevels(item);
   const selected = new Set(workTypeLevels(item).map(Number));
+  const qualColspan = editing ? 4 : 3;
+  const measureColspan = editing ? 2 : 1;
+  const riskColspan = editing ? 2 : 1;
   const qualBody = (item.quals || []).length
     ? item.quals.map((row, i) => `
         <tr>
           <td>${esc(row.role)}</td>
           <td>${esc(row.cert || "—")}</td>
           <td>${row.required === false ? "否" : "是"}</td>
-          <td class="table-actions">
+          ${editing ? `<td class="table-actions">
             <button type="button" class="btn btn-sm" data-qual-edit data-idx="${i}">编辑</button>
             <button type="button" class="btn btn-sm btn-ghost" data-qual-del data-idx="${i}">删除</button>
-          </td>
+          </td>` : ""}
         </tr>`).join("")
-    : `<tr><td colspan="4" class="meta">未配置资格</td></tr>`;
+    : `<tr><td colspan="${qualColspan}" class="meta">未配置资格</td></tr>`;
   const measureBody = (item.measures || []).length
     ? item.measures.map((row, i) => `
         <tr>
           <td>${esc(row.name)}${(row.fills || []).length ? `<div class="meta">填空：${esc(row.fills.join("、"))}</div>` : ""}</td>
-          <td class="table-actions">
+          ${editing ? `<td class="table-actions">
             <button type="button" class="btn btn-sm" data-measure-edit data-idx="${i}">编辑</button>
             <button type="button" class="btn btn-sm btn-ghost" data-measure-del data-idx="${i}">删除</button>
-          </td>
+          </td>` : ""}
         </tr>`).join("")
-    : `<tr><td colspan="2" class="meta">未配置措施</td></tr>`;
+    : `<tr><td colspan="${measureColspan}" class="meta">未配置措施</td></tr>`;
   const riskBody = (item.riskOptions || []).length
     ? item.riskOptions.map((name, i) => `
         <tr>
           <td>${esc(name)}</td>
-          <td class="table-actions">
+          ${editing ? `<td class="table-actions">
             <button type="button" class="btn btn-sm" data-risk-edit data-idx="${i}">编辑</button>
             <button type="button" class="btn btn-sm btn-ghost" data-risk-del data-idx="${i}">删除</button>
-          </td>
+          </td>` : ""}
         </tr>`).join("")
-    : `<tr><td colspan="2" class="meta">未配置风险项</td></tr>`;
-  return `
-    <div class="detail-head">
-      <div><h2>${esc(item.name)}</h2></div>
-      <div class="detail-head-tags">
-        <span class="dot ${workStatusTone(item.enabled ? "启用" : "停用")}">${item.enabled ? "启用" : "停用"}</span>
-        <span class="lvl lvl-${item.level || 2}">${esc(workTypeLevelsText(item))}</span>
-      </div>
-    </div>
-    <div class="white-card">
+    : `<tr><td colspan="${riskColspan}" class="meta">未配置风险项</td></tr>`;
+  const headActions = editing
+    ? `<button type="button" class="btn" data-wt-cancel>取消</button><button type="button" class="btn btn-primary" data-wt-save>保存</button>`
+    : `<button type="button" class="btn btn-primary" data-wt-edit>编辑</button>`;
+  const zoneNames = (item.zoneIds || [])
+    .map((id) => (data.zones || []).find((zone) => zone.id === id)?.name)
+    .filter(Boolean);
+  const basicFields = editing ? `
+      <p class="work-form-legend">基础</p>
       <div class="form-fields">
         <label>名称<input class="field" name="name" value="${esc(item.name || "")}"></label>
-        <label>编码<input class="field" name="code" value="${esc(item.code || "")}"></label>
         <label>状态
           <select class="field" name="enabled">
             <option${item.enabled ? " selected" : ""}>启用</option>
             <option${!item.enabled ? " selected" : ""}>停用</option>
           </select>
         </label>
-        <label>默认可作业时长（小时）<input class="field" name="validityHours" type="number" value="${item.validityHours || 8}"></label>
-        <label>等级上限时长（小时）<input class="field" name="maxHours" type="number" value="${extras.maxHours || item.validityHours || 8}"></label>
         <label class="span-2">允许等级
           <span class="check-row">${allowed.map((n) => (
             `<label><input type="checkbox" name="wlevel" value="${n}"${selected.has(n) ? " checked" : ""}>${workLevelLabel(n)}</label>`
           )).join("")}</span>
         </label>
-        <label class="check-inline">夜间
-          <span><input type="checkbox" name="night"${item.night ? " checked" : ""}> 允许夜间作业</span>
-        </label>
-        <label class="check-inline">动火人
-          <span><input type="checkbox" name="extra-hot"${extras.hotWorker ? " checked" : ""}> 需要动火人及特种作业证</span>
-        </label>
-        <label class="check-inline">气体分析
-          <span><input type="checkbox" name="extra-gas"${extras.gas ? " checked" : ""}> 开票须气体分析</span>
-        </label>
-        <label class="check-inline">作业高度
-          <span><input type="checkbox" name="extra-height"${extras.heightRequired ? " checked" : ""}> 开票须填写高度</span>
-        </label>
-        <label>合格标准<input class="field" name="gasStandard" value="${esc(extras.gasStandard || "")}"></label>
-        <label>LEL 上限（%）<input class="field" name="gasLimit" type="number" value="${extras.gasLimit || 20}"></label>
-        <label class="span-2">分析要求<textarea class="field" name="gasHint" rows="2">${esc(extras.gasHint || "")}</textarea></label>
+        <div class="span-2 wo-people-field">
+          <span class="wo-people-label">重点监管区域</span>
+          <div id="wt-zone-select" class="wo-people-select"></div>
+        </div>
+        <div class="span-2 wo-people-field">
+          <span class="wo-people-label">有效票期间抑制的告警</span>
+          <p class="meta">工单已签发且在时间窗内时，所选类型不进告警中心；识别复核仍留痕。定位闯入还需人员在票上。</p>
+          <div id="wt-suppress-select" class="wo-people-select"></div>
+        </div>
+      </div>` : `
+      <div class="alert-facts">
+        ${archiveDetailFact("状态", `<span class="dot ${workStatusTone(item.enabled ? "启用" : "停用")}">${item.enabled ? "启用" : "停用"}</span>`)}
+        ${archiveDetailFact("允许等级", esc(workTypeLevelsText(item)))}
       </div>
-    </div>
-    <div class="white-card">
-      <h3>重点监管区域</h3>
-      <div class="check-row is-stack">
-        ${(data.zones || []).map((zone) => `
-          <label><input type="checkbox" name="zone" value="${zone.id}"${(item.zoneIds || []).includes(zone.id) ? " checked" : ""}>${esc(zone.name)}</label>
-        `).join("")}
-      </div>
-    </div>
-    <div class="white-card">
-      <h3>有效票期间抑制的告警</h3>
-      <p class="meta">工单已签发且在时间窗内时，勾选类型不进告警中心；识别复核仍留痕。定位闯入还需人员在票上。</p>
-      <div class="check-row is-stack">
-        ${workSuppressableEventTypes().map((et) => `
-          <label><input type="checkbox" name="suppress-et" value="${esc(et.name)}"${(item.suppressEventTypes || []).includes(et.name) ? " checked" : ""}>${esc(et.name)} · ${esc(et.source)}</label>
-        `).join("") || `<span class="meta">暂无定位/视频事件类型</span>`}
-      </div>
-    </div>
-    ${workCfgTable("人员与资格", ["角色", "证照", "必持"], qualBody, "data-qual-add")}
-    ${workCfgTable("安全措施", ["措施"], measureBody, "data-measure-add")}
+      <p class="work-form-legend">重点监管区域</p>
+      ${configTagsHtml(zoneNames)}
+      <p class="work-form-legend">有效票期间抑制的告警</p>
+      ${configTagsHtml(item.suppressEventTypes)}`;
+  normalizeWorkTypeDetailTab();
+  const tab = workTypeDetailTab;
+  const panelHidden = (name) => (tab !== name ? " hidden" : "");
+  const tabsHtml = `
+    <div class="detail-tabs work-type-detail-tabs" role="tablist">
+      <button type="button" class="detail-tab${tab === "basic" ? " is-on" : ""}" data-wt-tab="basic">基础与资格</button>
+      <button type="button" class="detail-tab${tab === "measure" ? " is-on" : ""}" data-wt-tab="measure">安全措施</button>
+      <button type="button" class="detail-tab${tab === "flow" ? " is-on" : ""}" data-wt-tab="flow">审批</button>
+    </div>`;
+  const approvalBlock = `
     <div class="white-card">
       <div class="zone-admission-toolbar">
         <div>
           <h3>审批节点预览</h3>
           <p class="meta">审批流：${esc(workFlowName(item.flowId))}</p>
         </div>
-        <button type="button" class="btn btn-sm" data-change-flow>更换审批流</button>
+        ${editing ? `<button type="button" class="btn btn-sm" data-change-flow>更换审批流</button>` : ""}
       </div>
       <div class="table-wrap work-cfg-table">
         <table>
@@ -7499,12 +7971,33 @@ function renderWorkTypeDetail(item) {
           </tbody>
         </table>
       </div>
-      <p class="meta">节点在审批流配置中维护；通过「更换审批流」切换引用，已开工单不受影响。</p>
+    </div>`;
+  return `
+    <div class="detail-head">
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${esc(item.name)}</h2>
+          <span class="lvl lvl-${item.level || 2}">${esc(workTypeLevelsText(item))}</span>
+        </div>
+        <p class="meta">${esc(workFlowName(item.flowId))}</p>
+      </div>
+      <div class="detail-head-side">
+        <div class="work-order-actions" role="toolbar">${headActions}</div>
+      </div>
     </div>
-    ${workCfgTable("风险辨识选项", ["风险"], riskBody, "data-risk-add")}
-    <div class="form-foot">
-      <button type="button" class="btn btn-primary" data-save>保存</button>
-      <a class="btn" href="#/t5/tickets">作业工单</a>
+    ${tabsHtml}
+    <div class="work-type-detail-panels">
+      <div data-wt-panel="basic"${panelHidden("basic")}>
+        <div class="white-card">${basicFields}</div>
+        ${workCfgTable("人员与资格", ["角色", "证照", "必持"], qualBody, "data-qual-add", editing)}
+      </div>
+      <div data-wt-panel="measure"${panelHidden("measure")}>
+        ${workCfgTable("安全措施", ["措施"], measureBody, "data-measure-add", editing)}
+        ${workCfgTable("风险辨识选项", ["风险"], riskBody, "data-risk-add", editing)}
+      </div>
+      <div data-wt-panel="flow"${panelHidden("flow")}>
+        ${approvalBlock}
+      </div>
     </div>
   `;
 }
@@ -8422,7 +8915,7 @@ function WorkPeopleAntSelect(props) {
     allowClear: true,
     showSearch: true,
     optionFilterProp: "label",
-    optionLabelProp: "value",
+    optionLabelProp: props.optionLabelProp || "value",
     placeholder: props.placeholder,
     value,
     onChange: handleChange,
@@ -8430,11 +8923,18 @@ function WorkPeopleAntSelect(props) {
     style: { width: "100%" },
     dropdownStyle: { zIndex: 2000 },
     getPopupContainer: () => document.body,
-    notFoundContent: "无匹配人员"
+    notFoundContent: props.notFoundContent || "无匹配人员"
   });
 }
 
-function mountWorkPeopleSelect(host, { value, placeholder, onChange, options: optionsOverride }) {
+function mountWorkPeopleSelect(host, {
+  value,
+  placeholder,
+  onChange,
+  options: optionsOverride,
+  optionLabelProp,
+  notFoundContent
+}) {
   const state = { value: [...(value || [])] };
   const options = optionsOverride || workPeopleSelectOptions();
   if (!host) {
@@ -8462,6 +8962,8 @@ function mountWorkPeopleSelect(host, { value, placeholder, onChange, options: op
     value: state.value,
     options,
     placeholder,
+    optionLabelProp,
+    notFoundContent,
     onChange: (next) => {
       state.value = next;
       onChange?.(next);
@@ -9504,6 +10006,120 @@ function monthSeriesFromTotals(monthRows, total) {
   return weights.map((w) => Math.max(0, Math.round((total * w) / sum)));
 }
 
+function statsPeriodLabel(periodKey) {
+  return STATS_PERIOD_OPTIONS.find((item) => item.value === periodKey)?.label || periodKey || "—";
+}
+
+function csvEscapeCell(v) {
+  return `"${String(v ?? "").replace(/"/g, '""')}"`;
+}
+
+function exportEventStatsReport(plantId, periodKey, s, summary) {
+  const plantLabel = plantId === "all" ? "全厂" : (statsPlantLabel(plantId) || plantId);
+  const periodLabel = statsPeriodLabel(periodKey);
+  const escalRate = s.events.length ? Math.round((s.escalated / s.events.length) * 100) : 0;
+  const falseRate = s.review.total ? Math.round((s.review.falseHit / s.review.total) * 100) : 0;
+  const majorShare = s.alerts.length ? Math.round((s.major / s.alerts.length) * 100) : 0;
+  const lines = [];
+  const pushRow = (...cells) => lines.push(cells.map(csvEscapeCell).join(","));
+  const pushBreakdown = (title, colA, colB, rowsEv, rowsAl, match) => {
+    lines.push("");
+    pushRow(title, colA, colB);
+    const names = [...new Set([...rowsEv, ...rowsAl].map((row) => row.name))];
+    names.forEach((name) => {
+      const ev = rowsEv.find((row) => row.name === name)?.count || 0;
+      const al = rowsAl.find((row) => row.name === name)?.count || 0;
+      if (match && !match(name, ev, al)) return;
+      pushRow(name, ev, al);
+    });
+  };
+
+  pushRow("安全事件统计报表");
+  pushRow("统计周期", periodLabel);
+  pushRow("分厂范围", plantLabel);
+  pushRow("导出时间", new Date().toISOString().slice(0, 19).replace("T", " "));
+  lines.push("");
+  pushRow("汇总指标", "数值", "说明");
+  pushRow("事件数", s.events.length, "含误报/抑制/未升告警");
+  pushRow("正式告警", s.alerts.length, "本周期内");
+  pushRow("升告警", s.escalated, `升告警率 ${escalRate}%`);
+  pushRow("未办结告警", s.openAlerts, "");
+  pushRow("已办结告警", s.closed, "");
+  pushRow("一二级告警", s.major, `占比 ${majorShare}%`);
+  pushRow("平均处置时长(min)", summary?.avgHandleMin ?? "—", "签收至办结");
+  pushRow("视频AI复核", s.review.total, `误报率 ${falseRate}%`);
+
+  pushBreakdown("类型结构", "事件", "正式告警", s.typesEv, s.typesAl);
+  pushBreakdown("区域排行", "事件", "正式告警", s.areasEv, s.areasAl);
+  pushBreakdown("等级结构", "事件", "正式告警", s.levelsEv, s.levelsAl);
+
+  lines.push("");
+  pushRow("复核结论（视频/AI）", "条数");
+  pushRow("真警", s.review.trueHit);
+  pushRow("误报", s.review.falseHit);
+  pushRow("待复核/待核查", s.review.hold);
+  pushRow("已抑制", s.review.suppressed);
+
+  lines.push("");
+  pushRow("告警处置状态", "条数");
+  s.handleStatuses.forEach((row) => pushRow(row.name, row.count));
+
+  if (plantId === "all" && s.plants.length) {
+    lines.push("");
+    pushRow("分厂对比", "事件", "正式告警");
+    s.plants.forEach((row) => pushRow(row.name, row.events, row.alerts));
+  }
+
+  lines.push("");
+  pushRow("发生时段", "事件", "正式告警");
+  s.hourLabels.forEach((name) => {
+    const ev = s.hoursEv.find((row) => row.name === name)?.count || 0;
+    const al = s.hoursAl.find((row) => row.name === name)?.count || 0;
+    pushRow(name, ev, al);
+  });
+
+  lines.push("");
+  pushRow("事件明细");
+  pushRow("编号", "类型", "来源", "分厂", "区域", "等级", "状态", "时间", "正式告警");
+  s.events.forEach((row) => {
+    pushRow(
+      row.id,
+      row.type,
+      row.source || "",
+      row.plant || "",
+      row.place || "",
+      LEVEL_NAME[row.level] || row.level || "",
+      row.status || "",
+      row.time || "",
+      row.alertId || ""
+    );
+  });
+
+  lines.push("");
+  pushRow("正式告警明细");
+  pushRow("编号", "类型", "等级", "分厂", "区域", "对象", "状态", "时间");
+  s.alerts.forEach((row) => {
+    pushRow(
+      row.id,
+      row.type,
+      LEVEL_NAME[row.level] || row.level || "",
+      row.plant || "",
+      row.place || "",
+      row.person || "",
+      row.status || "",
+      row.time || ""
+    );
+  });
+
+  const blob = new Blob([`\ufeff${lines.join("\n")}`], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.download = `安全统计报表-${plantLabel}-${periodLabel}-${stamp}.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
 function renderEventStats(root) {
   let plantId = "all";
   let periodKey = "30d";
@@ -9587,6 +10203,7 @@ function renderEventStats(root) {
             `<option value="${p.id}"${plantId === p.id ? " selected" : ""}>${p.name}</option>`
           )).join("")}
         </select>
+        <button type="button" class="btn" data-stats-export>导出报表</button>
       </div>
       <div class="cockpit-kpi">
         <div class="kpi-card">
@@ -9669,6 +10286,14 @@ function renderEventStats(root) {
       root.querySelector("[name=period]")?.addEventListener("change", (event) => {
         periodKey = event.target.value || "30d";
         paint();
+      });
+      root.querySelector("[data-stats-export]")?.addEventListener("click", () => {
+        const plantLabel = plantId === "all" ? "全厂" : (statsPlantLabel(plantId) || plantId);
+        const periodLabel = statsPeriodLabel(periodKey);
+        openAlertDialog("导出报表", `<p class="meta">按当前筛选（${esc(periodLabel)} · ${esc(plantLabel)}）导出 CSV：汇总指标、分项统计、事件与正式告警明细。</p>`, () => {
+          exportEventStatsReport(plantId, periodKey, s, summary);
+          return true;
+        }, "导出");
       });
     };
 
@@ -10119,74 +10744,114 @@ function renderHeatAnalysis(root, focusId) {
   paint();
 }
 
+function labeledArchiveSearch(label, name, value, placeholder) {
+  return `<label class="cam-field-label"><span class="cam-field-label-name">${esc(label)}</span>
+    <input type="search" class="field alert-q-field" name="${name}" value="${esc(value)}" placeholder="${esc(placeholder || "")}" autocomplete="off"></label>`;
+}
+
+function archiveFieldIncludes(hay, needle) {
+  if (!needle) return true;
+  return String(hay || "").includes(needle);
+}
+
+function archiveDetailFact(label, valueHtml, wide) {
+  return `<div class="alert-fact${wide ? " alert-fact--wide" : ""}">
+    <span class="alert-fact-k">${esc(label)}</span>
+    <span class="alert-fact-v">${valueHtml || `<span class="meta">—</span>`}</span>
+  </div>`;
+}
+
+function eventArchiveAlertHtml(event) {
+  if (!event.alertId) return `<span class="meta">未生成</span>`;
+  return `<a class="text-link" href="#/t6/alert-archive?id=${encodeURIComponent(event.alertId)}">${esc(event.alertId)}</a>`;
+}
+
+function defaultEventArchiveFilters() {
+  return {
+    fId: "", fSource: "", fType: "", fPlant: "", fLevel: "", fPlace: "", fPerson: "", fConclusion: "", fAlert: "", fTime: ""
+  };
+}
+
+function defaultAlertArchiveFilters() {
+  return {
+    fId: "", fType: "", fPlant: "", fPlace: "", fPerson: "", fStatus: "全部", fLevel: "", fEvent: "", fTime: ""
+  };
+}
+
+function eventArchiveFiltersActive(filters) {
+  return Object.entries(filters).some(([key, val]) => String(val || "").trim() !== "");
+}
+
+function alertArchiveFiltersActive(filters) {
+  return Object.entries(filters).some(([key, val]) => {
+    if (key === "fStatus") return val !== "全部";
+    return String(val || "").trim() !== "";
+  });
+}
+
+function readArchiveFilters(root, names) {
+  const out = {};
+  names.forEach((name) => {
+    out[name] = root.querySelector(`[name="${name}"]`)?.value?.trim() || "";
+  });
+  return out;
+}
+
 function historyEventDetailHtml(event) {
   const alert = alertForEvent(event);
-  const stubAlert = {
-    camera: event.camera,
-    time: event.time,
-    type: event.type,
-    x: event.x,
-    y: event.y
-  };
-  const primaryCam = data.cameras.find((c) => c.id === event.camera);
   const timeline = eventHistoryTimeline(event);
   const logCount = timeline.length;
   const tabCount = (n) => (n ? `<span class="detail-tab-count">${n}</span>` : "");
-  const closeRow = alert ? [...(alert.timeline || [])].reverse().find((row) => row.status === "已办结") : null;
-  const alertLine = event.alertId
-    ? (alert ? `${event.alertId} · ${alert.status}` : event.alertId)
-    : "未生成正式告警";
+  const sourceLine = `${esc(eventSourceLabel(event))}${isLocSpaceEvent(event) ? ` · ${esc(locTriggerLabel(event))}` : ""}`;
+  const placeLine = [event.plant, event.place].filter(Boolean).map((s) => esc(s)).join(" · ") || "—";
+  const reviewFoot = HISTORY_EVENT_QUEUE.includes(event.status)
+    ? `<div class="form-foot archive-detail-foot"><a class="btn btn-primary" href="#/t3/review?id=${encodeURIComponent(event.id)}">识别复核</a></div>`
+    : "";
   return `
-    <p class="meta">${esc(eventSourceLabel(event))}${isLocSpaceEvent(event) ? ` · ${esc(locTriggerLabel(event))}` : ""} · ${esc(event.plant || "—")} ${esc(event.place || "")} · 发生 ${esc(event.time || "—")}${closeRow ? ` · 告警办结 ${esc(closeRow.time)}` : ""}</p>
-    <div class="detail-tabs" role="tablist">
+    <div class="archive-detail">
+      <div class="detail-tabs" role="tablist">
       <button type="button" class="detail-tab is-on" role="tab" aria-selected="true" data-history-tab="detail">详情</button>
       <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="video">视频与证据</button>
       <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="timeline">时间线${tabCount(logCount)}</button>
     </div>
-    <div class="detail-tab-panel">
-      <div data-history-panel="detail">
-        <div class="white-card flush">
-          <dl class="kv">
-            <dt>事件编号</dt><dd>${esc(event.id)}${event.sourceEventId ? ` <span class="meta">（源 ${esc(event.sourceEventId)}）</span>` : ""}</dd>
-            <dt>来源</dt><dd>${esc(eventSourceLabel(event))}${isLocSpaceEvent(event) ? ` · ${esc(locTriggerLabel(event))}` : ""}</dd>
-            <dt>类型</dt><dd>${esc(event.type || "—")}</dd>
-            <dt>等级</dt><dd><span class="lvl lvl-${event.level}">${LEVEL_NAME[event.level] || "—"}</span></dd>
-            <dt>事件结论</dt><dd>${esc(event.status || "—")}</dd>
-            <dt>规则</dt><dd>${esc(ruleLineForEvent(event))}</dd>
-            <dt>升级策略</dt><dd>${esc(event.entryPath || "—")}</dd>
-            <dt>对象</dt><dd>${esc(event.person || "—")}</dd>
-            <dt>正式告警</dt><dd>${esc(alertLine)}</dt>
-            ${event.confidence != null ? `<dt>置信度</dt><dd>${event.confidence}%</dd>` : ""}
-            ${event.coordPrecision || event.precision ? `<dt>落点精度</dt><dd>${esc(event.coordPrecision || event.precision)}</dd>` : ""}
-            <dt>摄像头</dt><dd>${esc(cameraName(event.camera) || "—")}</dd>
-            <dt>摘要</dt><dd>${esc(event.summary || event.note || "—")}</dd>
-          </dl>
-          ${renderHistoryLinkedBlock(event)}
-        </div>
-      </div>
-      <div data-history-panel="video" hidden>
-        <div class="white-card flush">
-          <div class="video-grid ai-shots">
-            ${primaryCam ? renderMonitor(primaryCam, true) : ""}
-            ${renderAlertSnapshot(stubAlert, primaryCam, event)}
+      <div class="detail-tab-panel archive-detail-panel">
+        <div data-history-panel="detail">
+          <div class="white-card flush archive-detail-card">
+            <div class="alert-facts">
+              ${archiveDetailFact("事件编号", `${esc(event.id)}${event.sourceEventId ? ` <span class="meta">（源 ${esc(event.sourceEventId)}）</span>` : ""}`)}
+              ${archiveDetailFact("来源", sourceLine)}
+              ${archiveDetailFact("类型", esc(event.type || "—"))}
+              ${archiveDetailFact("等级", `<span class="lvl lvl-${event.level}">${LEVEL_NAME[event.level] || "—"}</span>`)}
+              ${archiveDetailFact("事件结论", esc(event.status || "—"))}
+              ${archiveDetailFact("分厂 · 区域", placeLine)}
+              ${archiveDetailFact("对象", esc(event.person || "—"))}
+              ${archiveDetailFact("正式告警", eventArchiveAlertHtml(event))}
+              ${archiveDetailFact("规则", esc(ruleLineForEvent(event)))}
+              ${archiveDetailFact("升级策略", esc(event.entryPath || "—"))}
+              ${event.confidence != null ? archiveDetailFact("置信度", `${event.confidence}%`) : ""}
+              ${event.coordPrecision || event.precision ? archiveDetailFact("落点精度", esc(event.coordPrecision || event.precision)) : ""}
+              ${archiveDetailFact("摄像头", esc(cameraName(event.camera) || "—"))}
+              ${archiveDetailFact("摘要", esc(event.summary || event.note || "—"), true)}
+            </div>
+            ${renderHistoryLinkedBlock(event)}
           </div>
-          ${event.x != null && event.y != null ? `<div class="scene mini-scene" style="margin-top:10px">${renderMiniScene({ people: false, zones: true, cameras: true, alerts: true, track: false, fov: Boolean(event.camera) }, event.camera)}</div>` : ""}
         </div>
-      </div>
-      <div data-history-panel="timeline" hidden>
-        <div class="white-card flush">
-          <ol class="log">
-            ${logCount
+        <div data-history-panel="video" hidden>
+          <div class="white-card flush archive-detail-card">
+            ${renderArchiveEvidenceHtml(event, alert)}
+          </div>
+        </div>
+        <div data-history-panel="timeline" hidden>
+          <div class="white-card flush archive-detail-card">
+            <ol class="log">
+              ${logCount
     ? timeline.map((row) => `<li><b>${esc(row.time)}</b> ${esc(row.status)} · ${esc(row.actor)}<span>${esc(row.note || "")}</span></li>`).join("")
     : `<li class="meta">无时间线记录</li>`}
-          </ol>
+            </ol>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-foot" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
-      ${event.alertId ? `<a class="btn" href="#/t6/alert-archive?id=${encodeURIComponent(event.alertId)}">告警档案</a>` : ""}
-      ${HISTORY_EVENT_QUEUE.includes(event.status) ? `<a class="btn" href="#/t3/review?id=${encodeURIComponent(event.id)}">识别复核</a>` : ""}
-      <a class="btn btn-primary" href="${overviewLinkageHref(event.alertId || event.id)}">三维场景</a>
+      ${reviewFoot}
     </div>
   `;
 }
@@ -10212,6 +10877,7 @@ function showHistoryEventDetail(event) {
   if (!event) return;
   openAlertDialog(`事件档案 · ${event.id}`, historyEventDetailHtml(event), () => true, "关闭", true, (dlg) => {
     bindHistoryEventDetailTabs(dlg);
+    bindAlertEvidenceViewer(dlg);
   });
 }
 
@@ -10219,48 +10885,52 @@ function alertArchiveDetailHtml(alert) {
   const ev = eventsForAlert(alert)[0];
   const logCount = (alert.timeline || []).length;
   const tabCount = (n) => (n ? `<span class="detail-tab-count">${n}</span>` : "");
-  const closeRow = [...(alert.timeline || [])].reverse().find((row) => row.status === "已办结");
+  const placeLine = [alert.plant, alert.place].filter(Boolean).map((s) => esc(s)).join(" · ") || "—";
+  const eventLine = ev
+    ? `<a class="text-link" href="#/t6/events?id=${encodeURIComponent(ev.id)}">${esc(ev.id)}</a> · ${esc(eventSourceLabel(ev))}`
+    : `<span class="meta">未绑定</span>`;
+  const handleFoot = alert.status !== "已办结"
+    ? `<div class="form-foot archive-detail-foot"><a class="btn btn-primary" href="#/t2/alerts?id=${encodeURIComponent(alert.id)}">告警中心办理</a></div>`
+    : "";
   return `
-    <p class="meta">${esc(alert.plant || "—")} · ${esc(alert.place || "—")} · ${esc(alert.status)} · ${esc(alert.time || "—")}${closeRow ? ` · 办结 ${esc(closeRow.time)}` : ""}</p>
-    <div class="detail-tabs" role="tablist">
-      <button type="button" class="detail-tab is-on" role="tab" aria-selected="true" data-history-tab="detail">详情</button>
-      <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="video">视频与证据</button>
-      <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="timeline">时间线${tabCount(logCount)}</button>
-    </div>
-    <div class="detail-tab-panel">
-      <div data-history-panel="detail">
-        <div class="white-card flush">
-          <dl class="kv">
-            <dt>告警编号</dt><dd>${esc(alert.id)}</dd>
-            <dt>类型</dt><dd>${esc(alert.type || "—")}</dd>
-            <dt>等级</dt><dd><span class="lvl lvl-${alert.level}">${LEVEL_NAME[alert.level]}</span></dd>
-            <dt>办理状态</dt><dd>${esc(alert.status || "—")}</dd>
-            <dt>规则</dt><dd>${esc(alert.rule || "—")}</dd>
-            <dt>对象</dt><dd>${esc(alert.person || "—")}</dd>
-            <dt>派发</dt><dd>${esc(alertDispatchLine(alert))}</dd>
-            <dt>摄像头</dt><dd>${esc(cameraName(alert.camera) || "—")}</dd>
-            <dt>关联事件</dt><dd>${ev ? `<a class="text-link" href="#/t6/events?id=${encodeURIComponent(ev.id)}">${esc(ev.id)}</a> · ${esc(eventSourceLabel(ev))}` : `<span class="meta">未绑定</span>`}</dd>
-          </dl>
-          ${renderAlertLinkedWorkOrders(alert)}
+    <div class="archive-detail">
+      <div class="detail-tabs" role="tablist">
+        <button type="button" class="detail-tab is-on" role="tab" aria-selected="true" data-history-tab="detail">详情</button>
+        <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="video">视频与证据</button>
+        <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="timeline">时间线${tabCount(logCount)}</button>
+      </div>
+      <div class="detail-tab-panel archive-detail-panel">
+        <div data-history-panel="detail">
+          <div class="white-card flush archive-detail-card">
+            <div class="alert-facts">
+              ${archiveDetailFact("告警编号", esc(alert.id))}
+              ${archiveDetailFact("类型", esc(alert.type || "—"))}
+              ${archiveDetailFact("等级", `<span class="lvl lvl-${alert.level}">${LEVEL_NAME[alert.level]}</span>`)}
+              ${archiveDetailFact("办理状态", esc(alert.status || "—"))}
+              ${archiveDetailFact("分厂 · 区域", placeLine)}
+              ${archiveDetailFact("对象", esc(alert.person || "—"))}
+              ${archiveDetailFact("规则", esc(alert.rule || "—"))}
+              ${archiveDetailFact("派发", esc(alertDispatchLine(alert)))}
+              ${archiveDetailFact("摄像头", esc(cameraName(alert.camera) || "—"))}
+              ${archiveDetailFact("关联事件", eventLine, true)}
+            </div>
+            ${renderAlertLinkedWorkOrders(alert)}
+          </div>
         </div>
-      </div>
-      <div data-history-panel="video" hidden>
-        ${renderAlertVideoTab(alert)}
-      </div>
-      <div data-history-panel="timeline" hidden>
-        <div class="white-card flush">
-          <ol class="log">
-            ${logCount
+        <div data-history-panel="video" hidden>
+          <div class="white-card flush archive-detail-card">${renderArchiveEvidenceHtml(ev, alert)}</div>
+        </div>
+        <div data-history-panel="timeline" hidden>
+          <div class="white-card flush archive-detail-card">
+            <ol class="log">
+              ${logCount
     ? (alert.timeline || []).map((row) => `<li><b>${esc(row.time)}</b> ${esc(row.status)} · ${esc(row.actor)}<span>${esc(row.note || "")}</span></li>`).join("")
     : `<li class="meta">无时间线记录</li>`}
-          </ol>
+            </ol>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-foot" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
-      ${ev ? `<a class="btn" href="#/t6/events?id=${encodeURIComponent(ev.id)}">事件档案</a>` : ""}
-      ${alert.status !== "已办结" ? `<a class="btn btn-primary" href="#/t2/alerts?id=${encodeURIComponent(alert.id)}">告警中心办理</a>` : ""}
-      <a class="btn${alert.status === "已办结" ? " btn-primary" : ""}" href="${overviewLinkageHref(alert.id)}">三维场景</a>
+      ${handleFoot}
     </div>
   `;
 }
@@ -10269,53 +10939,70 @@ function showAlertArchiveDetail(alert) {
   if (!alert) return;
   openAlertDialog(`告警档案 · ${alert.id}`, alertArchiveDetailHtml(alert), () => true, "关闭", true, (dlg) => {
     bindHistoryEventDetailTabs(dlg);
+    bindAlertEvidenceViewer(dlg);
   });
 }
 
+function labeledArchiveSelect(label, name, value, options) {
+  return `<label class="cam-field-label"><span class="cam-field-label-name">${esc(label)}</span>
+    <select class="field alert-q-field" name="${name}">${options.map((opt) => (
+      `<option value="${esc(opt.value)}"${String(opt.value) === String(value) ? " selected" : ""}>${esc(opt.label)}</option>`
+    )).join("")}</select></label>`;
+}
+
+function eventArchiveLevelMatch(item, needle) {
+  if (!needle) return true;
+  const lv = LEVEL_NAME[item.level] || "";
+  return archiveFieldIncludes(String(item.level), needle) || archiveFieldIncludes(lv, needle);
+}
+
 function renderEventArchive(root, route) {
-  let type = route.filter && route.filter !== "全部" ? route.filter : "全部";
-  let plantFilter = "全部";
-  let level = "全部";
-  let sourceFilter = "全部";
-  let query = "";
+  let filters = defaultEventArchiveFilters();
+  if (route.filter && route.filter !== "全部") filters.fType = route.filter;
   let openFocus = route.focus || "";
+  const filterNames = ["fId", "fSource", "fType", "fPlant", "fLevel", "fPlace", "fPerson", "fConclusion", "fAlert", "fTime"];
 
   function rowsOf() {
     return historyArchiveEvents().filter((item) => {
-      if (type !== "全部" && item.type !== type) return false;
-      if (plantFilter !== "全部" && item.plant !== plantFilter) return false;
-      if (level !== "全部" && String(item.level) !== level) return false;
-      if (sourceFilter !== "全部" && eventSourceLabel(item) !== sourceFilter) return false;
-      const blob = [item.id, item.sourceEventId, item.person, item.place, item.summary, item.alertId].filter(Boolean).join(" ");
-      if (query && !blob.includes(query)) return false;
+      if (!archiveFieldIncludes(item.id, filters.fId)) return false;
+      if (!archiveFieldIncludes(eventSourceLabel(item), filters.fSource)) return false;
+      if (!archiveFieldIncludes(item.type, filters.fType)) return false;
+      if (!archiveFieldIncludes(item.plant, filters.fPlant)) return false;
+      if (!eventArchiveLevelMatch(item, filters.fLevel)) return false;
+      if (!archiveFieldIncludes(item.place, filters.fPlace)) return false;
+      if (!archiveFieldIncludes(item.person, filters.fPerson)) return false;
+      if (!archiveFieldIncludes(item.status, filters.fConclusion)) return false;
+      if (!archiveFieldIncludes(item.time, filters.fTime)) return false;
+      if (filters.fAlert) {
+        if (/未生成|未升/.test(filters.fAlert)) {
+          if (item.alertId) return false;
+        } else if (!archiveFieldIncludes(item.alertId, filters.fAlert)) return false;
+      }
       return true;
     }).sort((a, b) => String(b.time || "").localeCompare(String(a.time || "")));
   }
 
   function alertCell(event) {
-    if (!event.alertId) return `<span class="meta">未生成</span>`;
-    const alert = alertForEvent(event);
-    const st = alert ? alert.status : "—";
-    return `${esc(event.alertId)}<span class="meta"> · ${esc(st)}</span>`;
+    return eventArchiveAlertHtml(event);
   }
 
   function paint() {
     const rows = rowsOf();
-    const archive = historyArchiveEvents();
-    const types = ["全部", ...new Set(archive.map((row) => row.type).filter(Boolean))];
-    const plants = ["全部", ...data.plants.filter((row) => row.id !== "all").map((row) => row.name)];
-    const sources = ["全部", ...new Set(archive.map((row) => eventSourceLabel(row)).filter(Boolean))];
+    const canReset = eventArchiveFiltersActive(filters);
     root.innerHTML = `
-      <div class="filter-row alert-toolbar">
-        <select class="field" name="source">${optionList(sources, sourceFilter)}</select>
-        <select class="field" name="type">${optionList(types, type)}</select>
-        <select class="field" name="plant">${optionList(plants, plantFilter)}</select>
-        <select class="field" name="level">
-          <option${level === "全部" ? " selected" : ""}>全部</option>
-          ${[1, 2, 3, 4].map((n) => `<option value="${n}"${level === String(n) ? " selected" : ""}>${LEVEL_NAME[n]}</option>`).join("")}
-        </select>
-        <input class="field search" name="q" placeholder="编号、人员、区域、告警号" value="${esc(query)}">
-        <button type="button" class="btn btn-primary" data-search>查询</button>
+      <div class="filter-row alert-toolbar archive-toolbar">
+        ${labeledArchiveSearch("事件编号", "fId", filters.fId)}
+        ${labeledArchiveSearch("来源", "fSource", filters.fSource)}
+        ${labeledArchiveSearch("类型", "fType", filters.fType)}
+        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
+        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
+        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
+        ${labeledArchiveSearch("对象", "fPerson", filters.fPerson)}
+        ${labeledArchiveSearch("结论", "fConclusion", filters.fConclusion)}
+        ${labeledArchiveSearch("正式告警", "fAlert", filters.fAlert)}
+        ${labeledArchiveSearch("发生时间", "fTime", filters.fTime)}
+        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
+        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -10354,20 +11041,23 @@ function renderEventArchive(root, route) {
           </tbody>
         </table>
       </div>
-      <p class="meta" style="margin-top:10px">共 ${rows.length} 条事件（不含待复核/待核查）。其中 ${rows.filter((row) => !row.alertId).length} 条未升正式告警。</p>
     `;
     const apply = () => {
-      sourceFilter = formVal(root, "source") || "全部";
-      type = formVal(root, "type") || "全部";
-      plantFilter = formVal(root, "plant") || "全部";
-      level = formVal(root, "level") === "全部" ? "全部" : (root.querySelector("[name=level]")?.value || "全部");
-      query = formVal(root, "q");
+      filters = { ...filters, ...readArchiveFilters(root, filterNames) };
+      openFocus = "";
+      paint();
+    };
+    const reset = () => {
+      filters = defaultEventArchiveFilters();
       openFocus = "";
       paint();
     };
     root.querySelector("[data-search]")?.addEventListener("click", apply);
-    root.querySelector("[name=q]")?.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") apply();
+    root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
+      el.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") apply();
+      });
     });
     root.querySelectorAll("[data-history-view]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -10393,23 +11083,25 @@ function alertArchiveBaseRows() {
 }
 
 function renderAlertArchive(root, route) {
-  let type = route.filter && route.filter !== "全部" ? route.filter : "全部";
-  let plantFilter = "全部";
-  let level = "全部";
-  let statusFilter = "已办结";
-  let query = "";
+  let filters = defaultAlertArchiveFilters();
+  if (route.filter && route.filter !== "全部") filters.fType = route.filter;
   let openFocus = route.focus || "";
+  const filterNames = ["fId", "fType", "fPlant", "fPlace", "fPerson", "fLevel", "fEvent", "fTime"];
 
   function rowsOf() {
     return alertArchiveBaseRows().filter((item) => {
-      if (statusFilter === "已办结" && item.status !== "已办结") return false;
-      if (statusFilter === "在办" && item.status === "已办结") return false;
-      if (type !== "全部" && item.type !== type) return false;
-      if (plantFilter !== "全部" && item.plant !== plantFilter) return false;
-      if (level !== "全部" && String(item.level) !== level) return false;
+      const status = filters.fStatus || "已办结";
+      if (status === "已办结" && item.status !== "已办结") return false;
+      if (status === "在办" && item.status === "已办结") return false;
+      if (!archiveFieldIncludes(item.id, filters.fId)) return false;
+      if (!archiveFieldIncludes(item.type, filters.fType)) return false;
+      if (!archiveFieldIncludes(item.plant, filters.fPlant)) return false;
+      if (!archiveFieldIncludes(item.place, filters.fPlace)) return false;
+      if (!archiveFieldIncludes(item.person, filters.fPerson)) return false;
+      if (!eventArchiveLevelMatch(item, filters.fLevel)) return false;
+      if (!archiveFieldIncludes(item.time, filters.fTime)) return false;
       const ev = eventsForAlert(item)[0];
-      const blob = [item.id, item.type, item.person, item.place, item.rule, ev?.id].filter(Boolean).join(" ");
-      if (query && !blob.includes(query)) return false;
+      if (!archiveFieldIncludes(ev?.id, filters.fEvent)) return false;
       return true;
     }).sort((a, b) => String(b.time || "").localeCompare(String(a.time || "")));
   }
@@ -10422,24 +11114,24 @@ function renderAlertArchive(root, route) {
 
   function paint() {
     const rows = rowsOf();
-    const base = alertArchiveBaseRows();
-    const types = ["全部", ...new Set(base.map((row) => row.type).filter(Boolean))];
-    const plants = ["全部", ...data.plants.filter((row) => row.id !== "all").map((row) => row.name)];
+    const canReset = alertArchiveFiltersActive(filters);
     root.innerHTML = `
-      <div class="filter-row alert-toolbar">
-        <select class="field" name="status">
-          <option value="已办结"${statusFilter === "已办结" ? " selected" : ""}>已办结</option>
-          <option value="在办"${statusFilter === "在办" ? " selected" : ""}>在办</option>
-          <option value="全部"${statusFilter === "全部" ? " selected" : ""}>全部</option>
-        </select>
-        <select class="field" name="type">${optionList(types, type)}</select>
-        <select class="field" name="plant">${optionList(plants, plantFilter)}</select>
-        <select class="field" name="level">
-          <option${level === "全部" ? " selected" : ""}>全部</option>
-          ${[1, 2, 3, 4].map((n) => `<option value="${n}"${level === String(n) ? " selected" : ""}>${LEVEL_NAME[n]}</option>`).join("")}
-        </select>
-        <input class="field search" name="q" placeholder="告警号、人员、区域、事件号" value="${esc(query)}">
-        <button type="button" class="btn btn-primary" data-search>查询</button>
+      <div class="filter-row alert-toolbar archive-toolbar">
+        ${labeledArchiveSearch("告警编号", "fId", filters.fId)}
+        ${labeledArchiveSearch("类型", "fType", filters.fType)}
+        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
+        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
+        ${labeledArchiveSearch("对象", "fPerson", filters.fPerson)}
+        ${labeledArchiveSelect("状态", "fStatus", filters.fStatus, [
+          { value: "已办结", label: "已办结" },
+          { value: "在办", label: "在办" },
+          { value: "全部", label: "全部" }
+        ])}
+        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
+        ${labeledArchiveSearch("关联事件", "fEvent", filters.fEvent)}
+        ${labeledArchiveSearch("发生时间", "fTime", filters.fTime)}
+        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
+        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -10476,20 +11168,24 @@ function renderAlertArchive(root, route) {
           </tbody>
         </table>
       </div>
-      <p class="meta" style="margin-top:10px">共 ${rows.length} 条。未升告警的识别与定位留痕见「事件档案」。</p>
     `;
     const apply = () => {
-      statusFilter = formVal(root, "status") || "已办结";
-      type = formVal(root, "type") || "全部";
-      plantFilter = formVal(root, "plant") || "全部";
-      level = formVal(root, "level") === "全部" ? "全部" : (root.querySelector("[name=level]")?.value || "全部");
-      query = formVal(root, "q");
+      filters = { ...filters, ...readArchiveFilters(root, filterNames) };
+      filters.fStatus = root.querySelector("[name=fStatus]")?.value || "全部";
+      openFocus = "";
+      paint();
+    };
+    const reset = () => {
+      filters = defaultAlertArchiveFilters();
       openFocus = "";
       paint();
     };
     root.querySelector("[data-search]")?.addEventListener("click", apply);
-    root.querySelector("[name=q]")?.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") apply();
+    root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
+      el.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") apply();
+      });
     });
     root.querySelectorAll("[data-alert-archive-view]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -10501,9 +11197,229 @@ function renderAlertArchive(root, route) {
       let hit = rows.find((row) => row.id === openFocus);
       if (!hit) {
         hit = alertArchiveBaseRows().find((row) => row.id === openFocus);
-        if (hit && statusFilter === "已办结" && hit.status !== "已办结") statusFilter = "全部";
+        if (hit && filters.fStatus === "已办结" && hit.status !== "已办结") filters.fStatus = "全部";
       }
       if (hit) showAlertArchiveDetail(hit);
+      openFocus = "";
+    }
+  }
+  paint();
+}
+
+function defaultWorkArchiveFilters() {
+  return {
+    fId: "", fType: "", fPlant: "", fPlace: "", fPerson: "", fLevel: "", fApplicant: "", fTime: ""
+  };
+}
+
+function workArchiveFiltersActive(filters) {
+  return Object.entries(filters).some(([, val]) => String(val || "").trim() !== "");
+}
+
+function workArchiveBaseRows() {
+  ensureWorkCatalog();
+  return (data.workOrders || []).filter((row) => row.status === "已归档");
+}
+
+function workArchiveTimeText(item) {
+  return item.closedAt || item.acceptedAt || item.end || item.start || "";
+}
+
+function workArchiveDetailHtml(item) {
+  const type = workTypeById(item.typeId);
+  const extras = workExtras(type);
+  const measures = item.measures || [];
+  const tabCount = (n) => (n ? `<span class="detail-tab-count">${n}</span>` : "");
+  const timelineCount = (item.timeline || []).length;
+  const approvalSignedCount = (item.approvals || []).filter((row) => row.result).length;
+  const measureRows = measures.length
+    ? measures.map((row, idx) => {
+      const result = row.result || (row.done === true ? "是" : row.done === false ? "否" : "—");
+      return `<tr><td>${idx + 1}</td><td>${esc(row.name)}</td><td>${esc(result)}</td><td>${esc(row.confirmer || "—")}</td></tr>`;
+    }).join("")
+    : `<tr><td colspan="4" class="meta">—</td></tr>`;
+  const risks = (item.risks || []).length
+    ? `<p>${(item.risks || []).map((name) => esc(name)).join("、")}</p>${item.riskNote ? `<p class="meta">${esc(item.riskNote)}</p>` : ""}`
+    : "";
+  const gasBlock = (extras.gas || (item.gasChecks || []).length)
+    ? `<div class="white-card flush archive-detail-card">
+        <h3>气体分析</h3>
+        <p class="meta">${esc(item.gasStandard || extras.gasStandard || "—")}</p>
+        <div class="table-wrap">
+          <table class="work-gas-grid">
+            <thead><tr><th>分析时间</th><th>%LEL</th><th>采样人</th></tr></thead>
+            <tbody>${workGasChecksTableHtml(item, false)}</tbody>
+          </table>
+        </div>
+      </div>` : "";
+  return `
+    <div class="archive-detail work-archive-detail">
+      <div class="detail-tabs" role="tablist">
+        <button type="button" class="detail-tab is-on" role="tab" aria-selected="true" data-history-tab="detail">基本信息</button>
+        <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="safety">风险措施</button>
+        <button type="button" class="detail-tab" role="tab" aria-selected="false" data-history-tab="log">记录${tabCount(timelineCount + approvalSignedCount)}</button>
+      </div>
+      <div data-history-panel="detail">
+        <div class="white-card flush archive-detail-card">${workOrderInfoReadHtml(item, extras)}</div>
+      </div>
+      <div data-history-panel="safety" hidden>
+        <div class="white-card flush archive-detail-card">
+          <h3>风险辨识</h3>
+          ${risks || `<p class="meta">—</p>`}
+        </div>
+        <div class="white-card flush archive-detail-card">
+          <h3>安全措施</h3>
+          <div class="table-wrap">
+            <table class="work-measure-grid">
+              <thead><tr><th>序号</th><th>安全措施</th><th>是/否</th><th>确认人</th></tr></thead>
+              <tbody>${measureRows}</tbody>
+            </table>
+          </div>
+        </div>
+        ${gasBlock}
+        <div class="white-card flush archive-detail-card">
+          <h3>安全交底</h3>
+          <div class="work-info-grid work-brief-grid">
+            ${workInfoFact("交底人", esc(item.briefBy || ""))}
+            ${workInfoFact("监护人", esc(item.guardian || ""))}
+            ${workInfoFact("接受交底人", esc(item.briefedTo || peopleByRole(item, "接受交底人").join("、") || ""), true)}
+          </div>
+        </div>
+      </div>
+      <div data-history-panel="log" hidden>
+        <div class="white-card flush archive-detail-card">
+          <h3>审批记录</h3>
+          ${workApprovalRecordsHtml(item)}
+        </div>
+        <div class="white-card flush archive-detail-card">
+          <h3>时间线</h3>
+          <ul class="log">
+            ${timelineCount
+    ? (item.timeline || []).slice().reverse().map((row) => (
+      `<li><b>${esc(row.time)}</b> ${esc(row.status)} · ${esc(row.actor)}<span>${esc(row.note || "")}</span></li>`
+    )).join("")
+    : `<li class="meta">无时间线记录</li>`}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showWorkArchiveDetail(item) {
+  if (!item) return;
+  openAlertDialog(`工单档案 · ${item.id}`, workArchiveDetailHtml(item), () => true, "关闭", true, (dlg) => {
+    bindHistoryEventDetailTabs(dlg);
+  });
+}
+
+function renderWorkArchive(root, route) {
+  let filters = defaultWorkArchiveFilters();
+  let openFocus = route.focus || "";
+  const filterNames = ["fId", "fType", "fPlant", "fPlace", "fPerson", "fLevel", "fApplicant", "fTime"];
+
+  function rowsOf() {
+    return workArchiveBaseRows().filter((item) => {
+      if (!archiveFieldIncludes(item.id, filters.fId)) return false;
+      if (!archiveFieldIncludes(workOrderTypeLabel(item), filters.fType)) return false;
+      if (!archiveFieldIncludes(item.plant, filters.fPlant)) return false;
+      if (!archiveFieldIncludes(workOrderPlace(item), filters.fPlace)) return false;
+      const people = (item.people || []).map((row) => row.name).join(" ");
+      if (!archiveFieldIncludes(people, filters.fPerson)) return false;
+      if (!eventArchiveLevelMatch(item, filters.fLevel)) return false;
+      if (!archiveFieldIncludes(item.applicant, filters.fApplicant)) return false;
+      const timeHay = `${item.start || ""} ${item.end || ""} ${workArchiveTimeText(item)}`;
+      if (!archiveFieldIncludes(timeHay, filters.fTime)) return false;
+      return true;
+    }).sort((a, b) => String(workArchiveTimeText(b)).localeCompare(String(workArchiveTimeText(a))));
+  }
+
+  function paint() {
+    const rows = rowsOf();
+    const canReset = workArchiveFiltersActive(filters);
+    root.innerHTML = `
+      <div class="filter-row alert-toolbar archive-toolbar">
+        ${labeledArchiveSearch("工单编号", "fId", filters.fId)}
+        ${labeledArchiveSearch("作业类型", "fType", filters.fType)}
+        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
+        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
+        ${labeledArchiveSearch("作业人", "fPerson", filters.fPerson)}
+        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
+        ${labeledArchiveSearch("申请人", "fApplicant", filters.fApplicant)}
+        ${labeledArchiveSearch("作业/验收时间", "fTime", filters.fTime)}
+        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
+        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
+        <button type="button" class="btn" data-export>导出</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>工单编号</th>
+              <th>作业类型</th>
+              <th>等级</th>
+              <th>分厂</th>
+              <th>区域</th>
+              <th>作业人</th>
+              <th>申请人</th>
+              <th>作业时间</th>
+              <th>验收时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.length ? rows.map((row) => `
+              <tr>
+                <td class="meta">${esc(row.id)}</td>
+                <td>${esc(workOrderTypeLabel(row))}</td>
+                <td>${esc(workLevelLabel(row.level) || "—")}</td>
+                <td>${esc(row.plant || "—")}</td>
+                <td>${esc(workOrderPlace(row))}</td>
+                <td>${esc(peopleByRole(row, "作业人").join("、") || "—")}</td>
+                <td>${esc(row.applicant || "—")}</td>
+                <td class="meta">${esc(row.start || "—")}</td>
+                <td class="meta">${esc(row.closedAt || row.acceptedAt || "—")}</td>
+                <td class="table-actions">
+                  <button type="button" class="btn btn-sm" data-work-archive-view="${esc(row.id)}">查看</button>
+                </td>
+              </tr>`).join("") : `<tr><td colspan="10" class="meta">无匹配工单。</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    `;
+    const apply = () => {
+      filters = { ...filters, ...readArchiveFilters(root, filterNames) };
+      openFocus = "";
+      paint();
+    };
+    const reset = () => {
+      filters = defaultWorkArchiveFilters();
+      openFocus = "";
+      paint();
+    };
+    root.querySelector("[data-search]")?.addEventListener("click", apply);
+    root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
+      el.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") apply();
+      });
+    });
+    root.querySelector("[data-export]")?.addEventListener("click", () => {
+      openAlertDialog("导出工单档案", `<p class="meta">导出当前筛选 ${rows.length} 条为 CSV。</p>`, () => {
+        exportWorkOrdersCsv(rows);
+        return true;
+      }, "导出");
+    });
+    root.querySelectorAll("[data-work-archive-view]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const hit = rows.find((row) => row.id === btn.dataset.workArchiveView);
+        showWorkArchiveDetail(hit);
+      });
+    });
+    if (openFocus) {
+      const hit = workArchiveBaseRows().find((row) => row.id === openFocus)
+        || rows.find((row) => row.id === openFocus);
+      if (hit) showWorkArchiveDetail(hit);
       openFocus = "";
     }
   }
@@ -10563,12 +11479,12 @@ function sysOrgTreeTable(focusId, collapsed) {
     return `
       <tr class="${org.id === focusId ? "is-on" : ""}" data-id="${org.id}">
         <td class="tree-cell"><span class="tree-indent" style="--tree-depth:${depth}">${toggle}</span></td>
-        <td><button type="button" class="cell-link" data-id="${org.id}">${sysOrgDisplayCode(org)}</button></td>
-        <td>${org.name}</td>
-        <td>${org.abbr || org.name}</td>
-        <td>${org.kind || "—"}</td>
-        <td>${org.status || "启用"}</td>
-        <td class="table-actions"><button type="button" class="btn" data-edit-row="${org.id}">编辑</button></td>
+        <td class="meta">${esc(sysOrgDisplayCode(org))}</td>
+        <td>${esc(org.name)}</td>
+        <td>${esc(org.abbr || org.name)}</td>
+        <td>${esc(org.kind || "—")}</td>
+        <td>${esc(org.status || "启用")}</td>
+        ${sysTableActions(org.id)}
       </tr>
     `;
   }).join("");
@@ -10592,22 +11508,51 @@ function sysOrgTreeTable(focusId, collapsed) {
   `;
 }
 
-function sysUserTable(focusId) {
-  const rows = data.sysUsers || [];
+function sysOrgFlatTable(rows, focusId) {
+  if (!rows.length) return `<div class="table-wrap"><p class="meta" style="padding:16px">没有组织。</p></div>`;
+  const body = rows.map((org) => `
+      <tr class="${org.id === focusId ? "is-on" : ""}" data-id="${org.id}">
+        <td class="meta">${esc(sysOrgDisplayCode(org))}</td>
+        <td>${esc(org.name)}</td>
+        <td>${esc(org.abbr || org.name)}</td>
+        <td>${esc(org.kind || "—")}</td>
+        <td>${esc(org.status || "启用")}</td>
+        ${sysTableActions(org.id)}
+      </tr>`).join("");
+  return `
+    <div class="table-wrap sys-tree-table">
+      <table>
+        <thead>
+          <tr>
+            <th>组织编码</th>
+            <th>组织名称</th>
+            <th>组织简称</th>
+            <th>组织类型</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function sysUserTable(rows, focusId) {
   if (!rows.length) return `<div class="table-wrap"><p class="meta" style="padding:16px">没有用户。</p></div>`;
   const body = rows.map((row) => {
     const emp = row.employeeId ? employeeById(row.employeeId) : employeeByUserId(row.id);
     return `
     <tr class="${row.id === focusId ? "is-on" : ""}" data-id="${row.id}">
       <td class="meta">${esc(row.id)}</td>
-      <td><button type="button" class="cell-link" data-id="${row.id}">${row.account}</button></td>
-      <td>${row.name}</td>
-      <td>${row.org || "—"}</td>
-      <td>${row.role || "—"}</td>
+      <td>${esc(row.account)}</td>
+      <td>${esc(row.name)}</td>
+      <td>${esc(row.org || "—")}</td>
+      <td>${esc(row.role || "—")}</td>
       <td>${emp ? `<a class="text-link" href="#/t7/employees?id=${encodeURIComponent(emp.id)}">${esc(emp.id)}</a>` : "—"}</td>
-      <td>${row.plant || "—"}</td>
-      <td>${row.status || "—"}</td>
-      <td class="table-actions"><button type="button" class="btn" data-edit-row="${row.id}">编辑</button></td>
+      <td>${esc(row.plant || "—")}</td>
+      <td>${esc(row.status || "—")}</td>
+      ${sysTableActions(row.id)}
     </tr>`;
   }).join("");
   return `
@@ -10662,6 +11607,21 @@ function applySysOrgForm(root, item) {
   item.note = formVal(root, "note");
 }
 
+function showSysOrgView(item) {
+  openAlertDialog(`查看组织 · ${item.name}`, `
+    <div class="alert-facts">
+      ${archiveDetailFact("组织编码", esc(sysOrgDisplayCode(item)))}
+      ${archiveDetailFact("名称", esc(item.name))}
+      ${archiveDetailFact("类型", esc(item.kind || "—"))}
+      ${archiveDetailFact("上级", esc(item.parent || "—"))}
+      ${archiveDetailFact("状态", esc(item.status || "启用"))}
+      ${archiveDetailFact("职责", esc(item.duty || "—"), true)}
+      ${archiveDetailFact("同步来源", esc(item.sync || "—"))}
+      ${archiveDetailFact("说明", esc(item.note || "—"), true)}
+    </div>
+  `, () => true, "关闭", true);
+}
+
 function showSysOrgEditor(item, after) {
   openAlertDialog(`编辑组织 · ${item.name}`, sysOrgFormFields(item), (backdrop) => {
     if (!formVal(backdrop, "name")) {
@@ -10671,6 +11631,7 @@ function showSysOrgEditor(item, after) {
       return false;
     }
     applySysOrgForm(backdrop, item);
+    persist();
     after?.();
     return true;
   }, "保存", true);
@@ -10704,8 +11665,26 @@ function sysUserFormFields(item) {
         </select>
       </label>
     </div>
-    <p class="meta" style="margin-top:12px">规则派发到组织/岗位，不绑定个人。签收后时间线记录操作人。员工档案见员工管理（按员工 ID / 用户 ID 互链）。</p>
   `;
+}
+
+function showSysUserView(item) {
+  const emp = item.employeeId ? employeeById(item.employeeId) : employeeByUserId(item.id);
+  openAlertDialog(`查看用户 · ${item.name}`, `
+    <div class="alert-facts">
+      ${archiveDetailFact("用户 ID", esc(item.id))}
+      ${archiveDetailFact("账号", esc(item.account))}
+      ${archiveDetailFact("姓名", esc(item.name))}
+      ${archiveDetailFact("组织", esc(item.org || "—"))}
+      ${archiveDetailFact("角色", esc(item.role || "—"))}
+      ${archiveDetailFact("分厂 / 范围", esc(item.plant || "—"))}
+      ${archiveDetailFact("状态", esc(item.status || "—"))}
+      ${archiveDetailFact("关联员工", emp ? `${esc(emp.id)} · ${esc(emp.name)}` : "—")}
+      ${archiveDetailFact("手机", esc(item.mobile || "—"))}
+      ${archiveDetailFact("班次", esc(item.shift || "—"))}
+      ${archiveDetailFact("来源", esc(item.source || "—"), true)}
+    </div>
+  `, () => true, "关闭", true);
 }
 
 function applySysUserForm(root, item) {
@@ -10747,30 +11726,44 @@ function showSysUserEditor(item, after) {
   }, "保存", true);
 }
 
-function sysRoleEdit(item) {
-  return `
-    <div class="detail-head dict-detail-head">
-      <div>
-        <h2>${item.name}</h2>
-      </div>
-      <button type="button" class="btn btn-ghost-danger" data-del-role>删除</button>
-    </div>
-    <div class="sys-role-form">
+function sysRoleEdit(item, editing) {
+  const headActions = editing
+    ? `<button type="button" class="btn" data-role-cancel>取消</button><button type="button" class="btn btn-primary" data-role-save>保存</button>`
+    : `<button type="button" class="btn btn-primary" data-role-edit>编辑</button><button type="button" class="btn btn-ghost" data-del-role>删除</button>`;
+  const body = editing ? `
       <div class="form-fields">
-        <label>名称<input class="field" name="name" value="${item.name}"></label>
+        <label>名称<input class="field" name="name" value="${esc(item.name)}"></label>
         <label>数据范围<select class="field" name="scope">${optionList(SYS_SCOPES, item.scope)}</select></label>
-        <label class="span-2">说明<textarea name="desc" rows="2">${item.desc || ""}</textarea></label>
+        <label class="span-2">说明<textarea class="field" name="desc" rows="2">${esc(item.desc || "")}</textarea></label>
       </div>
-      <h3 class="form-section">菜单</h3>
+      <p class="work-form-legend">菜单</p>
       ${checkBoxes("menus", SYS_MENUS, item.menus)}
-      <h3 class="form-section">操作</h3>
+      <p class="work-form-legend">操作</p>
       ${checkBoxes("actions", SYS_ACTIONS, item.actions)}
-      <h3 class="form-section">对象引用</h3>
-      ${checkBoxes("objects", SYS_OBJECTS, item.objects)}
-      <div class="form-foot">
-        <button type="button" class="btn btn-primary" data-save>保存</button>
+      <p class="work-form-legend">对象引用</p>
+      ${checkBoxes("objects", SYS_OBJECTS, item.objects)}` : `
+      <div class="alert-facts">
+        ${archiveDetailFact("数据范围", esc(item.scope || "—"))}
+        ${archiveDetailFact("说明", esc(item.desc || "—"), true)}
+      </div>
+      <p class="work-form-legend">菜单</p>
+      ${configTagsHtml(item.menus)}
+      <p class="work-form-legend">操作</p>
+      ${configTagsHtml(item.actions)}
+      <p class="work-form-legend">对象引用</p>
+      ${configTagsHtml(item.objects)}`;
+  return `
+    <div class="detail-head">
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${esc(item.name)}</h2>
+        </div>
+      </div>
+      <div class="detail-head-side">
+        <div class="work-order-actions" role="toolbar">${headActions}</div>
       </div>
     </div>
+    <div class="white-card sys-role-form">${body}</div>
   `;
 }
 
@@ -10785,13 +11778,139 @@ function employeeMatches(row, filter, kind, query) {
   return hay.includes(q);
 }
 
+function employeeLinkedUserText(item) {
+  const user = item.userId ? (data.sysUsers || []).find((row) => row.id === item.userId) : null;
+  return user ? `${esc(user.id)} · ${esc(user.account)} · ${esc(user.name)}` : "—";
+}
+
+function employeeCertsReadTable(certs) {
+  const body = certs.length
+    ? certs.map((row) => `
+        <tr>
+          <td>${esc(row.cert)}</td>
+          <td>${esc(row.no || "—")}</td>
+          <td>${esc(row.status)}</td>
+          <td>${esc(row.due || "—")}</td>
+        </tr>`).join("")
+    : `<tr><td colspan="4" class="meta">未登记资格证</td></tr>`;
+  return `
+    <div class="table-wrap work-cfg-table">
+      <table>
+        <thead><tr><th>证照类型</th><th>证号</th><th>状态</th><th>有效期至</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
+}
+
+function employeeTrainingReadTable(rows) {
+  const body = rows.length
+    ? rows.map((row) => `
+        <tr>
+          <td>${esc(row.course || "—")}</td>
+          <td>${esc(row.kind || "—")}</td>
+          <td><span class="dot ${trainingResultTone(row.result)}">${esc(row.result || "—")}</span></td>
+          <td>${esc(row.score || "—")}</td>
+          <td class="meta">${esc(row.time || "—")}</td>
+          <td class="meta">${esc(row.source || "—")}</td>
+        </tr>`).join("")
+    : `<tr><td colspan="6" class="meta">暂无培训或考核记录</td></tr>`;
+  return `
+    <div class="table-wrap work-cfg-table">
+      <table>
+        <thead><tr><th>课程/模块</th><th>类型</th><th>结果</th><th>得分</th><th>时间</th><th>来源</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>
+    <p class="meta" style="margin-top:8px">厂内培训与操作考核结论，由仿真培训平台或公司培训系统同步，只读展示。官方作业资格证见「作业资格证」页签，二者独立维护。</p>`;
+}
+
+function employeeViewDialogHtml(item) {
+  const certs = workCertsForEmployee(item);
+  const trainingRows = workTrainingsForEmployee(item);
+  const live = livePersonForEmployee(item.id);
+  const tabCount = (n) => (n ? `<span class="detail-tab-count">${n}</span>` : "");
+  const liveHtml = live
+    ? `${archiveDetailFact("实时状态", esc(live.status || "在区"))}
+       ${archiveDetailFact("当前区域", esc(personZoneName(live)))}
+       <p class="meta"><a class="text-link" href="#/t1/overview?id=${encodeURIComponent(live.id)}">在地图查看</a></p>`
+    : archiveDetailFact("实时", "当前无实时落点");
+  return `
+    <div class="detail-tabs" role="tablist">
+      <button type="button" class="detail-tab is-on" role="tab" aria-selected="true" data-emp-tab="profile">档案</button>
+      <button type="button" class="detail-tab" role="tab" aria-selected="false" data-emp-tab="loc">定位设备</button>
+      <button type="button" class="detail-tab" role="tab" aria-selected="false" data-emp-tab="certs">作业资格证${tabCount(certs.length)}</button>
+      <button type="button" class="detail-tab" role="tab" aria-selected="false" data-emp-tab="training">培训考核${tabCount(trainingRows.length)}</button>
+    </div>
+    <div class="detail-tab-panel">
+      <div data-emp-panel="profile">
+        <div class="alert-facts">
+          ${archiveDetailFact("员工 ID", esc(item.id))}
+          ${archiveDetailFact("姓名", esc(item.name))}
+          ${archiveDetailFact("工号", esc(item.code || "—"))}
+          ${archiveDetailFact("人员类型", esc(item.kind || "—"))}
+          ${archiveDetailFact("状态", `<span class="dot ${workStatusTone(item.status)}">${esc(item.status || "—")}</span>`)}
+          ${archiveDetailFact("组织", esc(item.org || "—"))}
+          ${archiveDetailFact("岗位", esc(item.job || "—"))}
+          ${archiveDetailFact("班组", esc(item.team || "—"))}
+          ${archiveDetailFact("手机", esc(item.mobile || "—"))}
+          ${archiveDetailFact("关联用户", employeeLinkedUserText(item))}
+          ${archiveDetailFact("说明", esc(item.note || "—"), true)}
+        </div>
+      </div>
+      <div data-emp-panel="loc" hidden>
+        <div class="alert-facts">
+          ${archiveDetailFact("定位卡号", esc(item.tagId || "—"))}
+          ${archiveDetailFact("制式", esc(item.locMode || "—"))}
+          ${archiveDetailFact("绑定状态", esc(item.tagStatus || "未绑定"))}
+          ${archiveDetailFact("电量", esc(item.tagBattery || "—"))}
+          ${archiveDetailFact("最后心跳", esc(item.tagHeartbeat || "—"))}
+        </div>
+        ${liveHtml}
+      </div>
+      <div data-emp-panel="certs" hidden>
+        ${employeeCertsReadTable(certs)}
+      </div>
+      <div data-emp-panel="training" hidden>
+        ${employeeTrainingReadTable(trainingRows)}
+      </div>
+    </div>
+  `;
+}
+
+function bindEmployeeViewDialog(dlg) {
+  const showTab = (name) => {
+    dlg.querySelectorAll("[data-emp-tab]").forEach((btn) => {
+      const on = btn.dataset.empTab === name;
+      btn.classList.toggle("is-on", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    dlg.querySelectorAll("[data-emp-panel]").forEach((panel) => {
+      panel.hidden = panel.dataset.empPanel !== name;
+    });
+  };
+  dlg.querySelectorAll("[data-emp-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => showTab(btn.dataset.empTab));
+  });
+}
+
+function showEmployeeView(item) {
+  openAlertDialog(
+    `查看员工 · ${item.name}`,
+    employeeViewDialogHtml(item),
+    () => true,
+    "关闭",
+    true,
+    bindEmployeeViewDialog
+  );
+}
+
 function sysEmployeeTable(rows, focusId) {
   if (!rows.length) return `<div class="table-wrap"><p class="meta" style="padding:16px">没有员工。</p></div>`;
   const body = rows.map((row) => {
     const live = livePersonForEmployee(row.id);
     return `
     <tr class="${row.id === focusId ? "is-on" : ""}" data-id="${row.id}">
-      <td><button type="button" class="cell-link" data-id="${row.id}">${esc(row.name)}</button></td>
+      <td>${esc(row.name)}</td>
       <td class="meta">${esc(row.code || "—")}</td>
       <td><span class="dot ${workStatusTone(row.status)}">${esc(row.status)}</span></td>
       <td>${esc(row.org || "—")}</td>
@@ -10799,7 +11918,7 @@ function sysEmployeeTable(rows, focusId) {
       <td class="meta">${esc(row.tagId || "未绑定")}</td>
       <td>${esc(row.locMode || "—")}</td>
       <td>${live ? `<a class="text-link" href="#/t1/overview?id=${encodeURIComponent(live.id)}">${esc(live.status || "在区")}</a>` : "—"}</td>
-      <td class="table-actions"><button type="button" class="btn" data-edit-row="${row.id}">编辑</button></td>
+      ${sysTableActions(row.id)}
     </tr>`;
   }).join("");
   return `
@@ -11223,9 +12342,8 @@ function openLocImportDialog(after) {
 
 function renderSysEmployeesPage(root, focusId) {
   let focus = focusId;
-  let filter = "在册";
-  let kind = "全部";
-  let query = "";
+  const search = { page: 1, ...sysFilterBlank(SYS_EMP_FILTER_DEFAULTS) };
+  const pageSize = 20;
 
   function openEditor(id) {
     const item = (data.employees || []).find((row) => row.id === id);
@@ -11235,59 +12353,52 @@ function renderSysEmployeesPage(root, focusId) {
   function paint() {
     ensureEmployees();
     const all = data.employees || [];
-    const rows = all.filter((row) => employeeMatches(row, filter, kind, query));
-    if (focus && !rows.some((row) => row.id === focus)) focus = rows[0]?.id || null;
+    const rowsAll = all.filter((row) => employeeMatchesFilters(row, search.filters));
+    const totalPages = Math.max(1, Math.ceil(rowsAll.length / pageSize));
+    if (search.page > totalPages) search.page = totalPages;
+    const start = (search.page - 1) * pageSize;
+    const rows = rowsAll.slice(start, start + pageSize);
+    if (focus && !rowsAll.some((row) => row.id === focus)) focus = rowsAll[0]?.id || null;
     root.innerHTML = `
       <div class="sys-stack">
-      <div class="filter-row alert-toolbar">
-        <div class="alert-status-chips">
-          ${["在册", "离场", "全部"].map((name) => (
-            `<button type="button" class="chip${filter === name ? " is-on" : ""}" data-filter="${name}">${name}</button>`
-          )).join("")}
-        </div>
-        <select class="field alert-q-field" id="emp-kind" style="max-width:120px">
-          ${["全部", ...EMPLOYEE_KINDS].map((name) => (
-            `<option${kind === name ? " selected" : ""}>${esc(name)}</option>`
-          )).join("")}
-        </select>
-        <input type="search" class="field alert-q-field" id="emp-q" placeholder="姓名、工号、定位卡、组织" value="${esc(query)}" autocomplete="off">
-        <button type="button" class="btn btn-primary" data-search>搜索</button>
-      </div>
-      ${sysEmployeeTable(rows, focus)}
-      <div class="sys-table-toolbar">
-        <button type="button" class="btn" data-add>新增员工</button>
-        <button type="button" class="btn" data-import-loc>批量导入</button>
-        <a class="btn" href="#/t5/tickets">作业工单</a>
-      </div>
-      <p class="meta">档案与定位卡在同一人上维护；批量导入按工号/姓名绑定 UWB 或 GPS 卡。实时落点见综合监控。</p>
+        ${sysEmployeeFilterToolbar(search.draft, `<button type="button" class="btn" data-import-loc>批量导入</button>`)}
+        ${sysEmployeeTable(rows, focus)}
+        ${listPagerHtml(search.page, totalPages, rowsAll.length)}
       </div>
     `;
-    root.querySelectorAll("[data-filter]").forEach((btn) => {
-      btn.addEventListener("click", () => { filter = btn.dataset.filter; paint(); });
-    });
-    root.querySelector("#emp-kind")?.addEventListener("change", (ev) => { kind = ev.target.value; paint(); });
-    root.querySelector("[data-search]")?.addEventListener("click", () => {
-      query = root.querySelector("#emp-q")?.value || "";
-      paint();
-    });
+    bindSysListFilterToolbar(root, search, SYS_EMP_FILTER_FIELDS, SYS_EMP_FILTER_DEFAULTS, paint);
+    bindListPager(root, search, totalPages, paint);
     root.querySelectorAll("tr[data-id]").forEach((row) => {
       row.addEventListener("click", (ev) => {
-        if (ev.target.closest("[data-edit-row]") || ev.target.closest("a")) return;
+        if (ev.target.closest(".table-actions") || ev.target.closest("a")) return;
         focus = row.dataset.id;
         paint();
       });
     });
-    root.querySelectorAll(".cell-link[data-id]").forEach((btn) => {
+    root.querySelectorAll("[data-view-row]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        focus = btn.dataset.id;
-        paint();
+        const item = all.find((row) => row.id === btn.dataset.viewRow);
+        if (item) showEmployeeView(item);
       });
     });
     root.querySelectorAll("[data-edit-row]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.stopPropagation();
         openEditor(btn.dataset.editRow);
+      });
+    });
+    root.querySelectorAll("[data-del-row]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.delRow;
+        const item = all.find((row) => row.id === id);
+        if (!item || !window.confirm(`确定删除员工「${item.name}」？`)) return;
+        data.employees = all.filter((row) => row.id !== id);
+        bindEmployeeUser(item, "");
+        persist();
+        if (focus === id) focus = null;
+        paint();
       });
     });
     root.querySelector("[data-import-loc]")?.addEventListener("click", () => {
@@ -11332,6 +12443,13 @@ function renderSysUsersPage(root, focusId) {
 function renderSysIamPage(root, focusId, kind) {
   let focus = focusId;
   const orgCollapsed = new Set();
+  const search = kind === "org"
+    ? { page: 1, ...sysFilterBlank(SYS_ORG_FILTER_DEFAULTS) }
+    : kind === "users"
+      ? { page: 1, ...sysFilterBlank(SYS_USER_FILTER_DEFAULTS) }
+      : { page: 1 };
+  const pageSize = 20;
+  let roleEditing = false;
 
   function openOrgEditor(item) {
     showSysOrgEditor(item, () => paint());
@@ -11347,26 +12465,33 @@ function renderSysIamPage(root, focusId, kind) {
     const userRows = data.sysUsers || [];
     let item = null;
     let body = "";
-    const toolbar = `<div class="sys-table-toolbar"><button type="button" class="btn" data-add>新增${kind === "org" ? "组织" : "用户"}</button></div>`;
 
     if (kind === "org") {
-      const rows = orgRows;
-      item = rows.find((row) => row.id === focus) || rows[0] || null;
+      const filtered = orgRows.filter((row) => orgMatchesFilters(row, search.filters));
+      item = orgRows.find((row) => row.id === focus) || orgRows[0] || null;
       focus = item?.id || null;
+      const table = hasOrgListFilters(search.filters)
+        ? sysOrgFlatTable(filtered, focus)
+        : sysOrgTreeTable(focus, orgCollapsed);
       body = `
         <div class="sys-stack">
-          ${sysOrgTreeTable(focus, orgCollapsed)}
-          ${toolbar}
+          ${sysOrgFilterToolbar(search.draft)}
+          ${table}
         </div>
       `;
     } else if (kind === "users") {
-      const rows = userRows;
-      item = rows.find((row) => row.id === focus) || rows[0] || null;
+      const filtered = userRows.filter((row) => userMatchesFilters(row, search.filters));
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      if (search.page > totalPages) search.page = totalPages;
+      const start = (search.page - 1) * pageSize;
+      const pageRows = filtered.slice(start, start + pageSize);
+      item = userRows.find((row) => row.id === focus) || userRows[0] || null;
       focus = item?.id || null;
       body = `
         <div class="sys-stack">
-          ${sysUserTable(focus)}
-          ${toolbar}
+          ${sysUserFilterToolbar(search.draft)}
+          ${sysUserTable(pageRows, focus)}
+          ${listPagerHtml(search.page, totalPages, filtered.length)}
         </div>
       `;
     } else {
@@ -11378,35 +12503,49 @@ function renderSysIamPage(root, focusId, kind) {
           <aside class="alert-list-panel sys-nav-panel">
             <div class="sys-panel-head">
               <span class="sys-panel-title">角色列表</span>
-              <button type="button" class="btn" data-add>新增</button>
+              <button type="button" class="btn" data-add>新建</button>
             </div>
             <div class="sys-panel-body">
               ${sysRoleNavList(rows, focus)}
             </div>
           </aside>
           <section class="alert-detail">
-            ${item ? sysRoleEdit(item) : ""}
+            ${item ? sysRoleEdit(item, roleEditing) : ""}
           </section>
         </div>
       `;
     }
 
-    root.innerHTML = `
-      ${body}
-    `;
+    root.innerHTML = body;
+
+    if (kind === "org") {
+      bindSysListFilterToolbar(root, search, SYS_ORG_FILTER_FIELDS, SYS_ORG_FILTER_DEFAULTS, paint);
+    }
+    if (kind === "users") {
+      bindSysListFilterToolbar(root, search, SYS_USER_FILTER_FIELDS, SYS_USER_FILTER_DEFAULTS, paint);
+      const filtered = userRows.filter((row) => userMatchesFilters(row, search.filters));
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      bindListPager(root, search, totalPages, paint);
+    }
 
     root.querySelectorAll("tr[data-id]").forEach((row) => {
       row.addEventListener("click", (ev) => {
-        if (ev.target.closest("[data-toggle]") || ev.target.closest(".table-actions")) return;
+        if (ev.target.closest("[data-toggle]") || ev.target.closest(".table-actions") || ev.target.closest("a")) return;
         focus = row.dataset.id;
         paint();
       });
     });
-    root.querySelectorAll(".cell-link[data-id]").forEach((btn) => {
+    root.querySelectorAll("[data-view-row]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        focus = btn.dataset.id;
-        paint();
+        const id = btn.dataset.viewRow;
+        if (kind === "org") {
+          const target = orgRows.find((row) => row.id === id);
+          if (target) showSysOrgView(target);
+        } else if (kind === "users") {
+          const target = userRows.find((row) => row.id === id);
+          if (target) showSysUserView(target);
+        }
       });
     });
     root.querySelectorAll("[data-edit-row]").forEach((btn) => {
@@ -11422,6 +12561,29 @@ function renderSysIamPage(root, focusId, kind) {
         }
       });
     });
+    root.querySelectorAll("[data-del-row]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = btn.dataset.delRow;
+        if (kind === "org") {
+          const target = orgRows.find((row) => row.id === id);
+          if (!target || !window.confirm(`确定删除组织「${target.name}」？`)) return;
+          data.sysOrgs = orgRows.filter((row) => row.id !== id);
+          persist();
+          if (focus === id) focus = null;
+          paint();
+        } else if (kind === "users") {
+          const target = userRows.find((row) => row.id === id);
+          if (!target || !window.confirm(`确定删除用户「${target.name}」？`)) return;
+          const emp = employeeByUserId(id);
+          if (emp) bindEmployeeUser(emp, "");
+          data.sysUsers = userRows.filter((row) => row.id !== id);
+          persist();
+          if (focus === id) focus = null;
+          paint();
+        }
+      });
+    });
     root.querySelectorAll("[data-toggle]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.stopPropagation();
@@ -11432,12 +12594,38 @@ function renderSysIamPage(root, focusId, kind) {
       });
     });
     root.querySelectorAll(".sys-nav-item[data-id]").forEach((btn) => {
-      btn.addEventListener("click", () => { focus = btn.dataset.id; paint(); });
+      btn.addEventListener("click", () => {
+        focus = btn.dataset.id;
+        roleEditing = false;
+        paint();
+      });
+    });
+    root.querySelector("[data-role-edit]")?.addEventListener("click", () => {
+      roleEditing = true;
+      paint();
+    });
+    root.querySelector("[data-role-cancel]")?.addEventListener("click", () => {
+      roleEditing = false;
+      paint();
+    });
+    root.querySelector("[data-role-save]")?.addEventListener("click", () => {
+      if (!item || kind !== "roles") return;
+      item.name = formVal(root, "name") || item.name;
+      item.scope = formVal(root, "scope");
+      item.desc = formVal(root, "desc");
+      item.menus = formChecks(root, "menus");
+      item.actions = formChecks(root, "actions");
+      item.objects = formChecks(root, "objects");
+      persist();
+      roleEditing = false;
+      paint();
     });
     root.querySelector("[data-del-role]")?.addEventListener("click", () => {
       if (!item || kind !== "roles") return;
       if (!window.confirm(`确定删除角色「${item.name}」？`)) return;
       data.sysRoles = roleRows.filter((row) => row.id !== item.id);
+      persist();
+      roleEditing = false;
       if (focus === item.id) focus = null;
       paint();
     });
@@ -11446,30 +12634,24 @@ function renderSysIamPage(root, focusId, kind) {
         if (kind === "org") {
           const fresh = { id: `o-${Date.now()}`, name: "新组织", parent: "迪兹瓦铜钴矿", kind: "分厂", duty: "", sync: "本地", note: "", status: "启用" };
           data.sysOrgs.push(fresh);
+          persist();
           focus = fresh.id;
           openOrgEditor(fresh);
         } else if (kind === "roles") {
           const fresh = { id: `r-${Date.now()}`, name: "新角色", scope: "本分厂", desc: "", menus: ["告警中心"], actions: ["查看"], objects: ["告警"] };
           data.sysRoles.push(fresh);
+          persist();
           focus = fresh.id;
+          roleEditing = true;
           paint();
-        } else {
+        } else if (kind === "users") {
           const fresh = { id: `u-${Date.now()}`, name: "新用户", account: "newuser", org: "湿法分厂值班", role: "分厂值班员", plant: "湿法分厂", status: "启用", source: "本地账号", mobile: "", shift: "" };
           data.sysUsers.push(fresh);
+          persist();
           focus = fresh.id;
           openUserEditor(fresh);
         }
       });
-    });
-    root.querySelector("[data-save]")?.addEventListener("click", () => {
-      if (!item || kind !== "roles") return;
-      item.name = formVal(root, "name") || item.name;
-      item.scope = formVal(root, "scope");
-      item.desc = formVal(root, "desc");
-      item.menus = formChecks(root, "menus");
-      item.actions = formChecks(root, "actions");
-      item.objects = formChecks(root, "objects");
-      paint();
     });
   }
   paint();
@@ -11831,6 +13013,7 @@ async function boot() {
   migrateRuleZoneIds();
   migrateZoneFenceAlerts();
   migrateZoneAdmissions();
+  migrateAlertStrategies();
   migrateLocEventSources();
   bindAlertsOneEventEach();
   ensureAiCatalog();
@@ -11854,6 +13037,7 @@ async function boot() {
       migrateRuleZoneIds();
       migrateZoneFenceAlerts();
       migrateZoneAdmissions();
+      migrateAlertStrategies();
       migrateLocEventSources();
       bindAlertsOneEventEach();
       ensureAiCatalog();

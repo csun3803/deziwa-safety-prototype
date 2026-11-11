@@ -209,7 +209,7 @@ summary {
 .sidenav {
   background: var(--card);
   border-right: 1px solid var(--border);
-  padding: 12px 10px;
+  padding: 8px 10px 16px;
   overflow: auto;
 }
 
@@ -217,18 +217,40 @@ summary {
   display: none;
 }
 
+.sidenav-section {
+  padding: 8px 0 4px;
+}
+
+.sidenav-section + .sidenav-section {
+  margin-top: 6px;
+  padding-top: 10px;
+}
+
 .sidenav-group {
-  margin: 12px 10px 6px;
+  display: block;
+  margin: 0 4px 6px;
+  padding: 4px 8px;
   font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
   color: var(--muted-foreground);
+  background: color-mix(in oklab, var(--muted-foreground) 8%, var(--card));
+  border-radius: 4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.sidenav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .sidenav a {
   position: relative;
   display: block;
   padding: 8px 12px;
-  margin-bottom: 4px;
   color: var(--muted-foreground);
   text-decoration: none;
   border-radius: 8px;
@@ -671,6 +693,14 @@ summary {
   min-height: 0;
   height: auto;
   border-radius: 0;
+}
+
+/* 卫图略放大，边缘由 canvas-wrap 裁剪 */
+.overview-scene .scene-map-stage svg {
+  width: 112%;
+  height: 112%;
+  max-width: none;
+  max-height: none;
 }
 
 .scene-float-panel {
@@ -3253,6 +3283,18 @@ td.empty {
   min-width: 0;
 }
 
+.filter-row.alert-toolbar.archive-toolbar {
+  flex-wrap: wrap;
+  align-items: flex-end;
+  row-gap: 8px;
+}
+
+.filter-row.alert-toolbar.archive-toolbar .cam-field-label .alert-q-field {
+  flex: 1 1 108px;
+  min-width: 88px;
+  max-width: 132px;
+}
+
 .alert-status-chips {
   display: flex;
   flex-shrink: 0;
@@ -3948,6 +3990,50 @@ td.empty {
   margin-top: 0;
 }
 
+.archive-detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.archive-detail-head strong {
+  font-size: 15px;
+}
+
+.archive-detail-panel {
+  margin-top: 8px;
+}
+
+.archive-detail-card {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.archive-detail-card .alert-facts {
+  gap: 10px 14px;
+}
+
+.archive-detail-foot {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.archive-detail-scene {
+  margin-top: 10px;
+}
+
+.modal.is-wide:has(.archive-detail) {
+  width: min(720px, 100%);
+}
+
 .alert-related {
   margin-top: 14px;
   padding-top: 12px;
@@ -4586,7 +4672,8 @@ td.empty {
   .video-grid,
   .form-fields,
   .dash-grid,
-  .work-info-grid {
+  .work-info-grid,
+  .config-split {
     grid-template-columns: 1fr;
   }
 }
@@ -4617,13 +4704,39 @@ td.empty {
     border-right: 0;
     border-bottom: 1px solid var(--line);
     display: flex;
-    gap: 4px;
+    align-items: stretch;
+    gap: 8px;
     overflow-x: auto;
     padding: 8px;
   }
 
   .sidenav h2 {
     display: none;
+  }
+
+  .sidenav-section {
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px 0 0;
+    flex-shrink: 0;
+  }
+
+  .sidenav-section + .sidenav-section {
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 8px;
+    border-top: 0;
+    border-left: 1px solid var(--border);
+  }
+
+  .sidenav-group {
+    margin: 0 4px 4px;
+    white-space: nowrap;
+  }
+
+  .sidenav-links {
+    flex-direction: row;
+    gap: 4px;
   }
 
   .sidenav a {
@@ -4634,6 +4747,10 @@ td.empty {
 
   .sidenav a.is-active {
     border-bottom-color: var(--copper);
+  }
+
+  .config-split {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -4715,7 +4832,110 @@ td.empty {
 }
 
 .modal.is-wide.algo-modal {
-  width: min(760px, 100%);
+  width: min(860px, 100%);
+}
+
+.cam-algo-table-wrap {
+  margin-top: 4px;
+  max-height: min(420px, 55vh);
+  overflow: auto;
+}
+
+.cam-algo-table {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 12px;
+}
+
+.cam-algo-table th,
+.cam-algo-table td {
+  vertical-align: middle;
+  padding: 8px 5px;
+}
+
+.cam-algo-table th:nth-child(1),
+.cam-algo-table td:nth-child(1) {
+  width: 24%;
+}
+
+.cam-algo-table th:nth-child(2),
+.cam-algo-table td:nth-child(2) {
+  width: 64px;
+}
+
+.cam-algo-table th:nth-child(3),
+.cam-algo-table td:nth-child(3) {
+  width: 26%;
+}
+
+.cam-algo-table th:nth-child(4),
+.cam-algo-table td:nth-child(4) {
+  width: 52px;
+}
+
+.cam-algo-table th:nth-child(5),
+.cam-algo-table td:nth-child(5) {
+  width: 80px;
+}
+
+.cam-algo-table th:nth-child(6),
+.cam-algo-table td:nth-child(6) {
+  width: 64px;
+}
+
+.cam-algo-table .cam-algo-name {
+  overflow: hidden;
+}
+
+.cam-algo-table .cam-algo-name strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cam-algo-table .cam-algo-name .meta {
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cam-algo-row.is-on {
+  background: color-mix(in oklab, var(--primary) 6%, var(--card));
+}
+
+.cam-algo-row.is-locked {
+  opacity: 0.65;
+}
+
+.cam-algo-table .field-compact {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 30px;
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+.cam-algo-table td:nth-child(3) .field-compact {
+  padding-right: 2px;
+  font-size: 11px;
+}
+
+.cam-algo-table td:nth-child(4) .field-compact {
+  text-align: center;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.cam-algo-table td:nth-child(6) .field-compact {
+  text-align: center;
 }
 
 .cam-algo-list {
@@ -5153,8 +5373,123 @@ td.empty {
   border-bottom: none;
 }
 
+.alert-detail:has(.zone-detail-panels),
+.alert-detail:has(.work-type-detail-panels) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 14px;
+}
+
+.alert-detail:has(.zone-detail-panels) .detail-head,
+.alert-detail:has(.work-type-detail-panels) .detail-head,
+.alert-detail:has(.zone-detail-panels) .detail-tabs,
+.alert-detail:has(.work-type-detail-panels) .detail-tabs {
+  flex-shrink: 0;
+}
+
 .zone-detail-tabs {
-  margin: 12px 0 14px;
+  flex-shrink: 0;
+  margin: 10px 0 12px;
+}
+
+.zone-detail-panels,
+.work-type-detail-panels {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.config-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.config-split > .white-card {
+  margin-bottom: 0;
+}
+
+.config-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.config-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--muted-foreground) 10%, var(--card));
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.config-empty {
+  margin: 0;
+  padding: 18px 4px;
+}
+
+.check-row.is-wrap {
+  max-height: 140px;
+  overflow: auto;
+}
+
+.white-card .check-row label {
+  display: inline-flex;
+  margin-bottom: 0;
+}
+
+.work-type-detail-panels .white-card:last-child,
+.zone-detail-panel .white-card:last-child {
+  margin-bottom: 0;
+}
+
+.work-type-detail-panels .work-cfg-table {
+  max-height: none;
+}
+
+.zone-admission-list {
+  margin-bottom: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.zone-admission-list .zone-admission-grid thead th {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  z-index: 1;
+}
+
+.field.zone-head-status {
+  height: 30px;
+  min-width: 88px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.work-order-title-row .dot,
+.work-order-title-row .field.zone-head-status {
+  flex-shrink: 0;
+}
+
+.config-read-block {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.work-type-detail-panels > [data-wt-panel] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.work-type-detail-panels > [data-wt-panel][hidden] {
+  display: none;
 }
 
 .zone-detail-panel {
@@ -5165,10 +5500,27 @@ td.empty {
   display: block;
 }
 
-.zone-detail-panel .white-card + .white-card,
-.zone-detail-panel .white-card + .zone-loc-rule,
-.zone-detail-panel .meta + .zone-loc-rule {
-  margin-top: 12px;
+.zone-access-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zone-spatial-actions {
+  margin-top: 8px;
+}
+
+.zone-access-stack .zone-admission-toolbar {
+  margin-top: 4px;
+}
+
+.field.field-multi {
+  min-height: 88px;
+  padding: 6px 8px;
+}
+
+label .field-hint {
+  margin: 4px 0 6px;
 }
 
 .modal.is-wide.work-modal {
@@ -5426,7 +5778,7 @@ td.empty {
 
 .work-order-form .work-form-legend:not(:first-child),
 .work-order-info .work-form-legend:not(:first-child),
-.white-card > .work-form-legend {
+.white-card > .work-form-legend:not(:first-child) {
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid var(--line);
