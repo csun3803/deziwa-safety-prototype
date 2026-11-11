@@ -1277,25 +1277,62 @@ summary {
   margin: 12px 0 8px;
 }
 
-.linkage-primary {
+.linkage-primary,
+.scene-cam-zoom--feed {
+  appearance: none;
   display: block;
   width: 100%;
   margin-bottom: 4px;
+  padding: 0;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--card);
+  cursor: zoom-in;
+  text-align: left;
+  color: inherit;
+  font: inherit;
 }
 
-.linkage-primary .monitor-unit {
+.linkage-primary .monitor-unit,
+.scene-cam-zoom--feed .monitor-unit {
   width: 100%;
   border: none;
   border-radius: 0;
 }
 
-.linkage-primary .monitor-unit--feed .monitor-view {
+.linkage-primary .monitor-unit--feed .monitor-view,
+.scene-cam-zoom--feed .monitor-unit--feed .monitor-view {
   min-height: 168px;
   aspect-ratio: 16 / 10;
+}
+
+.scene-cam-zoom.linkage-tile {
+  cursor: zoom-in;
+}
+
+.scene-calib-live .scene-cam-zoom--feed {
+  margin-bottom: 0;
+}
+
+.linkage-modal-video {
+  display: block;
+}
+
+.modal-head--actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal-head--actions h3 {
+  min-width: 0;
+  flex: 1;
+}
+
+.scene-cam-modal-goto {
+  flex-shrink: 0;
 }
 
 .monitor-unit {

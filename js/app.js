@@ -1638,13 +1638,51 @@ function linkageCamMetaLine(cam) {
   return `${cam.code || cam.id} · ${cam.area || "—"} · ${plantName(cam.plant)} · ${st}`;
 }
 
+function goToSceneCameraPanel(cam) {
+  if (!cam?.id) return;
+  linkageFocusCamId = cam.id;
+  fovFocusId = cam.id;
+  fovShowAll = false;
+  layers.cameras = true;
+  applySceneSelection(cam);
+  sceneDetailTab = "watch";
+  renderPage();
+}
+
+function sceneCamZoomHtml(cam, layout = "tile", active = false, extraClass = "") {
+  if (!cam) return "";
+  const isFeed = layout === "feed";
+  const base = isFeed ? "scene-cam-zoom scene-cam-zoom--feed" : "linkage-tile scene-cam-zoom zone-console-cam";
+  const cls = `${base}${active ? " is-on" : ""}${extraClass ? ` ${extraClass}` : ""}`;
+  return `
+    <button type="button" class="${cls.trim()}" data-scene-cam-zoom="${cam.id}" title="放大查看">
+      ${renderMonitor(cam, active, layout)}
+    </button>`;
+}
+
 function openLinkageCamModal(camId) {
   const cam = linkageCamById(camId);
   if (!cam) return;
-  openAlertDialog(`实时画面 · ${cam.name}`, `
-    <div class="linkage-modal-video">${renderMonitor(cam, true, "feed")}</div>
+  const title = `实时画面 · ${cam.name}`;
+  openAlertDialog(title, `
+    <div class="linkage-modal-video">
+      ${renderMonitor(cam, true, "feed")}
+    </div>
     <p class="meta linkage-modal-meta">${linkageCamMetaLine(cam)}</p>
-  `, () => true, "关闭", true);
+  `, () => true, "关闭", true, (backdrop) => {
+    const head = backdrop.querySelector(".modal-head");
+    if (head) {
+      head.classList.add("modal-head--actions");
+      head.innerHTML = `
+        <h3 id="modal-title">${esc(title)}</h3>
+        <button type="button" class="btn btn-sm scene-cam-modal-goto" data-goto-scene-cam>查看</button>
+      `;
+    }
+    backdrop.querySelector("[data-goto-scene-cam]")?.addEventListener("click", () => {
+      backdrop.remove();
+      goToSceneCameraPanel(cam);
+    });
+  });
 }
 
 function linkageSplitGridHtml(camIds, focusId) {
@@ -1850,17 +1888,11 @@ function renderLinkagePanelHtml(item) {
   return `
     <section class="linkage-video-panel" data-linkage-context="${item.id}">
       <h3 class="field-group-title">实时画面</h3>
-      <div class="linkage-primary">
-        ${renderMonitor(primary, true, "feed")}
-      </div>
+      ${sceneCamZoomHtml(primary, "feed", true)}
       ${nearCams.length ? `
         <h3 class="field-group-title">周边视频</h3>
         <div class="zone-console-video video-grid linkage-near-grid">
-          ${nearCams.map((cam) => `
-            <div class="linkage-tile linkage-tile--static zone-console-cam${cam.id === activeNear ? " is-on" : ""}">
-              ${renderMonitor(cam, cam.id === activeNear, "tile")}
-            </div>
-          `).join("")}
+          ${nearCams.map((cam) => sceneCamZoomHtml(cam, "tile", cam.id === activeNear)).join("")}
         </div>
       ` : ""}
     </section>
@@ -1868,6 +1900,13 @@ function renderLinkagePanelHtml(item) {
 }
 
 function bindLinkagePanel(root) {
+  root.querySelectorAll("[data-scene-cam-zoom]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openLinkageCamModal(btn.dataset.sceneCamZoom);
+    });
+  });
   if (sceneDetailTab !== "watch") return;
   root.querySelectorAll("[data-linkage-live]").forEach((btn) => {
     btn.addEventListener("click", (event) => {
@@ -1880,9 +1919,7 @@ function bindLinkagePanel(root) {
       event.stopPropagation();
       const cam = linkageCamById(btn.dataset.linkageOpenCam);
       if (!cam) return;
-      applySceneSelection(cam);
-      sceneDetailTab = "watch";
-      renderPage();
+      goToSceneCameraPanel(cam);
     });
   });
 }
@@ -2346,7 +2383,7 @@ function sceneKind(item) {
 
 function sceneCamSection(item) {
   if (sceneKind(item) === "camera") {
-    return sceneBlockHtml("实时画面", `<div class="scene-calib-live">${renderMonitor(item, true, "feed")}</div>`);
+    return sceneBlockHtml("实时画面", `<div class="scene-calib-live">${sceneCamZoomHtml(item, "feed", true)}</div>`);
   }
   const recs = relatedVideos(item);
   if (!recs.length) return "";
@@ -2656,11 +2693,7 @@ function zoneVideoTabHtml(zone) {
   return `
     <section class="linkage-video-panel zone-linkage-video" data-linkage-context="${zone.id}">
       <div class="zone-console-video video-grid">
-        ${cams.map((cam) => `
-          <div class="linkage-tile linkage-tile--static zone-console-cam${cam.id === active ? " is-on" : ""}">
-            ${renderMonitor(cam, cam.id === active, "tile")}
-          </div>
-        `).join("")}
+        ${cams.map((cam) => sceneCamZoomHtml(cam, "tile", cam.id === active)).join("")}
       </div>
     </section>
   `;
