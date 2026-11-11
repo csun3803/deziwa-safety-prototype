@@ -1739,7 +1739,6 @@ function openLinkageSplitModal(item) {
     : pack.grid.map((c) => c.id)).slice(0, 4);
   const focusId = linkageFocusCamId || pack.primary?.id || camIds[0];
   openAlertDialog("多路分屏", `
-    <p class="meta">自选最多 4 路通道组成分屏；点画面可切换面板中的实时画面。</p>
     <p class="linkage-split-channel-label">分屏通道 <span class="meta">最多 4 路</span></p>
     <div class="linkage-split-channel-row">
       <div class="linkage-split-picker" id="linkage-split-picker">
@@ -6102,7 +6101,6 @@ function zoneFenceAlertBlock(item, editing) {
           ${archiveDetailFact("通知方式", esc(fa.notify || "—"))}
           ${archiveDetailFact("生效班次", esc(fa.shift || "—"))}`}
         </div>
-        ${fieldsOff ? `<p class="meta config-empty">定位告警已停用，启用后可配置参数。</p>` : ""}
       </div>`;
   }
   const statusField = `
@@ -6186,7 +6184,6 @@ function zoneForm(item, editing) {
         <div class="work-order-title-row">
           <h2>${esc(item.name)}</h2>
         </div>
-        <p class="meta">${item.id} · 边界由孪生维护</p>
       </div>
       <div class="detail-head-side">
         <div class="work-order-actions" role="toolbar">${headActions}</div>
@@ -7979,7 +7976,6 @@ function renderWorkTypeDetail(item, editing) {
           <h2>${esc(item.name)}</h2>
           <span class="lvl lvl-${item.level || 2}">${esc(workTypeLevelsText(item))}</span>
         </div>
-        <p class="meta">${esc(workFlowName(item.flowId))}</p>
       </div>
       <div class="detail-head-side">
         <div class="work-order-actions" role="toolbar">${headActions}</div>
