@@ -2231,12 +2231,19 @@ function trackResultCardHtml(tr) {
 }
 
 function renderTrackHistoryPanel() {
+  const replayHtml = trackReplayPanelHtml();
+  if (trackReplay.active && replayHtml) {
+    return `
+      <aside class="scene-float-panel is-expanded is-track-fixed is-replay-only glass-card glass-glow" id="track-history-panel" aria-label="当前回放">
+        ${replayHtml}
+      </aside>
+    `;
+  }
   const results = trackSearch.searched
     ? (trackSearchResults.length
       ? trackSearchResults.map(trackResultCardHtml).join("")
       : "")
     : "";
-  const replayHtml = trackReplayPanelHtml();
   return `
     <aside class="scene-float-panel is-expanded is-track-fixed glass-card glass-glow" id="track-history-panel" aria-label="历史轨迹检索">
       <header class="scene-panel-head hairline-b track-history-head">
@@ -2289,7 +2296,6 @@ function renderTrackHistoryPanel() {
         <h3 class="field-group-title">命中 ${trackSearch.searched ? trackSearchResults.length : "—"} 段</h3>
         <div class="track-result-list">${results}</div>
       </div>
-      <footer class="track-replay-dock hairline-t${replayHtml ? " is-active" : ""}">${replayHtml}</footer>
     </aside>
   `;
 }

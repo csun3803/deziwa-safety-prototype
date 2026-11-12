@@ -2012,6 +2012,20 @@ summary {
   flex-direction: column;
 }
 
+.scene-float-panel.is-track-fixed.is-replay-only {
+  top: auto;
+  bottom: 12px;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.scene-float-panel.is-replay-only .track-replay-panel {
+  margin: 0;
+  padding: 14px 16px 16px;
+  border-top: none;
+}
+
 .track-history-head {
   display: flex;
   align-items: center;
@@ -2347,6 +2361,15 @@ summary {
     width: 100%;
     max-height: 48vh;
     border-radius: 12px 12px 0 0;
+  }
+
+  .scene-float-panel.is-track-fixed.is-replay-only {
+    max-height: none;
+    width: min(360px, calc(100% - 24px));
+    left: auto;
+    right: 12px;
+    bottom: 12px;
+    border-radius: var(--radius-lg, 12px);
   }
 }
 
