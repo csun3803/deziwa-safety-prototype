@@ -21,6 +21,13 @@ const TABS = [
     ]
   },
   {
+    id: "t3b",
+    name: "识别复核（布局2）",
+    pages: [
+      { id: "review-desk", name: "识别复核（布局2）", done: true, layout: "列表-详情型" }
+    ]
+  },
+  {
     id: "t5",
     name: "作业管理",
     pages: [
@@ -31,8 +38,8 @@ const TABS = [
     id: "t6",
     name: "安全分析",
     pages: [
-      { id: "stats", name: "安全事件统计", group: "统计分析", done: true, layout: "总览/驾驶舱型", desc: "事件与正式告警并列统计：类型、区域、等级、复核与处置。" },
-      { id: "heatmap", name: "安全告警热力分析", group: "统计分析", done: true, layout: "统计报表/分析型", desc: "区域热力、重复事件与重点点位，辅助调整巡查。" },
+      { id: "stats", name: "安全统计", group: "统计分析", done: true, layout: "总览/驾驶舱型", desc: "事件与正式告警并列统计：类型、区域、等级、复核与处置。" },
+      { id: "heatmap", name: "安全热力分析", group: "统计分析", done: true, layout: "统计报表/分析型", desc: "区域热力、重复事件与重点点位，辅助调整巡查。" },
       { id: "events", name: "事件档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "事件全量留痕：定位/AI/人工上报；默认一对一正式告警。" },
       { id: "alert-archive", name: "告警档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "正式告警卷宗：派发、处置时间线及关联事件。" },
       { id: "work-archive", name: "工单档案", group: "档案查询", done: true, layout: "列表-详情型", desc: "已归档作业单卷宗：审批与作业记录，支持查询与导出。" }
@@ -42,10 +49,10 @@ const TABS = [
     id: "t7",
     name: "配置中心",
     pages: [
-      { id: "zones", name: "区域配置", group: "现场与空间", done: true, layout: "表单录入/编辑型", desc: "区域准入、围栏与定位告警（人员落点、越界等同一规则池）。" },
-      { id: "cameras", name: "视频与告警", group: "现场与空间", done: true, layout: "列表-详情型", desc: "通道接入、三维标定、AI 识别与告警规则配置。" },
-      { id: "work-flows", name: "审批流", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "作业签批节点模板；作业类型引用审批流。" },
-      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" }
+      { id: "zones", name: "区域配置", group: "告警规则", done: true, layout: "表单录入/编辑型", desc: "区域准入、围栏与定位告警（人员落点、越界等同一规则池）。" },
+      { id: "cameras", name: "摄像头配置", group: "告警规则", done: true, layout: "列表-详情型", desc: "通道接入、三维标定、按通道配置识别告警。" },
+      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" },
+      { id: "work-flows", name: "审批流", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "作业签批节点模板；作业类型引用审批流。" }
     ]
   },
   {
@@ -55,10 +62,10 @@ const TABS = [
       { id: "org", name: "组织管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "组织树与主数据属性，与人员系统同步。" },
       { id: "employees", name: "员工管理", group: "组织与人员", done: true, layout: "列表-详情型", desc: "现场人员档案与定位卡绑定；支持批量导入发卡；工单选人来源。" },
       { id: "users", name: "用户管理", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "账号、组织归属与角色。" },
-      { id: "roles", name: "角色权限", group: "组织与人员", done: true, layout: "表单录入/编辑型", desc: "菜单、数据范围、操作与对象引用。" },
-      { id: "dict", name: "字典管理", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "等级、误报原因等枚举字典。" },
+      { id: "roles", name: "角色权限", group: "组织与人员", done: true, layout: "列表-详情型", desc: "菜单、数据范围、操作与对象引用。" },
+      { id: "dict", name: "字典管理", group: "系统运行", done: true, layout: "列表-详情型", desc: "等级、误报原因等枚举字典。" },
+      { id: "params", name: "运行参数", group: "系统运行", done: true, layout: "列表-详情型", desc: "告警、定位、视频 AI、复核等运行参数。" },
       { id: "notify", name: "消息管理", group: "系统运行", done: true, layout: "列表-详情型", desc: "通知渠道、推送协议与消息模板。" },
-      { id: "params", name: "运行参数", group: "系统运行", done: true, layout: "表单录入/编辑型", desc: "告警、定位、视频 AI、复核等运行参数。" },
       { id: "audit", name: "操作审计", group: "系统运行", done: true, layout: "列表-详情型", desc: "按用户、模块、时间查操作记录。" }
     ]
   }
@@ -95,8 +102,6 @@ const LAYER_BTNS = [
 let selected = null;
 let scenePanelExpanded = true;
 let sceneDetailTab = "info";
-/** 区域详情：basic=基础配置（默认），access=告警与准入 */
-let zoneDetailTab = "basic";
 /** 作业类型详情：basic | measure | flow（qual 已并入 basic） */
 let workTypeDetailTab = "basic";
 
@@ -535,6 +540,9 @@ function parseRoute() {
   } else if (tabId === "t3") {
     pageId = "review";
   }
+  if (tabId === "t3b") {
+    pageId = "review-desk";
+  }
   if (tabId === "t4") {
     tabId = "t7";
   }
@@ -603,7 +611,8 @@ function cameraCalibOverviewHref(camId) {
 function cameraCalibPanelHtml(cam) {
   const hasXY = cam.x != null && cam.y != null;
   return `
-    ${sceneBlockHtml("地图坐标", `
+    <div class="scene-calib-pane">
+      <div class="scene-calib-live">${sceneCamZoomHtml(cam, "feed", true)}</div>
       <div class="cam-calib-grid">
         <label class="modal-field">X
           <input class="field mono" id="calib-x" type="number" step="0.1" value="${hasXY ? cam.x : ""}" readonly>
@@ -611,10 +620,6 @@ function cameraCalibPanelHtml(cam) {
         <label class="modal-field">Y
           <input class="field mono" id="calib-y" type="number" step="0.1" value="${hasXY ? cam.y : ""}" readonly>
         </label>
-      </div>
-    `)}
-    ${sceneBlockHtml("姿态", `
-      <div class="cam-calib-grid">
         <label class="modal-field">方位角（°）
           <input class="field" id="calib-heading" type="number" step="1" value="${cam.heading ?? 0}">
         </label>
@@ -630,9 +635,6 @@ function cameraCalibPanelHtml(cam) {
           </select>
         </label>
       </div>
-    `)}
-    <div class="scene-panel-actions cam-calib-actions">
-      <button type="button" class="btn btn-primary" data-cam-calib-save>保存标定</button>
     </div>
   `;
 }
@@ -709,11 +711,17 @@ function refreshOverviewMap(root) {
 function bindOverviewMapInteractions(root) {
   if (!overviewTrackMode) {
     root.querySelectorAll("#map [data-pick]").forEach((node) => {
-      node.addEventListener("click", () => {
+      node.addEventListener("click", (event) => {
+        event.stopPropagation();
         const hit = lookup(node.dataset.pick);
         applySceneSelection(hit);
         renderPage();
       });
+    });
+    root.querySelector("#map .scene-map-stage")?.addEventListener("click", (event) => {
+      if (event.target.closest("[data-pick]") || event.target.closest(".track-mode-map-blocker")) return;
+      const kind = selected && !selected.empty ? sceneKind(selected) : "";
+      if (kind && kind !== "zone" && selected) clearSceneSelection();
     });
   }
   bindCameraMapDrag(root);
@@ -1066,7 +1074,7 @@ function renderShell() {
   const hasL2 = tab.pages.length > 1;
   document.querySelector(".body").classList.toggle("no-side", !hasL2);
   document.getElementById("tabs").innerHTML = TABS.map((item) => {
-    const count = item.id === "t2" ? openCount() : item.id === "t3" ? pendingReview() : 0;
+    const count = item.id === "t2" ? openCount() : (item.id === "t3" || item.id === "t3b") ? pendingReview() : 0;
     const badge = count ? `<span class="tab-badge num">${count > 99 ? "99+" : count}</span>` : "";
     const on = item.id === tab.id;
     return `<button class="tab dark-nav-item${on ? " is-active" : ""}" type="button" data-tab="${item.id}">${item.name}${badge}${on ? `<span class="tab-underline"></span>` : ""}</button>`;
@@ -1088,7 +1096,7 @@ function renderShell() {
   const crumb = document.getElementById("crumb");
   if (crumb) {
     const hideCrumb = tab.id === "t1" && page.id === "overview";
-    const pageTitleTabs = new Set(["t2", "t3", "t5"]);
+    const pageTitleTabs = new Set(["t2", "t3", "t3b", "t5"]);
     const usePageTitle = pageTitleTabs.has(tab.id);
     crumb.classList.toggle("is-hidden", hideCrumb);
     crumb.classList.toggle("has-page-title", !hideCrumb && usePageTitle);
@@ -1123,6 +1131,10 @@ function renderPage() {
   }
   if (route.tab.id === "t3") {
     renderAiQueue(root, route.focus);
+    return;
+  }
+  if (route.tab.id === "t3b") {
+    renderAiQueue(root, route.focus, { desk: true });
     return;
   }
   if (route.tab.id === "t5") {
@@ -1218,6 +1230,11 @@ function alertsForZone(zone) {
   });
 }
 
+function peopleForZone(zone) {
+  if (!zone) return [];
+  return (data.people || []).map(hydratePerson).filter((p) => p.zone === zone.id);
+}
+
 function regionCascadePathText() {
   const z = zoneForSceneItem(selected);
   if (z) return `${plantName(z.plant)} / ${z.mapLabel || z.name}`;
@@ -1273,6 +1290,17 @@ function applySceneSelection(hit) {
     }
   }
   setOverviewHashWithTrack({ id: hit?.empty ? "" : (hit?.id || "") });
+}
+
+function clearSceneSelection() {
+  selected = null;
+  linkageFocusCamId = null;
+  fovFocusId = null;
+  fovShowAll = false;
+  layers.fov = false;
+  regionCascadeOpen = false;
+  setOverviewHashWithTrack({ id: "" });
+  renderPage();
 }
 
 function bindRegionCascade(root) {
@@ -1506,18 +1534,40 @@ function renderOverview(root, route) {
       openPlantFocusZonesDialog();
     });
   });
+  const selectedZone = () => (selected && sceneKind(selected) === "zone" ? selected : null);
+  root.querySelector("[data-open-zone-alerts]")?.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const zone = selectedZone();
+    if (!zone) return;
+    layers.alerts = true;
+    openPlantOverviewListDialog("告警", plantAlertListHtml(alertsForZone(zone)), "alerts", zone.mapLabel || zone.name);
+  });
+  root.querySelector("[data-open-zone-roster]")?.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const zone = selectedZone();
+    if (!zone) return;
+    layers.people = true;
+    openRosterDialog({
+      label: zone.mapLabel || zone.name,
+      people: peopleForZone(zone)
+    });
+  });
+  root.querySelector("[data-open-zone-cameras]")?.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const zone = selectedZone();
+    if (!zone) return;
+    layers.cameras = true;
+    openPlantCameraGridDialog(camerasForZone(zone), zone.mapLabel || zone.name);
+  });
+  root.querySelector("[data-open-zone-tickets]")?.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const zone = selectedZone();
+    if (!zone) return;
+    openPlantOverviewListDialog("作业工单", zoneWorkOrderListHtml(validWorkOrdersForZone(zone.id)), null, zone.mapLabel || zone.name);
+  });
   bindCameraCalibPanel(root);
   bindLinkagePanel(root);
-  root.querySelector("[data-close-panel]")?.addEventListener("click", () => {
-    selected = null;
-    linkageFocusCamId = null;
-    fovFocusId = null;
-    fovShowAll = false;
-    layers.fov = false;
-    regionCascadeOpen = false;
-    setOverviewHashWithTrack({ id: "" });
-    renderPage();
-  });
+  root.querySelector("[data-close-panel]")?.addEventListener("click", () => clearSceneSelection());
   root.querySelector("[data-overview-up]")?.addEventListener("click", () => {
     const z = zoneForSceneItem(selected);
     if (z) {
@@ -1649,6 +1699,7 @@ function linkageCamMetaLine(cam) {
 
 function goToSceneCameraPanel(cam) {
   if (!cam?.id) return;
+  document.querySelectorAll(".modal-backdrop").forEach((el) => el.remove());
   linkageFocusCamId = cam.id;
   fovFocusId = cam.id;
   fovShowAll = false;
@@ -1869,7 +1920,7 @@ function openLinkageSplitModal(item) {
       if (picker && !picker.contains(event.target)) ctl.closeMenu();
     });
     paintLinkageSplitGrid(backdrop, camIds, focusId);
-  });
+  }, false);
 }
 
 function linkageNearbyCams(pack, primary) {
@@ -1939,10 +1990,10 @@ function isSceneFieldNum(label, value) {
 }
 
 function statusCapsule(status) {
-  const tone = status === "已办结" || status === "在线" ? "ok"
+  const tone = status === "已办结" || status === "在线" || status === "真警" ? "ok"
     : status === "待签收" || status === "离线" ? "danger"
     : status === "待复核" || status === "处理中" ? "info"
-    : status === "已转派" ? "muted"
+    : status === "已转派" || status === "误报" ? "muted"
     : "warn";
   return `<span class="capsule capsule-${tone}">${esc(status)}</span>`;
 }
@@ -1975,7 +2026,7 @@ function scenePanelTabsHtml(active, specs) {
   )).join("")}</div>`;
 }
 
-function scenePanelChrome({ title, sub, badge, body, actions }) {
+function scenePanelChrome({ title, sub, badge, body, actions, bodyClass }) {
   return `
     <header class="scene-panel-head hairline-b">
       <div class="scene-panel-title-row">
@@ -1987,7 +2038,7 @@ function scenePanelChrome({ title, sub, badge, body, actions }) {
       </div>
       ${sub ? `<p class="scene-panel-hero">${sub}</p>` : ""}
     </header>
-    ${body ? `<div class="scene-panel-body">${body}</div>` : ""}
+    ${body ? `<div class="scene-panel-body${bodyClass ? ` ${bodyClass}` : ""}">${body}</div>` : ""}
     ${actions ? `<footer class="scene-panel-foot hairline-t">${actions}</footer>` : ""}
   `;
 }
@@ -1995,7 +2046,7 @@ function scenePanelChrome({ title, sub, badge, body, actions }) {
 function trackModeToggleHtml() {
   const on = overviewTrackMode;
   return `
-    <button type="button" class="track-mode-toggle btn${on ? " is-on" : ""}" data-toggle-track-mode aria-pressed="${on}">
+    <button type="button" class="track-mode-toggle btn btn-primary${on ? " is-on" : ""}" data-toggle-track-mode aria-pressed="${on}">
       ${on ? "退出轨迹模式" : "历史轨迹"}
     </button>
   `;
@@ -2331,7 +2382,7 @@ function personSceneProfileHtml(person) {
 function alertSceneProfileHtml(alert) {
   const linked = eventsForAlert(alert);
   const eventLine = linked.length
-    ? linked.map((ev) => `${ev.source} ${ev.id}`).join("；")
+    ? linked.map((ev) => ev.id).join("；")
     : "—";
   return sceneProfileHtml([
     ["告警编号", alert.id],
@@ -2374,23 +2425,47 @@ function cameraSceneProfileHtml(cam) {
   ]);
 }
 
-function zoneSceneProfileHtml(zone) {
-  const boundRules = (data.rules || []).filter((r) => ruleZoneIds(r).includes(zone.id));
-  return sceneProfileHtml([
-    ["区域编号", zone.id],
-    ["名称", zone.name],
-    ["分厂", plantName(zone.plant)],
-    ["围栏类型", zone.fence],
-    ["风险等级", zone.risk],
-    ["有效时段", zone.hours],
-    ["作业票", zone.permit ? "须作业票" : "不要求"],
-    ["当前有效工单", validWorkOrdersForZone(zone.id).length
-      ? validWorkOrdersForZone(zone.id).map((row) => `${row.id} ${workTypeName(row.typeId)}`).join("；")
-      : "无"],
-    ["边界版本", zone.version],
-    ["绑定规则", boundRules.length ? boundRules.map((r) => `${r.id} ${r.name}`).join("；") : "无"],
-    ["说明", zone.note]
-  ]);
+function sceneSituationKpiHtml({ alertCount, people, cameraCount, fourth, alertAction, rosterAction, cameraAction }) {
+  const abnormal = (people || []).filter(personLocAbnormal).length;
+  return `
+      <div class="scene-kpi-grid scene-kpi-grid--brief scene-kpi-grid--situation">
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" ${alertAction}>
+          <span>告警</span>
+          <strong class="num">${alertCount}</strong>
+        </button>
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" ${rosterAction}>
+          <span>在区人员</span>
+          <strong class="num scene-kpi-value">${(people || []).length}<em>${abnormal ? `${abnormal}人异常` : "状态正常"}</em></strong>
+        </button>
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" ${cameraAction}>
+          <span>摄像头</span>
+          <strong class="num">${cameraCount}</strong>
+        </button>
+        ${fourth ? `
+        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" ${fourth.action}>
+          <span>${esc(fourth.label)}</span>
+          <strong class="num">${fourth.count}</strong>
+        </button>` : ""}
+      </div>`;
+}
+
+function sceneUnsignedAlertsHtml(rows) {
+  return `
+      <h3 class="field-group-title">未签收告警</h3>
+      <div class="scene-brief-alerts">
+        ${rows.length ? rows.map((row) => `
+          <div class="scene-brief-alert grad-border">
+            <button type="button" class="scene-brief-alert-main" data-pick="${row.id}">
+              <div class="scene-todo-head">
+                <span class="scene-brief-alert-type">${row.type}</span>
+                <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
+              </div>
+              <p class="meta">${row.place} · ${row.time} · ${alertDisplayStatus(row)}</p>
+            </button>
+            <a class="btn btn-sm" href="#/t1/overview?id=${encodeURIComponent(row.id)}">查看</a>
+          </div>
+        `).join("") : `<p class="meta">无未签收告警。</p>`}
+      </div>`;
 }
 
 function sceneKind(item) {
@@ -2436,8 +2511,8 @@ function plantRosterPlantSplitHtml() {
   return `<p class="meta plant-roster-split">${(data.plants || []).filter((p) => p.id !== "all").map((p) => `${p.name.replace("作业区", "")} ${byPlant[p.id] || 0}`).join(" · ")}</p>`;
 }
 
-function plantRosterListHtml(filter) {
-  const all = peopleInCurrentPlant();
+function plantRosterListHtml(filter, people) {
+  const all = people || peopleInCurrentPlant();
   const rows = filter === "abnormal" ? all.filter(personLocAbnormal) : all;
   if (!rows.length) return `<p class="meta">当前范围无在区人员。</p>`;
   return `
@@ -2475,27 +2550,26 @@ function plantRosterListHtml(filter) {
   `;
 }
 
-function openPlantRosterDialog() {
-  let filter = plantRosterFilter;
-  const label = plant === "all" ? "全厂" : plantName(plant);
-  const all = peopleInCurrentPlant();
+function openRosterDialog({ label, people, splitHtml = "", rememberPlantFilter = false }) {
+  let filter = rememberPlantFilter ? plantRosterFilter : "all";
+  const all = people || [];
   const abnormalCount = all.filter(personLocAbnormal).length;
   const syncDialog = (dlg) => {
-    plantRosterFilter = filter;
+    if (rememberPlantFilter) plantRosterFilter = filter;
     const host = dlg.querySelector("#plant-roster-host");
-    if (host) host.innerHTML = plantRosterListHtml(filter);
+    if (host) host.innerHTML = plantRosterListHtml(filter, all);
     dlg.querySelectorAll("[data-roster-filter]").forEach((btn) => {
       const on = btn.dataset.rosterFilter === filter;
       btn.classList.toggle("is-on", on);
     });
   };
   openAlertDialog(`在区人员 · ${label}`, `
-    ${plantRosterPlantSplitHtml()}
+    ${splitHtml}
     <div class="alert-status-chips plant-roster-chips">
       <button type="button" class="chip${filter === "all" ? " is-on" : ""}" data-roster-filter="all">在区 ${all.length}</button>
       <button type="button" class="chip${filter === "abnormal" ? " is-on" : ""}" data-roster-filter="abnormal">异常 ${abnormalCount}</button>
     </div>
-    <div id="plant-roster-host">${plantRosterListHtml(filter)}</div>
+    <div id="plant-roster-host">${plantRosterListHtml(filter, all)}</div>
   `, () => true, "关闭", true, (dlg) => {
     dlg.querySelector(".modal")?.classList.add("is-wide");
     dlg.querySelectorAll("[data-roster-filter]").forEach((btn) => {
@@ -2504,6 +2578,15 @@ function openPlantRosterDialog() {
         syncDialog(dlg);
       });
     });
+  });
+}
+
+function openPlantRosterDialog() {
+  openRosterDialog({
+    label: plant === "all" ? "全厂" : plantName(plant),
+    people: peopleInCurrentPlant(),
+    splitHtml: plantRosterPlantSplitHtml(),
+    rememberPlantFilter: true
   });
 }
 
@@ -2543,34 +2626,53 @@ function plantAlertListHtml(rows) {
   `;
 }
 
-function plantCameraListHtml(rows) {
+const PLANT_CAM_PAGE_SIZE = 12;
+
+function plantCameraListHtml(rows, page = 1, pageSize = PLANT_CAM_PAGE_SIZE) {
   if (!rows.length) return `<p class="meta">当前范围无摄像头。</p>`;
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const slice = rows.slice((safePage - 1) * pageSize, safePage * pageSize);
   return `
-    <div class="table-wrap plant-roster-modal-table">
-      <table>
-        <thead>
-          <tr>
-            <th>名称</th>
-            <th>编码</th>
-            <th>监控分区</th>
-            <th>状态</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map((cam) => `
-            <tr>
-              <td>${esc(cam.name)}</td>
-              <td class="meta">${esc(cam.code || cam.id)}</td>
-              <td>${esc(cam.area || "—")}</td>
-              <td><span class="dot ${cam.online ? "ok" : "warn"}">${cam.online ? "在线" : "离线"}</span></td>
-              <td class="table-actions"><a class="btn btn-sm" href="${plantSceneListHref(cam.id)}">查看</a></td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
+    <div class="plant-cam-grid">
+      ${slice.map((cam) => `
+        <button type="button" class="linkage-tile plant-cam-tile" data-scene-cam-zoom="${esc(cam.id)}" title="放大查看">
+          ${renderMonitor(cam, false, "tile")}
+        </button>
+      `).join("")}
     </div>
+    ${listPagerHtml(safePage, totalPages, rows.length)}
   `;
+}
+
+function bindPlantCameraGrid(root, rows, pager, paint) {
+  const totalPages = Math.max(1, Math.ceil(rows.length / PLANT_CAM_PAGE_SIZE));
+  bindListPager(root, pager, totalPages, paint);
+  root.querySelectorAll("[data-scene-cam-zoom]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openLinkageCamModal(btn.dataset.sceneCamZoom);
+    });
+  });
+}
+
+function openPlantCameraGridDialog(rows, scopeLabel) {
+  const label = scopeLabel || (plant === "all" ? "全厂" : plantName(plant));
+  const pager = { page: 1 };
+  layers.cameras = true;
+  function paint(dlg) {
+    const body = dlg.querySelector(".modal-body");
+    if (!body) return;
+    const totalPages = Math.max(1, Math.ceil((rows.length || 0) / PLANT_CAM_PAGE_SIZE));
+    if (pager.page > totalPages) pager.page = totalPages;
+    body.innerHTML = plantCameraListHtml(rows, pager.page);
+    bindPlantCameraGrid(body, rows, pager, () => paint(dlg));
+  }
+  openAlertDialog(`摄像头 · ${label}`, plantCameraListHtml(rows, 1), () => true, "关闭", true, (dlg) => {
+    dlg.querySelector(".modal")?.classList.add("is-wide", "is-cam-grid");
+    bindPlantCameraGrid(dlg, rows, pager, () => paint(dlg));
+  });
 }
 
 function plantZoneListHtml(rows, opts = {}) {
@@ -2603,8 +2705,40 @@ function plantZoneListHtml(rows, opts = {}) {
   `;
 }
 
-function openPlantOverviewListDialog(title, tableHtml, layerId) {
-  const label = plant === "all" ? "全厂" : plantName(plant);
+function zoneWorkOrderListHtml(rows) {
+  if (!rows.length) return `<p class="meta">当前区域无在办工单。</p>`;
+  return `
+    <div class="table-wrap plant-roster-modal-table">
+      <table>
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>作业类型</th>
+            <th>状态</th>
+            <th>作业人</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => {
+            const people = (row.people || []).map((p) => p.name).filter(Boolean).join("、") || "—";
+            return `
+            <tr>
+              <td class="meta">${esc(row.id)}</td>
+              <td>${esc(workOrderTypeLabel(row) || "—")}</td>
+              <td><span class="dot ${workStatusTone(row.status)}">${esc(row.status || "—")}</span></td>
+              <td>${esc(people)}</td>
+              <td class="table-actions"><a class="btn btn-sm" href="#/t5/tickets?id=${encodeURIComponent(row.id)}">查看</a></td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openPlantOverviewListDialog(title, tableHtml, layerId, scopeLabel) {
+  const label = scopeLabel || (plant === "all" ? "全厂" : plantName(plant));
   openAlertDialog(`${title} · ${label}`, tableHtml, () => true, "关闭", true, (dlg) => {
     dlg.querySelector(".modal")?.classList.add("is-wide");
     if (layerId && layers[layerId] !== undefined) layers[layerId] = true;
@@ -2618,7 +2752,7 @@ function openPlantAlertsDialog() {
 
 function openPlantCamerasDialog() {
   const rows = (data.cameras || []).filter((cam) => inCurrentPlant(cam));
-  openPlantOverviewListDialog("摄像头", plantCameraListHtml(rows), "cameras");
+  openPlantCameraGridDialog(rows);
 }
 
 function openPlantFocusZonesDialog() {
@@ -2636,58 +2770,30 @@ function renderPlantBriefPanel() {
   const unsignedAlerts = openAlerts.filter((row) => row.status === "待签收");
   const cams = (data.cameras || []).filter((cam) => inCurrentPlant(cam));
   const people = peopleInCurrentPlant();
-  const abnormal = people.filter(personLocAbnormal).length;
   const keys = filteredZones().filter(isFocusZone);
-  const infoBody = `
-      <div class="scene-kpi-grid scene-kpi-grid--brief scene-kpi-grid--situation">
-        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-alerts>
-          <span>告警</span>
-          <strong class="num">${openAlerts.length}</strong>
-        </button>
-        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-roster>
-          <span>在区人员</span>
-          <strong class="num scene-kpi-value">${people.length}<em>${abnormal ? `${abnormal}人异常` : "状态正常"}</em></strong>
-        </button>
-        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-cameras>
-          <span>摄像头</span>
-          <strong class="num">${cams.length}</strong>
-        </button>
-        <button type="button" class="kpi grad-border shadow-soft scene-kpi-btn" data-open-plant-focus-zones>
-          <span>重点区域</span>
-          <strong class="num">${keys.length}</strong>
-        </button>
-      </div>
-      <h3 class="field-group-title">未签收告警</h3>
-      <div class="scene-brief-alerts">
-        ${unsignedAlerts.length ? unsignedAlerts.map((row) => `
-          <div class="scene-brief-alert grad-border">
-            <button type="button" class="scene-brief-alert-main" data-pick="${row.id}">
-              <div class="scene-todo-head">
-                <span class="scene-brief-alert-type">${row.type}</span>
-                <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
-              </div>
-              <p class="meta">${row.place} · ${row.time} · ${alertDisplayStatus(row)}</p>
-            </button>
-            <a class="btn btn-sm" href="#/t1/overview?id=${encodeURIComponent(row.id)}">查看</a>
-          </div>
-        `).join("") : `<p class="meta">无未签收告警。</p>`}
-      </div>
-  `;
   return scenePanelChrome({
     title: `${label} · 态势`,
-    body: infoBody
+    body: `${sceneSituationKpiHtml({
+      alertCount: openAlerts.length,
+      people,
+      cameraCount: cams.length,
+      alertAction: "data-open-plant-alerts",
+      rosterAction: "data-open-plant-roster",
+      cameraAction: "data-open-plant-cameras",
+      fourth: { label: "重点区域", count: keys.length, action: "data-open-plant-focus-zones" }
+    })}${sceneUnsignedAlertsHtml(unsignedAlerts)}`
   });
 }
 
 function scenePanelTabbedBody(item, kind, profileHtml) {
   const tabs = [{ id: "info", label: "基本信息" }];
-  if (kind === "camera") tabs.push({ id: "calib", label: "三维标定" });
   if (["alert", "person", "camera"].includes(kind)) tabs.push({ id: "watch", label: "关联视频" });
+  if (kind === "camera") tabs.push({ id: "calib", label: "三维标定" });
   const active = tabs.some((t) => t.id === sceneDetailTab) ? sceneDetailTab : "info";
   const inner = active === "watch"
     ? renderLinkagePanelHtml(item)
     : active === "calib" && kind === "camera"
-      ? `${sceneCamSection(item)}${cameraCalibPanelHtml(item)}`
+      ? cameraCalibPanelHtml(item)
       : sceneBlockHtml("基本信息", profileHtml);
   return `${scenePanelTabsHtml(active, tabs)}${inner}`;
 }
@@ -2709,80 +2815,40 @@ function zoneLinkageCameras(zone) {
   return out;
 }
 
-function zoneVideoTabHtml(zone) {
-  const cams = zoneLinkageCameras(zone);
-  if (!cams.length) return `<p class="meta">该区暂无关联视频。</p>`;
-  const active = linkageFocusCamId || cams[0]?.id;
-  return `
-    <section class="linkage-video-panel zone-linkage-video" data-linkage-context="${zone.id}">
-      <div class="zone-console-video video-grid">
-        ${cams.map((cam) => sceneCamZoomHtml(cam, "tile", cam.id === active)).join("")}
-      </div>
-    </section>
-  `;
-}
-
-function zoneAlertsTabHtml(zone) {
-  const openAlerts = alertsForZone(zone);
-  if (!openAlerts.length) return `<p class="meta">该区暂无进行中告警。</p>`;
-  return openAlerts.map((row) => `
-    <button type="button" class="scene-todo-card grad-border shadow-soft" data-pick="${row.id}">
-      <div class="scene-todo-head">
-        <span>${row.type}</span>
-        <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
-      </div>
-      <p>${alertDisplayStatus(row)} · ${row.time}</p>
-    </button>
-  `).join("");
-}
-
-function zonePeopleTabHtml(zone) {
-  const inZone = (data.people || []).map(hydratePerson).filter((p) => p.zone === zone.id);
-  if (!inZone.length) return `<p class="meta">当前无人在区。</p>`;
-  return `
-    <div class="zone-people-list">
-      ${inZone.map((p) => {
-        const tr = trackForReplay(p.id);
-        const lamp = personLocAbnormal(p) ? "off" : "ok";
-        return `
-          <article class="zone-people-card grad-border">
-            <div class="zone-people-card-main">
-              <div class="zone-people-card-head">
-                <button type="button" class="zone-people-name" data-pick="${p.id}">${esc(p.name)}</button>
-                <span class="status-lamp status-lamp--sm"><i class="${lamp}"></i>${esc(p.status || "在岗")}</span>
-              </div>
-              <p class="meta zone-people-card-meta">${esc(p.job || "—")} · ${esc(p.tagId || "未发卡")}</p>
-            </div>
-            ${tr ? `<a class="btn btn-sm" href="${trackReplayDeepHash(p.id, { trackId: tr.id })}">轨迹</a>` : ""}
-          </article>`;
-      }).join("")}
-    </div>
-  `;
+function camerasForZone(zone) {
+  const out = zoneLinkageCameras(zone).slice();
+  const seen = new Set(out.map((cam) => cam.id));
+  (data.cameras || []).forEach((cam) => {
+    if (cam.zone === zone.id && !seen.has(cam.id)) {
+      seen.add(cam.id);
+      out.push(cam);
+    }
+  });
+  return out;
 }
 
 function zonePanelHtml(zone) {
-  const tabs = [
-    { id: "info", label: "基本信息" },
-    { id: "watch", label: "关联视频" },
-    { id: "alerts", label: "异常告警" },
-    { id: "people", label: "人员分布" }
-  ];
-  const active = tabs.some((t) => t.id === sceneDetailTab)
-    ? sceneDetailTab
-    : (sceneDetailTab === "video" ? "watch" : "info");
-  const inner = active === "watch" ? zoneVideoTabHtml(zone)
-    : active === "alerts" ? zoneAlertsTabHtml(zone)
-    : active === "people" ? zonePeopleTabHtml(zone)
-    : sceneBlockHtml("基本信息", zoneSceneProfileHtml(zone));
+  const openAlerts = alertsForZone(zone);
+  const unsignedAlerts = openAlerts.filter((row) => row.status === "待签收");
+  const people = peopleForZone(zone);
+  const cams = camerasForZone(zone);
+  const tickets = validWorkOrdersForZone(zone.id);
+  const label = zone.mapLabel || zone.name;
+  const subParts = [plantName(zone.plant), zone.fence, zone.hours].filter(Boolean);
   return scenePanelChrome({
-    title: "区域信息",
-    sub: `${zone.name} · ${plantName(zone.plant)}`,
-    badge: `<span class="lvl lvl-${RISK_LVL[zone.risk] || 4}">${zone.risk || "区域"}</span>`,
-    body: `${scenePanelTabsHtml(active, tabs)}${inner}`,
-    actions: `
-      <a class="btn" href="#/t7/zones?id=${encodeURIComponent(zone.id)}">区域配置</a>
-      <button type="button" class="btn" data-overview-up>返回上层</button>
-    `
+    title: `${esc(label)} · 态势`,
+    sub: esc(subParts.join(" · ")),
+    badge: `<span class="lvl lvl-${RISK_LVL[zone.risk] || 4}">${esc(zone.risk || "区域")}</span>`,
+    body: `${sceneSituationKpiHtml({
+      alertCount: openAlerts.length,
+      people,
+      cameraCount: cams.length,
+      alertAction: "data-open-zone-alerts",
+      rosterAction: "data-open-zone-roster",
+      cameraAction: "data-open-zone-cameras",
+      fourth: { label: "作业工单", count: tickets.length, action: "data-open-zone-tickets" }
+    })}${sceneUnsignedAlertsHtml(unsignedAlerts)}`,
+    actions: `<button type="button" class="btn" data-overview-up>返回上层</button>`
   });
 }
 
@@ -2798,48 +2864,33 @@ function renderScenePanel(item) {
   }
   const kind = sceneKind(item);
   if (kind === "alert") {
-    const subjId = personIdForAlertSubject(item.person);
-    const subjTrack = subjId && trackForReplay(subjId);
-    const trackHref = subjTrack ? trackReplayDeepHash(subjId, { alertId: item.id, trackId: subjTrack.id }) : "";
     return scenePanelChrome({
       title: "告警信息",
       sub: `${item.type} · ${item.id}`,
       badge: `<span class="lvl lvl-${item.level}">${LEVEL_NAME[item.level]}</span>`,
       body: scenePanelTabbedBody(item, kind, alertSceneProfileHtml(item)),
-      actions: `
-        <a class="btn btn-primary" href="#/t2/alerts?id=${encodeURIComponent(item.id)}">处理告警</a>
-        ${trackHref ? `<a class="btn" href="${trackHref}">看轨迹</a>` : ""}
-        <button type="button" class="btn" data-close-panel>返回上层</button>
-      `
+      actions: `<a class="btn btn-primary" href="#/t2/alerts?id=${encodeURIComponent(item.id)}">处理告警</a>`
     });
   }
   if (kind === "person") {
     const row = hydratePerson(item);
-    const tr = trackForReplay(row.id);
-    const replayHref = tr ? trackReplayDeepHash(row.id, { trackId: tr.id }) : "";
-    const empHref = row.employeeId ? `#/t8/employees?id=${encodeURIComponent(row.employeeId)}` : "";
     const lamp = personLocAbnormal(row) ? "off" : "ok";
     return scenePanelChrome({
       title: "人员信息",
       sub: `${row.name} · ${row.job || ""}`,
       badge: `<span class="status-lamp"><i class="${lamp}"></i>${row.status || "在岗"}</span>`,
-      body: scenePanelTabbedBody(row, kind, personSceneProfileHtml(row)),
-      actions: `
-        ${replayHref ? `<a class="btn btn-primary" href="${replayHref}">回放轨迹</a>` : ""}
-        ${empHref ? `<a class="btn" href="${empHref}">员工档案</a>` : ""}
-        <button type="button" class="btn" data-close-panel>返回上层</button>
-      `
+      body: scenePanelTabbedBody(row, kind, personSceneProfileHtml(row))
     });
   }
   if (kind === "camera") {
+    const isCalib = sceneDetailTab === "calib";
     return scenePanelChrome({
       title: "摄像头信息",
       sub: `${item.name} · ${item.code || item.id}`,
       badge: `<span class="status-lamp"><i class="${item.online ? "ok" : "off"}"></i>${item.online ? "在线" : "离线"}</span>`,
       body: scenePanelTabbedBody(item, kind, cameraSceneProfileHtml(item)),
-      actions: `
-        <button type="button" class="btn" data-close-panel>返回上层</button>
-      `
+      bodyClass: isCalib ? "is-calib" : "",
+      actions: isCalib ? `<button type="button" class="btn btn-primary" data-cam-calib-save>保存标定</button>` : ""
     });
   }
   return zonePanelHtml(item);
@@ -3165,27 +3216,25 @@ function eventReviewHref(ev) {
   return "";
 }
 
-function renderAlertLinkedEvents(item) {
+function alertLinkedEventCellHtml(item) {
   const rows = eventsForAlert(item);
-  const eventsHtml = rows.length ? `
-    <div class="alert-related">
-      <h4 class="alert-related-title">关联事件</h4>
-      <ul class="alert-related-list">
-        ${rows.map((ev) => {
-          const href = eventReviewHref(ev);
-          const src = isLocSpaceEvent(ev) ? `${eventSourceLabel(ev)} · ${locTriggerLabel(ev)}` : eventSourceLabel(ev);
-          const head = href
-            ? `<a class="text-link" href="${href}">${esc(ev.id)}</a>`
-            : `<span>${esc(ev.id)}</span>`;
-          return `<li>
-            <div class="alert-related-head">${head}<span class="meta">${esc(src)} · ${esc(ev.status)}</span></div>
-            <p class="meta">${esc(ev.summary || ev.type || "—")}</p>
-          </li>`;
-        }).join("")}
-      </ul>
-    </div>
-  ` : "";
-  return `${eventsHtml}${renderAlertLinkedWorkOrders(item)}`;
+  if (!rows.length) return "—";
+  return rows.map((ev) => {
+    const href = eventReviewHref(ev);
+    return href
+      ? `<a class="text-link" href="${href}">${esc(ev.id)}</a>`
+      : `<a class="text-link" href="#/t6/events?id=${encodeURIComponent(ev.id)}">${esc(ev.id)}</a>`;
+  }).join("；");
+}
+
+function alertLinkedWorkOrderCellHtml(item) {
+  const rows = workOrdersForAlert(item);
+  const wantPermit = item.type === "非法闯入" || (item.rule || "").includes("作业票");
+  if (!rows.length) return wantPermit ? `<span class="meta">无有效作业票</span>` : "—";
+  return rows.map((row) => {
+    const href = `#/${row.status === "已归档" ? "t6/work-archive" : "t5/tickets"}?id=${encodeURIComponent(row.id)}`;
+    return `<a class="text-link" href="${href}">${esc(row.id)}</a>`;
+  }).join("；");
 }
 
 function alertFilter(filter) {
@@ -3810,7 +3859,9 @@ function renderAlertSnapshot(item, cam, ev) {
 }
 
 function renderAlertVideoTab(item) {
-  const nearby = nearbyCams(item.x, item.y).slice(0, 3);
+  const nearby = nearbyCams(item.x, item.y)
+    .filter((c) => c.id !== item.camera)
+    .slice(0, 4);
   return `
     <div class="alert-evidence-stack">
       <div class="white-card flush">
@@ -3818,15 +3869,15 @@ function renderAlertVideoTab(item) {
         ${renderAlertEvidenceBlock(item)}
       </div>
       <div class="white-card flush">
-        <h3>周边视频</h3>
+        <h3>附近实时画面</h3>
         <div class="alert-nearby-video">
           ${nearby.length
     ? nearby.map((c) => `
-            <button type="button" class="linkage-tile alert-nearby-cam${c.id === item.camera ? " is-on" : ""}"
+            <button type="button" class="linkage-tile alert-nearby-cam"
               data-alert-nearby-zoom="${c.id}" title="放大查看">
-              ${renderMonitor(c, c.id === item.camera, "tile")}
+              ${renderMonitor(c, false, "tile")}
             </button>`).join("")
-    : `<p class="meta">附近无在线摄像头。</p>`}
+    : `<p class="meta">附近无其他在线摄像头。</p>`}
         </div>
       </div>
     </div>
@@ -3839,18 +3890,22 @@ function renderAlertDetail(item, detailTab) {
   const cam = cameraName(item.camera);
   const noteTitle = item.status === "待复核" ? "复核关闭" : item.status === "处理中" ? "现场处置" : "核查处置";
   const logCount = (item.timeline || []).length;
+  const toolbar = alertHeadActionsHtml(item);
   return `
-    <div class="detail-head">
-      <div>
-        <h2>${item.id} · ${item.type}</h2>
-        <p class="meta">${item.plant} ${item.place}${alertHeldText(item) ? ` · ${alertHeldText(item)}` : ""} · ${item.time}</p>
-      </div>
-      <div class="detail-head-side">
-        <span class="alert-card-tags">
+    <div class="detail-head work-order-detail-head">
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${item.id} · ${item.type}</h2>
           ${statusCapsule(alertDisplayStatus(item))}
           <span class="lvl lvl-${item.level}">${LEVEL_NAME[item.level]}</span>
-        </span>
+        </div>
+        <p class="meta">${item.plant} ${item.place}${alertHeldText(item) ? ` · ${alertHeldText(item)}` : ""} · ${item.time}</p>
       </div>
+      ${toolbar ? `
+        <div class="detail-head-side work-order-head-side">
+          <div class="work-order-actions" role="toolbar" aria-label="告警操作">${toolbar}</div>
+        </div>
+      ` : ""}
     </div>
     <ol class="steps" aria-label="办理进度">
       ${FLOW.map((name, index) => `<li class="${index < step ? "is-done" : index === step ? "is-now" : ""}" data-flow="${name}">${name}</li>`).join("")}
@@ -3882,12 +3937,19 @@ function renderAlertDetail(item, detailTab) {
                 <span class="alert-fact-k">摄像头</span>
                 <span class="alert-fact-v">${esc(cam)}</span>
               </div>
-              <div class="alert-fact alert-fact--wide">
+              <div class="alert-fact">
                 <span class="alert-fact-k">已到手</span>
                 <span class="alert-fact-v num">${esc(alertHeldDuration(item) || "—")}</span>
               </div>
+              <div class="alert-fact">
+                <span class="alert-fact-k">关联事件</span>
+                <span class="alert-fact-v">${alertLinkedEventCellHtml(item)}</span>
+              </div>
+              <div class="alert-fact">
+                <span class="alert-fact-k">作业工单</span>
+                <span class="alert-fact-v">${alertLinkedWorkOrderCellHtml(item)}</span>
+              </div>
             </div>
-            ${renderAlertLinkedEvents(item)}
           </div>
           ${item.status !== "待签收" ? `
           <div class="white-card flush">
@@ -3901,44 +3963,51 @@ function renderAlertDetail(item, detailTab) {
       ${tab === "timeline" ? `
         <div class="white-card flush">
           <ol class="log">
-            ${(item.timeline || []).map((row) => `<li><b>${row.time}</b> ${row.status} · ${row.actor}<span>${row.note || ""}</span></li>`).join("")}
+            ${(item.timeline || []).slice().reverse().map((row) => `<li><b>${row.time}</b> ${row.status} · ${row.actor}<span>${row.note || ""}</span></li>`).join("")}
           </ol>
         </div>
       ` : ""}
     </div>
-    ${tab === "detail" ? `<div class="alert-actions">${actionButtons(item)}</div>` : ""}
   `;
 }
 
-function actionButtons(item) {
-  const id = item.id;
+function alertActBtn(item, act, label, primary = false) {
+  return `<button type="button" class="btn${primary ? " btn-primary" : ""}" data-act="${act}" data-id="${item.id}">${label}</button>`;
+}
+
+function alertHeadActionsHtml(item) {
   if (isTransferredOutByMe(item)) {
-    return `<span class="meta">${alertAssignee(item)}</span>`;
+    return `<span class="meta">${esc(alertAssignee(item))}</span>`;
   }
-  if (item.status === "已办结") {
-    return "";
-  }
-  const buttons = [];
-  if (item.status === "待签收") {
-    buttons.push(`<button class="btn btn-primary" data-act="ack" data-id="${id}">立即签收</button>`);
-  }
+  if (item.status === "已办结") return "";
+  const primary = [];
+  const more = [];
+  if (item.status === "待签收") primary.push(["ack", "立即签收", true]);
   if (item.status === "核查中") {
-    buttons.push(`<button class="btn btn-primary" data-act="check" data-id="${id}">进入处理</button>`);
-    buttons.push(`<button class="btn" data-act="false" data-id="${id}">误报关闭</button>`);
+    primary.push(["check", "进入处理", true]);
+    more.push(["false", "误报关闭"]);
   }
-  if (item.status === "处理中") {
-    buttons.push(`<button class="btn btn-primary" data-act="sim-field" data-id="${id}">处理完成</button>`);
-  }
+  if (item.status === "处理中") primary.push(["sim-field", "处理完成", true]);
   if (item.status === "待复核") {
-    buttons.push(`<button class="btn btn-primary" data-act="close" data-id="${id}">复核关闭</button>`);
-    buttons.push(`<button class="btn" data-act="back" data-id="${id}">退回补充</button>`);
+    primary.push(["close", "复核关闭", true]);
+    more.push(["back", "退回补充"]);
   }
-  buttons.push(`<button class="btn" data-act="transfer" data-id="${id}">转派</button>`);
-  buttons.push(`<button class="btn" data-act="up" data-id="${id}">升级</button>`);
+  more.push(["up", "升级"]);
   if (item.status !== "待签收" && item.status !== "待复核") {
-    buttons.push(`<button class="btn" data-act="back" data-id="${id}">退回</button>`);
+    more.push(["back", "退回"]);
   }
-  return buttons.join("");
+  const bits = [
+    alertActBtn(item, "transfer", "转派"),
+    more.length ? `
+      <details class="alert-more">
+        <summary class="btn">更多</summary>
+        <div class="alert-more-menu">
+          ${more.map(([act, label]) => alertActBtn(item, act, label)).join("")}
+        </div>
+      </details>` : "",
+    ...primary.map(([act, label, isPrimary]) => alertActBtn(item, act, label, isPrimary))
+  ];
+  return bits.join("");
 }
 
 function alertTransferOptions() {
@@ -3961,7 +4030,12 @@ function alertTransferOptions() {
   return rows;
 }
 
-function openAlertDialog(title, bodyHtml, onConfirm, okLabel = "确认", wide = false, onMount) {
+function openAlertDialog(title, bodyHtml, onConfirm, okLabel = "确认", wide = false, onMount, dismissOnly) {
+  const dismissLabels = new Set(["关闭", "知道了"]);
+  let singleDismiss;
+  if (dismissOnly === false) singleDismiss = false;
+  else if (dismissOnly === true) singleDismiss = true;
+  else singleDismiss = dismissLabels.has(okLabel);
   const backdrop = document.createElement("div");
   backdrop.className = "modal-backdrop";
   backdrop.innerHTML = `
@@ -3969,9 +4043,9 @@ function openAlertDialog(title, bodyHtml, onConfirm, okLabel = "确认", wide = 
       <header class="modal-head"><h3 id="modal-title">${title}</h3></header>
       <div class="modal-body">${bodyHtml}</div>
       <p class="modal-err" id="modal-err" hidden></p>
-      <footer class="modal-foot">
-        <button type="button" class="btn" data-modal-cancel>取消</button>
-        <button type="button" class="btn btn-primary" data-modal-ok>${okLabel}</button>
+      <footer class="modal-foot${singleDismiss ? " modal-foot--dismiss" : ""}">
+        ${singleDismiss ? "" : `<button type="button" class="btn" data-modal-cancel>取消</button>`}
+        <button type="button" class="btn${singleDismiss ? "" : " btn-primary"}" data-modal-ok>${okLabel}</button>
       </footer>
     </div>
   `;
@@ -3979,7 +4053,7 @@ function openAlertDialog(title, bodyHtml, onConfirm, okLabel = "确认", wide = 
   backdrop.addEventListener("click", (event) => {
     if (event.target === backdrop) close();
   });
-  backdrop.querySelector("[data-modal-cancel]").addEventListener("click", close);
+  backdrop.querySelector("[data-modal-cancel]")?.addEventListener("click", close);
   backdrop.querySelector("[data-modal-ok]").addEventListener("click", () => {
     const err = backdrop.querySelector("#modal-err");
     const ok = onConfirm(backdrop, err);
@@ -4718,62 +4792,76 @@ function zoneNameByCamId(zoneId) {
   return z?.mapLabel || z?.name || zoneId;
 }
 
-function cameraAiViewRows(cam) {
+function cameraAiViewTableHtml(cam) {
   const rows = cameraAiBindings(cam);
-  if (!rows.length) return [["绑定算法", "未绑定"]];
-  return rows.map((row) => {
+  if (!rows.length) return `<p class="meta camera-view-algo-empty">未绑定识别告警</p>`;
+  const body = rows.map((row) => {
     const algo = aiAlgoById(row.algoId);
-    const name = algo ? algo.name : row.algoId;
+    const label = esc(algo?.eventName || algo?.name || row.algoId);
     const on = row.enabled !== false && algo?.enabled !== false;
-    const st = `<span class="capsule capsule-${on ? "ok" : "warn"}">${on ? "启用" : "停用"}</span>`;
-    return [name, `${st}　${row.confidence ?? algo?.confidence ?? "—"}%　${row.roi || "全画面"}　间隔 ${row.interval ?? algo?.interval ?? "—"}s`];
-  });
-}
-
-function cameraModalSection(title, rows) {
+    const conf = row.confidence ?? algo?.confidence ?? "—";
+    const roi = esc(row.roi || algo?.roi || "全画面");
+    const interval = row.interval ?? algo?.interval ?? "—";
+    return `
+      <tr>
+        <td>${label}</td>
+        <td><span class="dot ${on ? "ok" : "off"}">${on ? "启用" : "停用"}</span></td>
+        <td class="num">${conf}%</td>
+        <td>${roi}</td>
+        <td class="num">${interval}s</td>
+      </tr>`;
+  }).join("");
   return `
-    <section class="camera-modal-section-block">
-      <h4 class="camera-modal-section-title">${title}</h4>
-      ${sceneProfileHtml(rows)}
-    </section>
-  `;
+    <div class="table-wrap camera-view-algo-table">
+      <table>
+        <thead>
+          <tr>
+            <th>告警</th>
+            <th>状态</th>
+            <th>置信度</th>
+            <th>检测区域</th>
+            <th>间隔</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
 }
 
 function cameraViewDialogHtml(cam) {
   const coord = cam.x != null && cam.y != null
     ? `<span class="mono">${cam.x}, ${cam.y}</span>`
     : "—";
-  const onlineCap = `<span class="capsule capsule-${cam.online ? "ok" : "warn"}">${cam.online ? "在线" : "离线"}</span>`;
-  const calibCap = `<span class="dot ${calibTone(cam.calib)}">${cam.calib || "未标定"}</span>`;
-  const syncCap = `<span class="dot ${cam.sync === "待并表" ? "warn" : "ok"}">${cam.sync || "已对齐"}</span>`;
+  const onlineCap = `<span class="dot ${cam.online ? "ok" : "off"}">${cam.online ? "在线" : "离线"}</span>`;
+  const calibCap = `<span class="dot ${calibTone(cam.calib)}">${esc(cam.calib || "未标定")}</span>`;
+  const maint = cam.maintNote ? esc(cam.maintNote) : `<span class="meta">—</span>`;
   return `
     <div class="camera-modal-view">
-      ${cameraModalSection("通道与接入", [
-        ["通道编码", cam.code || cam.id],
-        ["名称", cam.name],
-        ["IP", cam.ip || "—"],
-        ["NVR 通道", cam.nvrChannel ?? "—"],
-        ["设备类型", cam.form || "—"],
-        ["协议 / 编码", [cam.protocol, cam.codec].filter(Boolean).join(" · ") || "—"],
-        ["在线状态", onlineCap]
-      ])}
-      ${cameraModalSection("位置与归属", [
-        ["分厂", plantName(cam.plant)],
-        ["监控分区", cam.area || "—"],
-        ["关联区域", zoneNameByCamId(cam.zone)],
-        ["地图坐标", coord]
-      ])}
-      ${cameraModalSection("标定与姿态", [
-        ["标定状态", calibCap],
-        ["台账同步", syncCap],
-        ["方位 / 俯仰", `${cam.heading ?? "—"}° / ${cam.pitch ?? "—"}°`],
-        ["视场角", cam.fov != null ? `${cam.fov}°` : "—"],
-        ["维护备注", cam.maintNote || "—"]
-      ])}
-      ${cameraModalSection("识别算法", cameraAiViewRows(cam))}
-      <div class="camera-modal-foot-links">
-        ${cam.x != null ? `<a class="btn" href="#/t1/overview?id=${encodeURIComponent(cam.id)}">在地图查看</a>` : ""}
-        <a class="btn" href="${cameraCalibOverviewHref(cam.id)}">去场景标定</a>
+      <div class="white-card flush camera-view-card">
+        <h3>通道档案</h3>
+        <div class="alert-facts camera-view-facts">
+          ${archiveDetailFact("通道编码", esc(cam.code || cam.id))}
+          ${archiveDetailFact("名称", esc(cam.name))}
+          ${archiveDetailFact("IP", esc(cam.ip || "—"))}
+          ${archiveDetailFact("NVR", esc(cam.nvrChannel ?? "—"))}
+          ${archiveDetailFact("设备类型", esc(cam.form || "—"))}
+          ${archiveDetailFact("协议", esc(cam.protocol || "—"))}
+          ${archiveDetailFact("编码", esc(cam.codec || "—"))}
+          ${archiveDetailFact("在线", onlineCap)}
+          ${archiveDetailFact("分厂", esc(plantName(cam.plant)))}
+          ${archiveDetailFact("监控分区", esc(cam.area || "—"))}
+          ${archiveDetailFact("关联区域", esc(zoneNameByCamId(cam.zone)))}
+          ${archiveDetailFact("地图坐标", coord)}
+          ${archiveDetailFact("维护备注", maint, true)}
+        </div>
+        <p class="work-form-legend">标定</p>
+        <div class="alert-facts camera-view-facts">
+          ${archiveDetailFact("标定状态", calibCap)}
+          ${archiveDetailFact("方位 / 俯仰", `<span class="num">${cam.heading ?? "—"}° / ${cam.pitch ?? "—"}°</span>`)}
+          ${archiveDetailFact("视场角", cam.fov != null ? `<span class="num">${cam.fov}°</span>` : `<span class="meta">—</span>`)}
+        </div>
+        <p class="work-form-legend">识别告警</p>
+        ${cameraAiViewTableHtml(cam)}
       </div>
     </div>
   `;
@@ -4816,17 +4904,7 @@ function cameraFormFields(cam) {
       ${fld("关联区域", `<select class="field" name="zone">
         <option value="">—</option>
         ${zones.map((z) => `<option value="${z.id}"${z.id === cam.zone ? " selected" : ""}>${z.label}</option>`).join("")}
-      </select>`, true)}
-      <h4 class="camera-modal-section-title span-2">标定与姿态</h4>
-      ${fld("标定", `<select class="field" name="calib">
-        ${CAM_CALIB_STATES.map((v) => `<option${v === (cam.calib || "未标定") ? " selected" : ""}>${v}</option>`).join("")}
       </select>`)}
-      ${fld("台账同步", `<select class="field" name="sync">
-        ${CAM_SYNC_STATES.map((v) => `<option${v === (cam.sync || "已对齐") ? " selected" : ""}>${v}</option>`).join("")}
-      </select>`)}
-      ${fld("朝向（°）", `<input class="field" name="heading" type="number" value="${cam.heading ?? ""}">`)}
-      ${fld("俯仰（°）", `<input class="field" name="pitch" type="number" value="${cam.pitch ?? ""}">`)}
-      ${fld("视场角（°）", `<input class="field" name="fov" type="number" value="${cam.fov ?? ""}">`)}
       ${fld("维护备注", `<input class="field" name="maintNote" value="${(cam.maintNote || "").replace(/"/g, "&quot;")}">`, true)}
     </div>
   `;
@@ -4845,11 +4923,6 @@ function readCameraFromDialog(dlg) {
     protocol: dlg.querySelector('[name="protocol"]')?.value || "RTSP",
     codec: dlg.querySelector('[name="codec"]')?.value || "H.265",
     online: dlg.querySelector('[name="online"]')?.value === "1",
-    calib: dlg.querySelector('[name="calib"]')?.value || "未标定",
-    sync: dlg.querySelector('[name="sync"]')?.value || "已对齐",
-    heading: Number(dlg.querySelector('[name="heading"]')?.value) || 0,
-    pitch: Number(dlg.querySelector('[name="pitch"]')?.value) || 0,
-    fov: Number(dlg.querySelector('[name="fov"]')?.value) || 0,
     maintNote: dlg.querySelector('[name="maintNote"]')?.value.trim() || ""
   };
 }
@@ -4982,18 +5055,7 @@ function bindCameraAlgoDialog(dlg) {
 }
 
 function cameraEditDialogHtml(cam) {
-  return `
-    <div class="camera-edit-modal">
-      ${cameraFormFields(cam)}
-      <h4 class="camera-modal-section-title">通道告警</h4>
-      ${cameraAlgoDialogHtml(cam)}
-    </div>
-  `;
-}
-
-function bindCameraEditDialog(dlg) {
-  dlg.querySelector(".modal")?.classList.add("algo-modal");
-  bindCameraAlgoDialog(dlg);
+  return `<div class="camera-edit-modal">${cameraFormFields(cam)}</div>`;
 }
 
 function aiAlgoCatalogHtml() {
@@ -5054,7 +5116,7 @@ function openCameraView(cam) {
 
 function openCameraAlertConfig(cam, after) {
   if (!cam) return;
-  openAlertDialog(`告警配置 · ${cam.name}`, cameraAlgoDialogHtml(cam), (dlg) => {
+  openAlertDialog(`识别告警 · ${cam.name}`, cameraAlgoDialogHtml(cam), (dlg) => {
     cam.aiBindings = readCameraAlgoBindings(dlg, cam);
     persist();
     after?.();
@@ -5062,7 +5124,7 @@ function openCameraAlertConfig(cam, after) {
   }, "保存", true, bindCameraAlgoDialog);
 }
 
-function openCameraEdit(cam, after, opts) {
+function openCameraEdit(cam, after) {
   openAlertDialog(`编辑 · ${cam.name}`, cameraEditDialogHtml(cam), (dlg, err) => {
     const patch = readCameraFromDialog(dlg);
     if (!patch.code || !patch.name) {
@@ -5072,19 +5134,11 @@ function openCameraEdit(cam, after, opts) {
       }
       return false;
     }
-    Object.assign(cam, patch, {
-      streamConfigured: true,
-      aiBindings: readCameraAlgoBindings(dlg, cam)
-    });
+    Object.assign(cam, patch, { streamConfigured: true });
     persist();
     after();
     return true;
-  }, "保存", true, (dlg) => {
-    bindCameraEditDialog(dlg);
-    if (opts?.tab === "algo") {
-      dlg.querySelector(".cam-algo-table-wrap")?.scrollIntoView({ block: "nearest" });
-    }
-  });
+  }, "保存", true);
 }
 
 function openCameraCreate(after) {
@@ -5188,6 +5242,46 @@ function sysFilterFieldSelect(label, name, value, options) {
     </select></label>`;
 }
 
+function sysExtraFiltersOn(filters, extraKeys, defaults) {
+  const selectKeys = new Set(["kind", "status", "org", "role", "plant"]);
+  return extraKeys.some((key) => {
+    const cur = filters[key];
+    const base = defaults[key];
+    if (selectKeys.has(key)) return String(cur || "") !== String(base || "全部");
+    return String(cur || "").trim() !== "";
+  });
+}
+
+function sysFiltersActive(filters, defaults) {
+  return Object.keys(defaults).some((key) => {
+    const cur = filters[key];
+    const base = defaults[key];
+    if (key === "name" || key === "code" || key === "account" || key === "tagId") {
+      return String(cur || "").trim().toLowerCase() !== String(base || "").trim().toLowerCase();
+    }
+    return String(cur || "") !== String(base || "");
+  });
+}
+
+function sysFilterStackHtml({ mainHtml, moreHtml, moreOpen, canReset, addLabel, extraActions = "" }) {
+  return `
+    <div class="camera-toolbar-stack">
+      <div class="filter-row alert-toolbar archive-toolbar camera-toolbar camera-toolbar-search sys-list-toolbar">
+        ${mainHtml}
+        <div class="camera-toolbar-actions">
+          <button type="button" class="btn btn-primary alert-q-submit" data-sys-search>搜索</button>
+          <button type="button" class="btn btn-ghost alert-q-reset" data-sys-reset${canReset ? "" : " disabled"}>重置</button>
+          <button type="button" class="btn btn-ghost" data-sys-more aria-expanded="${moreOpen}">${moreOpen ? "收起" : "更多条件"}</button>
+          ${extraActions}
+          ${addLabel ? `<button type="button" class="btn btn-primary" data-add>${esc(addLabel)}</button>` : ""}
+        </div>
+      </div>
+      <div class="filter-row alert-toolbar archive-toolbar camera-toolbar camera-toolbar-more"${moreOpen ? "" : " hidden"}>
+        ${moreHtml}
+      </div>
+    </div>`;
+}
+
 function sysListFilterToolbar(fieldsHtml, addLabel, extraActions = "") {
   return `
     <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-search sys-list-toolbar">
@@ -5196,7 +5290,7 @@ function sysListFilterToolbar(fieldsHtml, addLabel, extraActions = "") {
         <button type="button" class="btn btn-primary alert-q-submit" data-sys-search>搜索</button>
         <button type="button" class="btn btn-ghost alert-q-reset" data-sys-reset>重置</button>
         ${extraActions}
-        <button type="button" class="btn btn-primary" data-add>${esc(addLabel)}</button>
+        ${addLabel ? `<button type="button" class="btn btn-primary" data-add>${esc(addLabel)}</button>` : ""}
       </div>
     </div>`;
 }
@@ -5235,6 +5329,7 @@ function bindSysListFilterToolbar(root, state, fields, defaults, paint) {
     state.draft = { ...defaults };
     state.filters = { ...defaults };
     state.page = 1;
+    if (typeof state.filtersOpen === "boolean") state.filtersOpen = false;
     paint();
   });
 }
@@ -5251,35 +5346,55 @@ function sysPlantNamesForFilter() {
   return ["全部", ...data.plants.filter((row) => row.id !== "all").map((row) => row.name), "全厂"];
 }
 
-function sysOrgFilterToolbar(draft) {
-  return sysListFilterToolbar(`
-    ${sysFilterFieldText("名称", "org-name", draft.name)}
-    ${sysFilterFieldText("组织编码", "org-code", draft.code)}
-    ${sysFilterFieldSelect("组织类型", "org-kind", draft.kind, ["全部", ...SYS_ORG_KINDS])}
-    ${sysFilterFieldSelect("状态", "org-status", draft.status, ["全部", "启用", "停用"])}
-  `, "新建");
+const SYS_ORG_FILTER_EXTRA = ["kind", "status"];
+const SYS_USER_FILTER_EXTRA = ["role", "plant", "status"];
+const SYS_EMP_FILTER_EXTRA = ["status", "kind", "tagId"];
+
+function sysOrgFilterToolbar(draft, moreOpen, canReset) {
+  return sysFilterStackHtml({
+    moreOpen,
+    canReset,
+    addLabel: "新建",
+    mainHtml: `
+      ${sysFilterFieldText("名称", "org-name", draft.name)}
+      ${sysFilterFieldText("组织编码", "org-code", draft.code)}`,
+    moreHtml: `
+      ${sysFilterFieldSelect("组织类型", "org-kind", draft.kind, ["全部", ...SYS_ORG_KINDS])}
+      ${sysFilterFieldSelect("状态", "org-status", draft.status, ["全部", "启用", "停用"])}`,
+  });
 }
 
-function sysUserFilterToolbar(draft) {
-  return sysListFilterToolbar(`
-    ${sysFilterFieldText("姓名", "user-name", draft.name)}
-    ${sysFilterFieldText("账号", "user-account", draft.account)}
-    ${sysFilterFieldSelect("组织", "user-org", draft.org, sysOrgNamesForFilter())}
-    ${sysFilterFieldSelect("角色", "user-role", draft.role, sysRoleNamesForFilter())}
-    ${sysFilterFieldSelect("分厂 / 范围", "user-plant", draft.plant, sysPlantNamesForFilter())}
-    ${sysFilterFieldSelect("状态", "user-status", draft.status, ["全部", ...SYS_USER_STATUS])}
-  `, "新建");
+function sysUserFilterToolbar(draft, moreOpen, canReset) {
+  return sysFilterStackHtml({
+    moreOpen,
+    canReset,
+    addLabel: "新建",
+    mainHtml: `
+      ${sysFilterFieldText("姓名", "user-name", draft.name)}
+      ${sysFilterFieldText("账号", "user-account", draft.account)}
+      ${sysFilterFieldSelect("组织", "user-org", draft.org, sysOrgNamesForFilter())}`,
+    moreHtml: `
+      ${sysFilterFieldSelect("角色", "user-role", draft.role, sysRoleNamesForFilter())}
+      ${sysFilterFieldSelect("分厂 / 范围", "user-plant", draft.plant, sysPlantNamesForFilter())}
+      ${sysFilterFieldSelect("状态", "user-status", draft.status, ["全部", ...SYS_USER_STATUS])}`,
+  });
 }
 
-function sysEmployeeFilterToolbar(draft, extraActions) {
-  return sysListFilterToolbar(`
-    ${sysFilterFieldText("姓名", "emp-name", draft.name)}
-    ${sysFilterFieldText("工号", "emp-code", draft.code)}
-    ${sysFilterFieldSelect("组织", "emp-org", draft.org, sysOrgNamesForFilter())}
-    ${sysFilterFieldSelect("状态", "emp-status", draft.status, ["全部", ...EMPLOYEE_STATUS])}
-    ${sysFilterFieldSelect("人员类型", "emp-kind", draft.kind, ["全部", ...EMPLOYEE_KINDS])}
-    ${sysFilterFieldText("定位卡", "emp-tag", draft.tagId)}
-  `, "新建", extraActions);
+function sysEmployeeFilterToolbar(draft, moreOpen, canReset, extraActions) {
+  return sysFilterStackHtml({
+    moreOpen,
+    canReset,
+    addLabel: "新建",
+    extraActions,
+    mainHtml: `
+      ${sysFilterFieldText("姓名", "emp-name", draft.name)}
+      ${sysFilterFieldText("工号", "emp-code", draft.code)}
+      ${sysFilterFieldSelect("组织", "emp-org", draft.org, sysOrgNamesForFilter())}`,
+    moreHtml: `
+      ${sysFilterFieldSelect("状态", "emp-status", draft.status, ["全部", ...EMPLOYEE_STATUS])}
+      ${sysFilterFieldSelect("人员类型", "emp-kind", draft.kind, ["全部", ...EMPLOYEE_KINDS])}
+      ${sysFilterFieldText("定位卡", "emp-tag", draft.tagId)}`,
+  });
 }
 
 const SYS_ORG_FILTER_FIELDS = [
@@ -5408,6 +5523,7 @@ function renderCameraPage(root, routeOrFocus) {
   let qName = "";
   let qIp = "";
   let qChannel = "";
+  let filtersOpen = false;
   let page = 1;
   const pageSize = 20;
   const plants = ["全部", ...(data.plants || []).filter((p) => p.id !== "all")];
@@ -5419,7 +5535,6 @@ function renderCameraPage(root, routeOrFocus) {
       if (statusFilter === "在线") return cam.online;
       if (statusFilter === "离线") return !cam.online;
       if (statusFilter === "待标定") return cam.calib !== "已标定";
-      if (statusFilter === "待并表") return cam.sync === "待并表";
       return true;
     }).filter((cam) => plantFilter === "全部" || cam.plant === plantFilter)
       .filter((cam) => areaFilter === "全部" || cam.area === areaFilter)
@@ -5456,6 +5571,7 @@ function renderCameraPage(root, routeOrFocus) {
     qName = "";
     qIp = "";
     qChannel = "";
+    filtersOpen = false;
     page = 1;
     paint();
   }
@@ -5472,19 +5588,38 @@ function renderCameraPage(root, routeOrFocus) {
         : `<option value="${p.id}"${plantFilter === p.id ? " selected" : ""}>${p.name}</option>`
     )).join("");
 
+    const extraOn = areaFilter !== "全部" || formFilter !== "全部" || calibFilter !== "全部"
+      || !!qIp || !!draftIp.trim();
+    const moreOpen = filtersOpen || extraOn;
     root.innerHTML = `
       <div class="camera-toolbar-stack">
-        <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-filters">
-          <label class="cam-field-label"><span class="cam-field-label-name">状态</span>
-            <select class="field cam-filter-sel" id="cam-status-filter">
-              ${["全部", "在线", "离线", "待标定", "待并表"].map((name) => (
-                `<option value="${name}"${statusFilter === name ? " selected" : ""}>${name === "全部" ? "全部" : name}</option>`
-              )).join("")}
-            </select>
+        <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-search">
+          <label class="cam-field-label cam-field-label--channel"><span class="cam-field-label-name">通道</span>
+            <input type="search" class="field alert-q-field" id="cam-q-channel" value="${draftChannel.replace(/"/g, "&quot;")}" autocomplete="off">
+          </label>
+          <label class="cam-field-label"><span class="cam-field-label-name">名称</span>
+            <input type="search" class="field alert-q-field" id="cam-q-name" value="${draftName.replace(/"/g, "&quot;")}" autocomplete="off">
           </label>
           <label class="cam-field-label"><span class="cam-field-label-name">分厂</span>
             <select class="field cam-filter-sel" id="cam-plant-filter">${plantOpts}</select>
           </label>
+          <label class="cam-field-label"><span class="cam-field-label-name">状态</span>
+            <select class="field cam-filter-sel" id="cam-status-filter">
+              ${["全部", "在线", "离线", "待标定"].map((name) => (
+                `<option value="${name}"${statusFilter === name ? " selected" : ""}>${name === "全部" ? "全部" : name}</option>`
+              )).join("")}
+            </select>
+          </label>
+          <div class="camera-toolbar-actions">
+            <button type="button" class="btn btn-primary alert-q-submit" data-cam-search>搜索</button>
+            <button type="button" class="btn btn-ghost alert-q-reset" data-cam-reset>重置</button>
+            <button type="button" class="btn btn-ghost" data-cam-more aria-expanded="${moreOpen}">${moreOpen ? "收起" : "更多条件"}</button>
+            <button type="button" class="btn" data-cam-import>导入</button>
+            <button type="button" class="btn" data-cam-export>导出</button>
+            <button type="button" class="btn btn-primary" data-cam-add>新增</button>
+          </div>
+        </div>
+        <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-more"${moreOpen ? "" : " hidden"}>
           <label class="cam-field-label"><span class="cam-field-label-name">监控分区</span>
             <select class="field cam-filter-sel" id="cam-area-filter">
               ${areas.map((name) => `<option value="${name}"${areaFilter === name ? " selected" : ""}>${name === "全部" ? "全部" : name}</option>`).join("")}
@@ -5502,24 +5637,9 @@ function renderCameraPage(root, routeOrFocus) {
               )).join("")}
             </select>
           </label>
-        </div>
-        <div class="filter-row alert-toolbar camera-toolbar camera-toolbar-search">
-          <label class="cam-field-label"><span class="cam-field-label-name">名称</span>
-            <input type="search" class="field alert-q-field" id="cam-q-name" value="${draftName.replace(/"/g, "&quot;")}" autocomplete="off">
-          </label>
           <label class="cam-field-label"><span class="cam-field-label-name">IP</span>
             <input type="search" class="field alert-q-field" id="cam-q-ip" value="${draftIp.replace(/"/g, "&quot;")}" autocomplete="off">
           </label>
-          <label class="cam-field-label"><span class="cam-field-label-name">通道</span>
-            <input type="search" class="field alert-q-field" id="cam-q-channel" value="${draftChannel.replace(/"/g, "&quot;")}" autocomplete="off">
-          </label>
-          <div class="camera-toolbar-actions">
-            <button type="button" class="btn btn-primary alert-q-submit" data-cam-search>搜索</button>
-            <button type="button" class="btn btn-ghost alert-q-reset" data-cam-reset>重置</button>
-            <button type="button" class="btn" data-cam-import>导入</button>
-            <button type="button" class="btn" data-cam-export>导出</button>
-            <button type="button" class="btn btn-primary" data-cam-add>新增</button>
-          </div>
         </div>
       </div>
       <div class="table-wrap">
@@ -5538,7 +5658,6 @@ function renderCameraPage(root, routeOrFocus) {
               <th>标定</th>
               <th>编码</th>
               <th>协议</th>
-              <th>台账</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -5557,18 +5676,17 @@ function renderCameraPage(root, routeOrFocus) {
                 <td><span class="dot ${calibTone(cam.calib)}">${cam.calib || "未标定"}</span></td>
                 <td>${cam.codec || "—"}</td>
                 <td>${cam.protocol || "—"}</td>
-                <td><span class="dot ${cam.sync === "待并表" ? "warn" : "ok"}">${cam.sync || "已对齐"}</span></td>
                 <td>
                   <div class="table-actions">
                     <button type="button" class="btn" data-cam-view="${cam.id}">查看</button>
                     <button type="button" class="btn" data-cam-edit="${cam.id}">编辑</button>
-                    <button type="button" class="btn" data-cam-alert="${cam.id}">告警</button>
+                    <button type="button" class="btn" data-cam-alert="${cam.id}">识别告警</button>
                     <a class="btn" href="${cameraCalibOverviewHref(cam.id)}">标定</a>
                     <button type="button" class="btn" data-cam-del="${cam.id}">删除</button>
                   </div>
                 </td>
               </tr>
-            `).join("") : `<tr><td colspan="14" class="empty">没有符合条件的摄像头。</td></tr>`}
+            `).join("") : `<tr><td colspan="13" class="empty">没有符合条件的摄像头。</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -5596,6 +5714,10 @@ function renderCameraPage(root, routeOrFocus) {
     });
     root.querySelector("[data-cam-search]")?.addEventListener("click", applySearch);
     root.querySelector("[data-cam-reset]")?.addEventListener("click", resetFilters);
+    root.querySelector("[data-cam-more]")?.addEventListener("click", () => {
+      filtersOpen = !moreOpen;
+      paint();
+    });
     root.querySelector("[data-cam-import]")?.addEventListener("click", () => {
       openAlertDialog("批量导入", `
         <p class="meta">按模板导入通道：通道编码、名称、IP、NVR 通道、设备类型、监控分区、分厂、协议、编码格式。</p>
@@ -5787,7 +5909,11 @@ function ensureZoneFenceAlert(zone) {
 
 function migrateSysRoleMenus() {
   (data.sysRoles || []).forEach((role) => {
-    role.menus = (role.menus || []).map((name) => (name === "三维实景" ? "安全综合监控" : name));
+    role.menus = (role.menus || []).map((name) => {
+      if (name === "三维实景") return "安全综合监控";
+      if (name === "视频与告警" || name === "视频监控") return "摄像头配置";
+      return name;
+    });
   });
 }
 
@@ -5955,13 +6081,6 @@ function persistZoneBasic(root, zone) {
   if (mapLabel) zone.mapLabel = mapLabel;
   const ver = zone.version || "v1";
   zone.version = bumpVersion(ver.includes(".") ? ver : `${ver}.0`);
-}
-
-function persistZoneFence(root, zone) {
-  const ver = zone.version || "v1";
-  zone.version = bumpVersion(ver.includes(".") ? ver : `${ver}.0`);
-  readZoneFenceAlert(root, zone);
-  syncFenceAlertToRules(zone);
 }
 
 function readZoneFenceAlert(root, zone) {
@@ -6287,11 +6406,6 @@ function renderAlertRulesConfig(root, focusId) {
   }
   paint();
 }
-function normalizeZoneDetailTab() {
-  if (zoneDetailTab === "fence" || zoneDetailTab === "admission") zoneDetailTab = "access";
-  if (zoneDetailTab !== "basic" && zoneDetailTab !== "access") zoneDetailTab = "basic";
-}
-
 function configListPanelHtml(title, cardsHtml, addButtonHtml = "") {
   return `
     <aside class="alert-list-panel config-list-panel">
@@ -6357,22 +6471,16 @@ function renderZoneAccess(root, focusId) {
   let zoneEditing = false;
 
   function paint() {
-    normalizeZoneDetailTab();
     const rows = data.zones;
     const item = rows.find((row) => row.id === focus) || rows[0];
     focus = item?.id;
-    const listCards = rows.map((row) => {
-      const fa = ensureZoneFenceAlert(row);
-      const alertOn = fa.status === "启用";
-      return `
+    const listCards = rows.map((row) => `
         <button type="button" class="alert-card${row.id === item.id ? " is-on" : ""}" data-id="${row.id}">
           <div class="row">
             <strong>${row.name}</strong>
             <span class="lvl lvl-${RISK_LVL[row.risk] || 4}">${row.risk}</span>
           </div>
-          <p class="meta">${plantName(row.plant)} · ${row.fence}${alertOn ? " · 定位告警启" : ""}</p>
-        </button>`;
-    }).join("");
+        </button>`).join("");
     root.innerHTML = `
       <div class="alert-layout">
         ${configListPanelHtml("区域列表", listCards, `<button type="button" class="btn btn-sm btn-primary" data-zone-add>新增</button>`)}
@@ -6385,7 +6493,6 @@ function renderZoneAccess(root, focusId) {
       openZoneCreateDialog((id) => {
         focus = id;
         zoneEditing = true;
-        zoneDetailTab = "basic";
         paint();
       });
     });
@@ -6396,15 +6503,7 @@ function renderZoneAccess(root, focusId) {
         paint();
       });
     });
-    root.querySelectorAll("[data-zone-tab]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        zoneDetailTab = btn.dataset.zoneTab || "basic";
-        zoneEditing = false;
-        paint();
-      });
-    });
     const refreshAdmission = () => {
-      zoneDetailTab = "access";
       paint();
     };
     root.querySelector("[data-admission-add]")?.addEventListener("click", () => {
@@ -6432,8 +6531,9 @@ function renderZoneAccess(root, focusId) {
       paint();
     });
     root.querySelector("[data-zone-save]")?.addEventListener("click", () => {
-      if (zoneDetailTab === "basic") persistZoneBasic(root, item);
-      else persistZoneFence(root, item);
+      persistZoneBasic(root, item);
+      readZoneFenceAlert(root, item);
+      syncFenceAlertToRules(item);
       persist();
       zoneEditing = false;
       paint();
@@ -6461,40 +6561,23 @@ function joinWhitelistLines(lines) {
   return lines.map((s) => s.trim()).filter(Boolean).join("、");
 }
 
-function zoneAdmissionListHtml(item) {
+function zoneAdmissionBodyHtml(item) {
   const rows = ensureZoneAdmissions(item);
-  const body = rows.length
-    ? rows.map((row, i) => {
-      const st = admissionStatus(row);
-      return `
-        <tr data-admission-row="${i}">
-          <td>${row.person || "—"}</td>
-          <td>${row.hours || "—"}</td>
-          <td>${admissionDateText(row)}</td>
-          <td><span class="dot ${admissionStatusTone(st)}">${st}</span></td>
-          <td class="zone-adm-actions">
-            <button type="button" class="btn btn-sm" data-admission-edit data-idx="${i}">编辑</button>
-            <button type="button" class="btn btn-sm btn-ghost" data-admission-del data-idx="${i}">删除</button>
-          </td>
-        </tr>`;
-    }).join("")
-    : `<tr><td colspan="5" class="meta">暂无准入条目</td></tr>`;
-  return `
-    <div class="white-card zone-admission-list">
-      <table class="zone-admission-grid">
-        <thead>
-          <tr>
-            <th>岗位或人员</th>
-            <th>有效时段</th>
-            <th>有效期</th>
-            <th>状态</th>
-            <th class="zone-adm-actions">操作</th>
-          </tr>
-        </thead>
-        <tbody>${body}</tbody>
-      </table>
-    </div>
-  `;
+  if (!rows.length) return `<tr><td colspan="5" class="meta">暂无准入条目</td></tr>`;
+  return rows.map((row, i) => {
+    const st = admissionStatus(row);
+    return `
+      <tr data-admission-row="${i}">
+        <td>${row.person || "—"}</td>
+        <td>${row.hours || "—"}</td>
+        <td>${admissionDateText(row)}</td>
+        <td><span class="dot ${admissionStatusTone(st)}">${st}</span></td>
+        <td class="table-actions">
+          <button type="button" class="btn btn-sm" data-admission-edit data-idx="${i}">编辑</button>
+          <button type="button" class="btn btn-sm btn-ghost" data-admission-del data-idx="${i}">删除</button>
+        </td>
+      </tr>`;
+  }).join("");
 }
 
 function zoneSpatialBoundsText(item) {
@@ -6507,10 +6590,10 @@ function zoneBasicBlock(item, editing) {
   const plantSelect = plantIds.map((id) => (
     `<option value="${id}"${id === item.plant ? " selected" : ""}>${plantName(id)}</option>`
   )).join("");
-  const mapQuery = `<a class="btn btn-sm" href="#/t1/overview?id=${encodeURIComponent(item.id)}">地图查询</a>`;
   if (!editing) {
     return `
-      <div class="white-card zone-basic-card">
+      <div class="white-card">
+        <h3>基础</h3>
         <div class="alert-facts">
           ${archiveDetailFact("区域名称", esc(item.name))}
           ${archiveDetailFact("分厂", plantName(item.plant))}
@@ -6519,17 +6602,19 @@ function zoneBasicBlock(item, editing) {
           ${archiveDetailFact("责任人", esc(zoneOwnerText(item)))}
           ${archiveDetailFact("注意事项", esc(item.note || "—"), true)}
         </div>
-        <p class="work-form-legend">空间标识</p>
+      </div>
+      <div class="white-card">
+        <h3>空间标识</h3>
         <div class="alert-facts">
           ${archiveDetailFact("区域 ID", esc(item.id))}
           ${archiveDetailFact("地图标注", esc(item.mapLabel || item.name || "—"))}
           ${archiveDetailFact("孪生边界框", zoneSpatialBoundsText(item))}
         </div>
-        <div class="zone-spatial-actions">${mapQuery}</div>
       </div>`;
   }
   return `
-    <div class="white-card zone-basic-card">
+    <div class="white-card">
+      <h3>基础</h3>
       <div class="form-fields">
         <label>区域名称<input class="field" name="zone-name" value="${esc(item.name || "")}"></label>
         <label>分厂<select class="field" name="zone-plant">${plantSelect}</select></label>
@@ -6538,14 +6623,15 @@ function zoneBasicBlock(item, editing) {
         <label>责任人<input class="field" name="zone-owner" value="${esc(item.owner || "")}" placeholder="姓名或岗位"></label>
         <label class="span-2">注意事项<textarea class="field" name="zone-note" rows="2">${esc(item.note || "")}</textarea></label>
       </div>
-      <p class="work-form-legend">空间标识</p>
+    </div>
+    <div class="white-card">
+      <h3>空间标识</h3>
       <div class="form-fields">
         <label>区域 ID<input class="field" value="${esc(item.id)}" readonly></label>
         <label>地图标注<input class="field" name="zone-map-label" value="${esc(item.mapLabel || "")}" placeholder="${esc(item.name || "")}"></label>
         <label class="span-2">孪生边界框<input class="field" value="${zoneSpatialBoundsText(item)}" readonly></label>
       </div>
-      <p class="meta">边界坐标由孪生维护，本页仅支持标注与地图查询。</p>
-      <div class="zone-spatial-actions">${mapQuery}</div>
+      <p class="meta">边界坐标由孪生维护，本页仅支持标注。</p>
     </div>`;
 }
 
@@ -6554,10 +6640,11 @@ function zoneFenceAlertBlock(item, editing) {
   const st = RULE_STATUSES.includes(fa.status) ? fa.status : "停用";
   const fieldsOff = st === "停用";
   const strategyVal = normalizeAlertStrategy(fa.strategy);
-  const statusRead = archiveDetailFact("定位告警", `<span class="dot ${statusTone(st)}">${st}</span>`);
+  const statusRead = archiveDetailFact("状态", `<span class="dot ${statusTone(st)}">${st}</span>`);
   if (!editing) {
     return `
       <div class="white-card zone-fence-alert">
+        <h3>定位告警</h3>
         <div class="alert-facts">
           ${statusRead}
           ${fieldsOff ? "" : `
@@ -6576,7 +6663,7 @@ function zoneFenceAlertBlock(item, editing) {
       </div>`;
   }
   const statusField = `
-        <label>定位告警
+        <label>状态
           <select class="field" name="za-status">
             ${RULE_STATUSES.map((name) => `<option${name === st ? " selected" : ""}>${name}</option>`).join("")}
           </select>
@@ -6605,6 +6692,7 @@ function zoneFenceAlertBlock(item, editing) {
         <label>生效班次<input class="field" name="za-shift" value="${esc(fa.shift || "")}"></label>`;
   return `
     <div class="white-card zone-fence-alert">
+      <h3>定位告警</h3>
       <div class="form-fields">
         ${statusField}
         ${detailFields || `<p class="meta span-2">定位告警为停用时不可配置告警规则与参数，请先启用。</p>`}
@@ -6613,40 +6701,7 @@ function zoneFenceAlertBlock(item, editing) {
   `;
 }
 
-function zoneAccessCombinedPanel(item, editing) {
-  return `
-    <div class="zone-access-stack">
-      <p class="work-form-legend">定位告警</p>
-      ${zoneFenceAlertBlock(item, editing)}
-      <div class="zone-admission-toolbar">
-        <div>
-          <h3>准入与名单</h3>
-          <p class="meta">岗位、人员与有效期</p>
-        </div>
-        <button type="button" class="btn btn-sm btn-primary" data-admission-add>新增</button>
-      </div>
-      ${zoneAdmissionListHtml(item)}
-    </div>`;
-}
-
 function zoneForm(item, editing) {
-  const tab = zoneDetailTab === "access" ? "access" : "basic";
-  const tabsHtml = `
-    <div class="detail-tabs zone-detail-tabs" role="tablist">
-      <button type="button" class="detail-tab${tab === "basic" ? " is-on" : ""}" data-zone-tab="basic">基础配置</button>
-      <button type="button" class="detail-tab${tab === "access" ? " is-on" : ""}" data-zone-tab="access">告警与准入</button>
-    </div>
-  `;
-  const basicPanel = `
-    <div class="zone-detail-panel${tab === "basic" ? " is-active" : ""}" data-zone-panel="basic">
-      ${zoneBasicBlock(item, editing)}
-    </div>
-  `;
-  const accessPanel = `
-    <div class="zone-detail-panel${tab === "access" ? " is-active" : ""}" data-zone-panel="access">
-      ${zoneAccessCombinedPanel(item, editing)}
-    </div>
-  `;
   const headActions = editing
     ? `<button type="button" class="btn" data-zone-cancel>取消</button><button type="button" class="btn btn-primary" data-zone-save>保存</button>`
     : `<button type="button" class="btn btn-primary" data-zone-edit>编辑</button>`;
@@ -6661,10 +6716,10 @@ function zoneForm(item, editing) {
         <div class="work-order-actions" role="toolbar">${headActions}</div>
       </div>
     </div>
-    ${tabsHtml}
-    <div class="zone-detail-panels">
-      ${basicPanel}
-      ${accessPanel}
+    <div class="work-type-detail-panels">
+      ${zoneBasicBlock(item, editing)}
+      ${zoneFenceAlertBlock(item, editing)}
+      ${workCfgTable("准入与名单", ["岗位或人员", "有效时段", "有效期", "状态"], zoneAdmissionBodyHtml(item), "data-admission-add", true)}
     </div>
   `;
 }
@@ -6888,14 +6943,6 @@ function reviewLocSubjectLine(item) {
   return [item.person, item.deviceId].filter(Boolean).join(" · ") || "—";
 }
 
-/** 仅展示多路识别融合说明，工单提示走「关联工单」与说明字段 */
-function reviewFusionNoteHtml(item) {
-  const text = String(item?.fusionNote || "").trim();
-  if (!text) return "";
-  if (item.workOrderId && /关联工单|升告警前须核对|作业票抑制|作业关联/.test(text)) return "";
-  return `<dt>融合</dt><dd>${esc(text)}</dd>`;
-}
-
 function linkReviewEventToWorkOrder(event, order) {
   if (!event || !order) return;
   event.workOrderId = order.id;
@@ -6994,7 +7041,6 @@ function renderAlertLinkedWorkOrders(item) {
       `<li>
         <div class="alert-related-head">
           <a class="text-link" href="#/${row.status === "已归档" ? "t6/work-archive" : "t5/tickets"}?id=${encodeURIComponent(row.id)}">${esc(row.id)}</a>
-          <span class="meta">${esc(workOrderTypeLabel(row))} · ${esc(row.status)}</span>
         </div>
       </li>`
     )).join("")}</ul>`
@@ -8119,97 +8165,106 @@ function showWorkFlowEditor(item, after) {
   });
 }
 
+function renderWorkFlowDetail(item, editing, steps) {
+  const on = item.enabled !== false;
+  const rows = steps || [];
+  const headActions = editing
+    ? `<button type="button" class="btn" data-wf-cancel>取消</button><button type="button" class="btn btn-primary" data-wf-save>保存</button>`
+    : `<button type="button" class="btn" data-wf-del>删除</button><button type="button" class="btn btn-primary" data-wf-edit>编辑</button>`;
+  const stepBody = rows.length
+    ? rows.map((row, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${esc(row.step)}</td>
+          <td>${esc(row.role || "—")}</td>
+          ${editing ? `<td class="table-actions">
+            <button type="button" class="btn btn-sm" data-step-up data-idx="${i}"${i === 0 ? " disabled" : ""}>上移</button>
+            <button type="button" class="btn btn-sm" data-step-down data-idx="${i}"${i >= rows.length - 1 ? " disabled" : ""}>下移</button>
+            <button type="button" class="btn btn-sm" data-step-edit data-idx="${i}">编辑</button>
+            <button type="button" class="btn btn-sm btn-ghost" data-step-del data-idx="${i}">删除</button>
+          </td>` : ""}
+        </tr>`).join("")
+    : `<tr><td colspan="${editing ? 4 : 3}" class="meta">未配置节点</td></tr>`;
+  const basic = editing ? `
+      <div class="form-fields">
+        <label>审批流 ID<input class="field" name="id" value="${esc(item.id)}" readonly></label>
+        <label>名称<input class="field" name="name" value="${esc(item.name)}"></label>
+        <label>状态
+          <select class="field" name="enabled">
+            <option value="启用"${on ? " selected" : ""}>启用</option>
+            <option value="停用"${!on ? " selected" : ""}>停用</option>
+          </select>
+        </label>
+      </div>` : `
+      <div class="alert-facts">
+        ${archiveDetailFact("审批流 ID", esc(item.id))}
+        ${archiveDetailFact("状态", `<span class="dot ${workStatusTone(on ? "启用" : "停用")}">${on ? "启用" : "停用"}</span>`)}
+        ${archiveDetailFact("节点", `${rows.length} 步`)}
+      </div>`;
+  return `
+    <div class="detail-head">
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${esc(item.name)}</h2>
+          <span class="dot ${workStatusTone(on ? "启用" : "停用")}">${on ? "启用" : "停用"}</span>
+        </div>
+      </div>
+      <div class="detail-head-side">
+        <div class="work-order-actions" role="toolbar">${headActions}</div>
+      </div>
+    </div>
+    <div class="work-type-detail-panels">
+      <div class="white-card">
+        <h3>基础</h3>
+        ${basic}
+      </div>
+      ${workCfgTable("审批节点", ["序号", "步骤", "岗位"], stepBody, "data-step-add", editing)}
+    </div>
+  `;
+}
+
 function renderWorkFlowsConfig(root, focusId) {
   let focus = focusId;
-  let filter = "全部";
+  let flowEditing = false;
+  let draftSteps = [];
+
+  const beginEdit = (item) => {
+    flowEditing = true;
+    draftSteps = (item.steps || []).map((row) => ({ ...row }));
+  };
 
   function paint() {
     ensureWorkFlows();
     const all = data.workFlows || [];
-    const rows = all.filter((row) => {
-      if (filter === "启用") return row.enabled !== false;
-      if (filter === "停用") return row.enabled === false;
-      return true;
-    });
-    if (focus && !rows.some((row) => row.id === focus)) focus = rows[0]?.id || null;
+    const item = all.find((row) => row.id === focus) || all[0] || null;
+    focus = item?.id || null;
+    const steps = item && flowEditing ? draftSteps : (item?.steps || []);
+    const listCards = all.map((row) => `
+      <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-id="${row.id}">
+        <div class="row">
+          <strong>${esc(row.name)}</strong>
+          <span class="dot ${workStatusTone(row.enabled !== false ? "启用" : "停用")}">${row.enabled !== false ? "启用" : "停用"}</span>
+        </div>
+        <p class="meta">${esc(row.id)} · ${(row.steps || []).length} 步 · ${esc((row.steps || []).map((s) => s.role).filter(Boolean).join(" → ") || "—")}</p>
+      </button>
+    `).join("");
     root.innerHTML = `
-      <div class="sys-stack">
-        <div class="zone-admission-toolbar">
-          <div class="alert-status-chips">
-            ${["全部", "启用", "停用"].map((name) => (
-              `<button type="button" class="chip${filter === name ? " is-on" : ""}" data-filter="${name}">${name}</button>`
-            )).join("")}
-          </div>
-          <button type="button" class="btn btn-sm btn-primary" data-add>新增审批流</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>审批流 ID</th>
-                <th>名称</th>
-                <th>状态</th>
-                <th>节点</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows.length ? rows.map((row) => `
-                  <tr class="${row.id === focus ? "is-on" : ""}" data-id="${row.id}">
-                    <td class="meta">${esc(row.id)}</td>
-                    <td><button type="button" class="cell-link" data-id="${row.id}">${esc(row.name)}</button></td>
-                    <td><span class="dot ${workStatusTone(row.enabled !== false ? "启用" : "停用")}">${row.enabled !== false ? "启用" : "停用"}</span></td>
-                    <td>${(row.steps || []).length} 步 · ${esc((row.steps || []).map((s) => s.role).filter(Boolean).join(" → ") || "—")}</td>
-                    <td class="table-actions">
-                      <button type="button" class="btn" data-edit-row="${row.id}">编辑</button>
-                      <button type="button" class="btn btn-ghost" data-del-row="${row.id}">删除</button>
-                    </td>
-                  </tr>`).join("") : `<tr><td colspan="5" class="meta">没有审批流</td></tr>`}
-            </tbody>
-          </table>
-        </div>
+      <div class="alert-layout">
+        ${configListPanelHtml("审批流", listCards || `<p class="meta">暂无审批流。</p>`, `<button type="button" class="btn btn-sm btn-primary" data-wf-add>新增</button>`)}
+        <section class="alert-detail">
+          ${item ? renderWorkFlowDetail(item, flowEditing, steps) : `<p class="meta">请新增一条审批流。</p>`}
+        </section>
       </div>
     `;
-    root.querySelectorAll("[data-filter]").forEach((btn) => {
-      btn.addEventListener("click", () => { filter = btn.dataset.filter; paint(); });
-    });
-    root.querySelectorAll("tr[data-id]").forEach((row) => {
-      row.addEventListener("click", (ev) => {
-        if (ev.target.closest("[data-edit-row]") || ev.target.closest("[data-del-row]") || ev.target.closest("a")) return;
-        focus = row.dataset.id;
-        paint();
-      });
-    });
-    root.querySelectorAll(".cell-link[data-id]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.stopPropagation();
+    root.querySelectorAll("[data-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
         focus = btn.dataset.id;
+        flowEditing = false;
+        draftSteps = [];
         paint();
       });
     });
-    root.querySelectorAll("[data-edit-row]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        const item = workFlowById(btn.dataset.editRow);
-        if (item) showWorkFlowEditor(item, paint);
-      });
-    });
-    root.querySelectorAll("[data-del-row]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        const id = btn.dataset.delRow;
-        const used = workTypesUsingFlow(id);
-        if (used.length) {
-          openAlertDialog("无法删除", `<p class="meta">该审批流已被 ${esc(used.map((t) => t.name).join("、"))} 引用。</p>`, () => true, "知道了");
-          return;
-        }
-        data.workFlows = (data.workFlows || []).filter((row) => row.id !== id);
-        persist();
-        if (focus === id) focus = null;
-        paint();
-      });
-    });
-    root.querySelector("[data-add]")?.addEventListener("click", () => {
+    root.querySelector("[data-wf-add]")?.addEventListener("click", () => {
       const fresh = {
         id: `wf-${Date.now()}`,
         name: "新审批流",
@@ -8220,7 +8275,85 @@ function renderWorkFlowsConfig(root, focusId) {
       data.workFlows.push(fresh);
       persist();
       focus = fresh.id;
-      showWorkFlowEditor(fresh, paint);
+      beginEdit(fresh);
+      paint();
+    });
+    root.querySelector("[data-wf-edit]")?.addEventListener("click", () => {
+      if (!item) return;
+      beginEdit(item);
+      paint();
+    });
+    root.querySelector("[data-wf-cancel]")?.addEventListener("click", () => {
+      flowEditing = false;
+      draftSteps = [];
+      paint();
+    });
+    root.querySelector("[data-wf-save]")?.addEventListener("click", () => {
+      if (!item) return;
+      const name = formVal(root, "name").trim();
+      if (!name) {
+        openAlertDialog("无法保存", `<p class="meta">请填写名称。</p>`, () => true, "知道了");
+        return;
+      }
+      if (!draftSteps.length) {
+        openAlertDialog("无法保存", `<p class="meta">请至少配置一个审批节点。</p>`, () => true, "知道了");
+        return;
+      }
+      item.name = name;
+      item.enabled = formVal(root, "enabled") !== "停用";
+      item.steps = draftSteps.map((row) => ({ step: row.step, role: row.role }));
+      workTypesUsingFlow(item.id).forEach((type) => {
+        type.approval = item.steps.map((row) => ({ ...row }));
+      });
+      persist();
+      flowEditing = false;
+      draftSteps = [];
+      paint();
+    });
+    root.querySelector("[data-wf-del]")?.addEventListener("click", () => {
+      if (!item) return;
+      const used = workTypesUsingFlow(item.id);
+      if (used.length) {
+        openAlertDialog("无法删除", `<p class="meta">该审批流已被 ${esc(used.map((t) => t.name).join("、"))} 引用。</p>`, () => true, "知道了");
+        return;
+      }
+      data.workFlows = (data.workFlows || []).filter((row) => row.id !== item.id);
+      persist();
+      focus = null;
+      flowEditing = false;
+      draftSteps = [];
+      paint();
+    });
+    const refreshSteps = () => paint();
+    root.querySelector("[data-step-add]")?.addEventListener("click", () => {
+      openWorkFlowStepDialog(draftSteps, null, refreshSteps);
+    });
+    root.querySelectorAll("[data-step-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openWorkFlowStepDialog(draftSteps, Number(btn.dataset.idx), refreshSteps);
+      });
+    });
+    root.querySelectorAll("[data-step-del]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        draftSteps.splice(Number(btn.dataset.idx), 1);
+        refreshSteps();
+      });
+    });
+    root.querySelectorAll("[data-step-up]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.dataset.idx);
+        if (i < 1) return;
+        [draftSteps[i - 1], draftSteps[i]] = [draftSteps[i], draftSteps[i - 1]];
+        refreshSteps();
+      });
+    });
+    root.querySelectorAll("[data-step-down]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.dataset.idx);
+        if (i >= draftSteps.length - 1) return;
+        [draftSteps[i], draftSteps[i + 1]] = [draftSteps[i + 1], draftSteps[i]];
+        refreshSteps();
+      });
     });
   }
   paint();
@@ -8635,7 +8768,6 @@ function renderWorkOrders(root, route) {
         <button type="button" class="btn btn-primary" data-search>搜索</button>
         <button type="button" class="btn btn-ghost alert-q-reset" data-reset${query || typeId ? "" : " disabled"}>重置</button>
         <button type="button" class="btn" data-work-create>创建工单</button>
-        <button type="button" class="btn" data-export>导出</button>
       </div>
       <div class="alert-layout">
         <aside class="alert-list-panel">
@@ -8689,12 +8821,6 @@ function renderWorkOrders(root, route) {
       filter = "在办";
       workDetailTab = "info";
       paint();
-    });
-    root.querySelector("[data-export]")?.addEventListener("click", () => {
-      openAlertDialog("导出工单", `<p class="meta">导出当前筛选 ${rows.length} 条为 CSV。</p>`, () => {
-        exportWorkOrdersCsv(rows);
-        return true;
-      }, "导出");
     });
     const after = () => { applyWorkAlertSuppression(); persist(); paint(); };
     bindWorkOrderActions(root, item, after, workOrderEditing, () => { workDetailTab = "info"; });
@@ -9062,11 +9188,7 @@ function showWorkApprovalFlowDialog(item, after) {
     return true;
   }, canApprove ? "通过" : "关闭", true, (dlg) => {
     dlg.querySelector(".modal")?.classList.add("work-modal");
-    if (!canApprove) {
-      const cancel = dlg.querySelector("[data-modal-cancel]");
-      if (cancel) cancel.hidden = true;
-      return;
-    }
+    if (!canApprove) return;
     const rejectBtn = document.createElement("button");
     rejectBtn.type = "button";
     rejectBtn.className = "btn";
@@ -9238,7 +9360,7 @@ function renderWorkOrderDetail(item, detailTab, editingIds) {
     </div>
     <div class="detail-tab-panel work-order-detail-panels">
       <div data-work-panel="info"${panelHidden("info")}>
-        <div class="white-card">
+        <div class="white-card flush">
           <h3>工单信息</h3>
           ${showInfoForm ? workOrderFormHtml(item, draftTypes) : workOrderInfoReadHtml(item, extras)}
         </div>
@@ -9321,10 +9443,10 @@ function renderWorkOrderDetail(item, detailTab, editingIds) {
               </div>
             </div>
           ` : `
-            <div class="work-info-grid work-brief-grid">
-              ${workInfoFact("交底人", esc(item.briefBy || ""))}
-              ${workInfoFact("监护人", esc(item.guardian || ""))}
-              ${workInfoFact("接受交底人", esc(item.briefedTo || ""), true)}
+            <div class="alert-facts">
+              ${archiveDetailFact("交底人", esc(item.briefBy || "—"))}
+              ${archiveDetailFact("监护人", esc(item.guardian || "—"))}
+              ${archiveDetailFact("接受交底人", esc(item.briefedTo || "—"), true)}
             </div>
           `}
         </div>
@@ -9598,26 +9720,20 @@ function workOrderInfoReadHtml(item, extras) {
   )).join("、");
   const typeHtml = `<a class="text-link" href="#/t7/work-types?id=${encodeURIComponent(item.typeId)}">${esc(workTypeName(item.typeId))}</a>`;
   return `
-    <div class="work-order-info">
-      <p class="work-form-legend">作业安排</p>
-      <div class="work-info-grid">
-        ${workInfoFact("作业类型", typeHtml)}
-        ${workInfoFact("作业等级", esc(workLevelLabel(item.level) || ""))}
-        ${workInfoFact("作业区域", esc(placeText))}
-        ${workInfoFact("申请单位", esc(item.applyOrg || ""))}
-        ${workInfoFact("申请人", esc(item.applicant || ""))}
-        ${workInfoFact("作业时间", esc(timeText))}
-        ${acceptText ? workInfoFact("完工验收", esc(acceptText)) : ""}
-        ${extras.heightRequired || item.height ? workInfoFact("作业高度", esc(item.height || "")) : ""}
-        ${extras.hotWorker || item.hotSpot ? workInfoFact("动火设施/部位", esc(item.hotSpot || ""), true) : ""}
-        ${workInfoFact("作业内容", esc(item.content || ""), true)}
-      </div>
-      <p class="work-form-legend">作业人员</p>
-      <div class="work-info-grid">
-        ${workInfoFact("作业负责人", esc(supervisor || item.applicant || ""))}
-        ${workInfoFact("作业人", esc(workers), true)}
-        ${hotWorkers ? workInfoFact("动火人", esc(hotWorkers), true) : ""}
-      </div>
+    <div class="alert-facts">
+      ${archiveDetailFact("作业类型", typeHtml)}
+      ${archiveDetailFact("作业等级", esc(workLevelLabel(item.level) || "—"))}
+      ${archiveDetailFact("作业区域", esc(placeText || "—"))}
+      ${archiveDetailFact("申请单位", esc(item.applyOrg || "—"))}
+      ${archiveDetailFact("申请人", esc(item.applicant || "—"))}
+      ${archiveDetailFact("作业时间", esc(timeText || "—"))}
+      ${archiveDetailFact("作业负责人", esc(supervisor || item.applicant || "—"))}
+      ${archiveDetailFact("作业人", esc(workers || "—"))}
+      ${hotWorkers ? archiveDetailFact("动火人", esc(hotWorkers), true) : ""}
+      ${extras.hotWorker || item.hotSpot ? archiveDetailFact("动火设施/部位", esc(item.hotSpot || "—"), true) : ""}
+      ${extras.heightRequired || item.height ? archiveDetailFact("作业高度", esc(item.height || "—")) : ""}
+      ${acceptText ? archiveDetailFact("完工验收", esc(acceptText)) : ""}
+      ${archiveDetailFact("作业内容", esc(item.content || "—"), true)}
     </div>
   `;
 }
@@ -9807,16 +9923,6 @@ function reviewEvidenceItems(item) {
   });
 }
 
-function reviewLiveCameras(item) {
-  const list = [];
-  const add = (cam) => {
-    if (cam && !list.some((row) => row.id === cam.id)) list.push(cam);
-  };
-  add(data.cameras.find((c) => c.id === item.camera));
-  nearbyCams(item.x, item.y).forEach(add);
-  return list.slice(0, 6);
-}
-
 function renderAlertEvidenceDisplay(spec) {
   const kind = spec.kind === "video" ? "video" : "image";
   const badge = spec.badge || (kind === "video" ? "抓拍视频" : "抓拍图片");
@@ -9836,7 +9942,147 @@ function renderReviewShotStage(spec) {
   return `<div class="review-media-frame">${renderAlertEvidenceDisplay(spec)}</div>`;
 }
 
-function renderAiQueue(root, focusId) {
+function reviewQueueCardsHtml(rows, focusId) {
+  if (!rows.length) return "";
+  return rows.map((row) => `
+    <button type="button" class="alert-card${row.id === focusId ? " is-on" : ""}" data-ai="${row.id}">
+      <div class="row">
+        <strong>${row.id}</strong>
+        <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
+      </div>
+      <p>${row.type} · ${row.place}</p>
+      <p class="meta">${row.status} · 置信度 ${row.confidence}% · ${row.time}${reviewEventWorkOrderId(row) ? ` · ${esc(reviewEventWorkOrderId(row))}` : ""}</p>
+    </button>
+  `).join("");
+}
+
+const REVIEW_DESK_SHOT_PAGE = 3;
+
+function reviewShotGridHtml(shotSpecs, shotIndex = 0) {
+  if (!shotSpecs.length) return `<p class="meta">暂无抓拍图片或视频。</p>`;
+  const total = shotSpecs.length;
+  const maxStart = Math.max(0, total - REVIEW_DESK_SHOT_PAGE);
+  const start = Math.max(0, Math.min(shotIndex, maxStart));
+  const page = shotSpecs.slice(start, start + REVIEW_DESK_SHOT_PAGE);
+  const needPager = total > REVIEW_DESK_SHOT_PAGE;
+  const pageCount = Math.max(1, Math.ceil(total / REVIEW_DESK_SHOT_PAGE));
+  const pageNo = start >= maxStart && maxStart > 0 ? pageCount : Math.floor(start / REVIEW_DESK_SHOT_PAGE) + 1;
+  return `
+    <div class="review-desk-carousel">
+      <div class="review-desk-shots" role="region" aria-label="抓拍证据">
+        ${page.map(renderAlertEvidenceThumb).join("")}
+      </div>
+      ${needPager ? `
+        <div class="review-desk-nav-group" role="navigation" aria-label="抓拍翻页">
+          <button type="button" class="review-desk-nav is-prev" data-review-shot-page="-1" aria-label="上一页"${start <= 0 ? " disabled" : ""}>‹</button>
+          <span class="review-desk-page">${pageNo} / ${pageCount}</span>
+          <button type="button" class="review-desk-nav is-next" data-review-shot-page="1" aria-label="下一页"${start >= maxStart ? " disabled" : ""}>›</button>
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function reviewMediaBlockHtml({ shotSpecs, shotIndex, desk }) {
+  if (desk) return reviewShotGridHtml(shotSpecs, shotIndex);
+  return `
+    <section class="review-media-stage">
+      ${renderReviewShotStage(shotSpecs[shotIndex])}
+    </section>
+    <div class="review-shot-switch" aria-label="切换抓拍">
+      <button type="button" class="btn btn-sm" data-review-shot-step="-1"${shotIndex <= 0 ? " disabled" : ""}>上一张</button>
+      ${shotSpecs.map((spec, i) => (
+        `<button type="button" class="chip${i === shotIndex ? " is-on" : ""}" data-review-shot="${i}">${i + 1}</button>`
+      )).join("")}
+      <button type="button" class="btn btn-sm" data-review-shot-step="1"${shotIndex >= shotSpecs.length - 1 ? " disabled" : ""}>下一张</button>
+      <span class="meta">第 ${shotSpecs.length ? shotIndex + 1 : 0} / ${shotSpecs.length} 张</span>
+    </div>
+  `;
+}
+
+function reviewFactCell(label, value, wide = false) {
+  return `<div class="alert-fact${wide ? " alert-fact--wide" : ""}"><span class="alert-fact-k">${label}</span><span class="alert-fact-v">${value}</span></div>`;
+}
+
+function reviewJudgeFactsHtml(item, cam, { desk = false } = {}) {
+  const place = esc([item.plant, item.place].filter(Boolean).join(" ") || "—");
+  const cells = [
+    reviewFactCell("来源", esc(reviewEventSourceLabel(item)))
+  ];
+  if (!desk) {
+    cells.push(
+      reviewFactCell("状态", esc(item.status || "—")),
+      reviewFactCell("时间", `<span class="num">${esc(item.time || "—")}</span>`),
+      reviewFactCell("位置", place)
+    );
+  }
+  cells.push(reviewFactCell("置信度", item.confidence != null ? `${item.confidence}%` : "—"));
+  if (item.source === "定位") {
+    cells.push(reviewFactCell("定位对象", esc(reviewLocSubjectLine(item))));
+  } else {
+    const camText = cam ? `${esc(cam.name)} ${cam.online ? "在线" : "离线"}` : esc(item.camera || "—");
+    const camLink = cam ? ` <a class="text-link" href="${overviewLinkageHref(cam.id)}">实时画面</a>` : "";
+    cells.push(reviewFactCell("摄像头", `${camText}${camLink}`));
+    cells.push(reviewFactCell("识别算法", esc(aiAlgoLabel(item))));
+  }
+  cells.push(reviewFactCell("关联工单", reviewEventWorkOrderCell(item)));
+  cells.push(reviewFactCell("识别编号", `${esc(item.id)}${item.alertId ? `　已挂 ${esc(item.alertId)}` : ""}`));
+  cells.push(reviewFactCell("落点精度", esc(item.coordPrecision || item.precision || "—")));
+  const fusion = String(item?.fusionNote || "").trim();
+  if (fusion && !(item.workOrderId && /关联工单|升告警前须核对|作业票抑制|作业关联/.test(fusion))) {
+    cells.push(reviewFactCell("融合", esc(fusion), true));
+  }
+  if (item.status === "误报") {
+    cells.push(reviewFactCell("误报原因", esc(item.reason || "—")));
+    cells.push(reviewFactCell("复核人", esc(item.reviewer || "—")));
+    if (item.note) cells.push(reviewFactCell("说明", esc(item.note), true));
+  } else if (item.status === "真警") {
+    cells.push(reviewFactCell("复核人", esc(item.reviewer || "—")));
+    if (item.note) cells.push(reviewFactCell("说明", esc(item.note), true));
+  }
+  const factGrid = `<div class="alert-facts review-judge-facts${desk ? " review-desk-facts" : ""}">${cells.join("")}</div>`;
+  const note = item.status === "待核查" ? `
+    <label class="review-judge-note">说明
+      <textarea id="ai-note" rows="${desk ? 2 : 3}" placeholder="送现场确认的补充说明（可选）">${esc(item.note || "")}</textarea>
+    </label>
+  ` : "";
+  return `${factGrid}${note}`;
+}
+
+function reviewFactsHtml(item, cam) {
+  return reviewJudgeFactsHtml(item, cam);
+}
+
+function reviewDeskDetailHtml(item, media) {
+  const actions = aiButtons(item);
+  return `
+    <div class="detail-head work-order-detail-head">
+      <div class="detail-head-main">
+        <div class="work-order-title-row">
+          <h2>${esc(item.id)} · ${esc(item.type)}</h2>
+          ${statusCapsule(item.status)}
+          <span class="lvl lvl-${item.level}">${LEVEL_NAME[item.level]}</span>
+        </div>
+        <p class="meta">${esc([item.plant, item.place].filter(Boolean).join(" ") || "—")} · ${esc(item.time || "")}</p>
+      </div>
+      ${actions ? `
+        <div class="detail-head-side work-order-head-side">
+          <div class="work-order-actions" role="toolbar" aria-label="复核操作">${actions}</div>
+        </div>
+      ` : ""}
+    </div>
+    <div class="review-desk-body">
+      <div class="review-desk-media">${reviewMediaBlockHtml({ ...media, desk: true })}</div>
+      <div class="white-card flush">
+        <h3>AI识别信息</h3>
+        ${reviewJudgeFactsHtml(item, media.cam, { desk: true })}
+      </div>
+    </div>
+  `;
+}
+
+function renderAiQueue(root, focusId, opts = {}) {
+  const desk = !!opts.desk;
   let focus = focusId;
   let filter = "待办";
   let searchId = "";
@@ -9847,9 +10093,7 @@ function renderAiQueue(root, focusId) {
   let draftType = "";
   let draftPlace = "";
   let draftCam = "";
-  let mediaMode = "shot";
   let shotIndex = 0;
-  let liveCamId = "";
   let mediaFocusId = "";
 
   const rowsOf = () => reviewQueueEvents().filter((item) => {
@@ -9917,16 +10161,12 @@ function renderAiQueue(root, focusId) {
     const cam = item ? data.cameras.find((row) => row.id === item.camera) : null;
     if (item?.id !== mediaFocusId) {
       mediaFocusId = item?.id || "";
-      mediaMode = "shot";
       shotIndex = 0;
-      liveCamId = item?.camera || "";
     }
     const shotSpecs = item ? reviewEvidenceItems(item) : [];
-    if (shotIndex >= shotSpecs.length) shotIndex = Math.max(0, shotSpecs.length - 1);
-    const liveCams = item ? reviewLiveCameras(item) : [];
-    if (liveCamId && !liveCams.some((c) => c.id === liveCamId)) liveCamId = liveCams[0]?.id || item?.camera || "";
-    const liveCam = liveCams.find((c) => c.id === liveCamId) || cam;
-    const sceneCam = mediaMode === "live" ? liveCam : cam;
+    const maxStart = Math.max(0, shotSpecs.length - (desk ? REVIEW_DESK_SHOT_PAGE : 1));
+    if (shotIndex > maxStart) shotIndex = maxStart;
+    if (shotIndex < 0) shotIndex = 0;
     const aiTypes = [...new Set([
       ...aiAlgos().map((row) => row.eventName),
       ...reviewQueueEvents().map((row) => row.type).filter(Boolean)
@@ -9955,52 +10195,25 @@ function renderAiQueue(root, focusId) {
         <datalist id="ai-place-hints">${aiPlaces.map((name) => `<option value="${name}">`).join("")}</datalist>
         <datalist id="ai-cam-hints">${aiCams.map((name) => `<option value="${name}">`).join("")}</datalist>
       </div>
+      ${desk ? `
+      <div class="alert-layout">
+        <aside class="alert-list-panel">
+          ${reviewQueueCardsHtml(rows, item?.id) || `<p class="meta" style="padding:16px">无匹配识别</p>`}
+        </aside>
+        <section class="alert-detail review-desk-detail">
+          ${item ? reviewDeskDetailHtml(item, { cam, shotSpecs, shotIndex }) : `<p class="meta" style="padding:16px">没有可复核的识别。</p>`}
+        </section>
+      </div>
+      ` : `
       <div class="review-layout">
         <div class="review-column">
-          <h2 class="review-col-head">识别队列</h2>
           <aside class="alert-list-panel">
-            ${rows.length ? rows.map((row) => `
-              <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-ai="${row.id}">
-                <div class="row">
-                  <strong>${row.id}</strong>
-                  <span class="lvl lvl-${row.level}">${LEVEL_NAME[row.level]}</span>
-                </div>
-                <p>${row.type} · ${row.place}</p>
-                <p class="meta">${row.status} · 置信度 ${row.confidence}% · ${row.time}${reviewEventWorkOrderId(row) ? ` · ${esc(reviewEventWorkOrderId(row))}` : ""}</p>
-              </button>
-            `).join("") : ""}
+            ${reviewQueueCardsHtml(rows, item?.id)}
           </aside>
         </div>
         ${item ? `
           <div class="review-column review-column--media">
-            <header class="review-media-head">
-              <div class="review-media-tabs" role="tablist">
-                <button type="button" class="btn btn-sm review-media-tab${mediaMode === "shot" ? " is-on" : ""}" data-review-mode="shot">抓拍</button>
-                <button type="button" class="btn btn-sm review-media-tab${mediaMode === "live" ? " is-on" : ""}" data-review-mode="live">实时画面</button>
-              </div>
-              ${sceneCam ? `<a class="btn btn-sm" href="${overviewLinkageHref(sceneCam.id)}">三维场景</a>` : ""}
-            </header>
-            <section class="review-media-stage">
-              ${mediaMode === "live"
-                ? `<div class="review-media-frame review-media-live">${renderMonitor(liveCam, true, "feed")}</div>`
-                : renderReviewShotStage(shotSpecs[shotIndex])}
-            </section>
-            ${mediaMode === "live" ? `
-              <div class="review-cam-switch" role="tablist" aria-label="切换摄像头">
-                ${liveCams.length ? liveCams.map((c) => (
-                  `<button type="button" class="chip${c.id === liveCam?.id ? " is-on" : ""}" data-review-cam="${c.id}">${esc(c.mapLabel || c.name)}</button>`
-                )).join("") : `<p class="meta">无关联摄像头</p>`}
-              </div>
-            ` : `
-              <div class="review-shot-switch" aria-label="切换抓拍">
-                <button type="button" class="btn btn-sm" data-review-shot-step="-1"${shotIndex <= 0 ? " disabled" : ""}>上一张</button>
-                ${shotSpecs.map((spec, i) => (
-                  `<button type="button" class="chip${i === shotIndex ? " is-on" : ""}" data-review-shot="${i}">${i + 1}</button>`
-                )).join("")}
-                <button type="button" class="btn btn-sm" data-review-shot-step="1"${shotIndex >= shotSpecs.length - 1 ? " disabled" : ""}>下一张</button>
-                <span class="meta">第 ${shotSpecs.length ? shotIndex + 1 : 0} / ${shotSpecs.length} 张</span>
-              </div>
-            `}
+            ${reviewMediaBlockHtml({ shotSpecs, shotIndex })}
           </div>
           <aside class="review-judge">
             <div class="review-judge-body">
@@ -10010,22 +10223,7 @@ function renderAiQueue(root, focusId) {
                   <strong class="judge-title">${item.id} · ${item.type}</strong>
                   <span class="lvl lvl-${item.level} lvl-sm">${LEVEL_NAME[item.level]}</span>
                 </div>
-                <dl class="kv review-facts">
-                  <dt>来源</dt><dd>${esc(reviewEventSourceLabel(item))}</dd>
-                  <dt>关联工单</dt><dd>${reviewEventWorkOrderCell(item)}</dd>
-                  <dt>位置</dt><dd>${esc([item.plant, item.place].filter(Boolean).join(" ") || "—")}</dd>
-                  <dt>状态</dt><dd>${esc(item.status || "—")}</dd>
-                  <dt>时间</dt><dd class="num">${esc(item.time || "—")}</dd>
-                  ${item.source === "定位"
-    ? `<dt>定位对象</dt><dd>${esc(reviewLocSubjectLine(item))}</dd>`
-    : `<dt>摄像头</dt><dd>${cam ? `${cam.name} ${cam.online ? "在线" : "离线"}` : item.camera || "—"}${cam ? `　<a class="text-link" href="#/t7/cameras?id=${encodeURIComponent(cam.id)}&view=alert">告警配置</a>` : ""}</dd>
-                  <dt>识别算法</dt><dd>${aiAlgoLabel(item)}</dd>`}
-                  <dt>落点精度</dt><dd>${esc(item.coordPrecision || item.precision || "—")}</dd>
-                  <dt>识别编号</dt><dd>${item.id}${item.alertId ? `　已挂 ${item.alertId}` : "　尚未转正式告警"}</dd>
-                  <dt>置信度</dt><dd>${item.confidence != null ? `${item.confidence}%` : "—"}</dd>
-                  ${reviewFusionNoteHtml(item)}
-                </dl>
-                ${renderAiJudgeExtras(item)}
+                ${reviewFactsHtml(item, cam)}
               </div>
             </div>
             ${(() => {
@@ -10037,6 +10235,7 @@ function renderAiQueue(root, focusId) {
           </aside>
         ` : `<section class="review-empty"></section>`}
       </div>
+      `}
     `;
     root.querySelector("#ai-status-filter")?.addEventListener("change", (event) => {
       filter = event.currentTarget.value || "待办";
@@ -10067,12 +10266,6 @@ function renderAiQueue(root, focusId) {
     root.querySelectorAll("[data-ai]").forEach((btn) => {
       btn.addEventListener("click", () => { focus = btn.dataset.ai; paint(); });
     });
-    root.querySelectorAll("[data-review-mode]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        mediaMode = btn.dataset.reviewMode === "live" ? "live" : "shot";
-        paint();
-      });
-    });
     root.querySelectorAll("[data-review-shot]").forEach((btn) => {
       btn.addEventListener("click", () => {
         shotIndex = Number(btn.dataset.reviewShot) || 0;
@@ -10085,14 +10278,15 @@ function renderAiQueue(root, focusId) {
         paint();
       });
     });
-    root.querySelectorAll("[data-review-cam]").forEach((btn) => {
+    root.querySelectorAll("[data-review-shot-page]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        liveCamId = btn.dataset.reviewCam;
-        mediaMode = "live";
+        const maxStart = Math.max(0, shotSpecs.length - REVIEW_DESK_SHOT_PAGE);
+        shotIndex = Math.max(0, Math.min(maxStart, shotIndex + (Number(btn.dataset.reviewShotPage) || 0) * REVIEW_DESK_SHOT_PAGE));
         paint();
       });
     });
     bindAiActions(root, item, refresh);
+    if (desk) bindAlertEvidenceViewer(root);
   }
   paint();
 }
@@ -10108,35 +10302,6 @@ function aiButtons(item) {
     `<button class="btn btn-primary" data-ai-act="true" data-id="${item.id}">真警，转正式告警</button>`,
     `<button class="btn" data-ai-act="false" data-id="${item.id}">误报</button>`
   ].join("");
-}
-
-function renderAiJudgeExtras(item) {
-  if (item.status === "待复核") return "";
-  if (item.status === "待核查") {
-    return `
-      <label>说明
-        <textarea id="ai-note" rows="3" placeholder="送现场确认的补充说明（可选）">${item.note || ""}</textarea>
-      </label>
-    `;
-  }
-  if (item.status === "误报") {
-    return `
-      <dl class="kv review-readonly">
-        <dt>误报原因</dt><dd>${item.reason || "—"}</dd>
-        <dt>说明</dt><dd>${item.note || "—"}</dd>
-        <dt>复核人</dt><dd>${item.reviewer || "—"}</dd>
-      </dl>
-    `;
-  }
-  if (item.status === "真警") {
-    return `
-      <dl class="kv review-readonly">
-        <dt>说明</dt><dd>${item.note || "—"}</dd>
-        <dt>复核人</dt><dd>${item.reviewer || "—"}</dd>
-      </dl>
-    `;
-  }
-  return "";
 }
 
 function applyAiFalse(target, reason, note) {
@@ -10501,7 +10666,7 @@ function exportEventStatsReport(plantId, periodKey, s, summary) {
     });
   };
 
-  pushRow("安全事件统计报表");
+  pushRow("安全统计报表");
   pushRow("统计周期", periodLabel);
   pushRow("分厂范围", plantLabel);
   pushRow("导出时间", new Date().toISOString().slice(0, 19).replace("T", " "));
@@ -11211,9 +11376,36 @@ function renderHeatAnalysis(root, focusId) {
   paint();
 }
 
-function labeledArchiveSearch(label, name, value, placeholder) {
-  return `<label class="cam-field-label"><span class="cam-field-label-name">${esc(label)}</span>
+function labeledArchiveSearch(label, name, value, placeholder, extraClass) {
+  return `<label class="cam-field-label${extraClass ? ` ${extraClass}` : ""}"><span class="cam-field-label-name">${esc(label)}</span>
     <input type="search" class="field alert-q-field" name="${name}" value="${esc(value)}" placeholder="${esc(placeholder || "")}" autocomplete="off"></label>`;
+}
+
+function archiveFilterStackHtml({ mainHtml, moreHtml, moreOpen, canReset, extraButtons = "" }) {
+  return `
+    <div class="camera-toolbar-stack">
+      <div class="filter-row alert-toolbar archive-toolbar">
+        ${mainHtml}
+        <div class="camera-toolbar-actions">
+          <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
+          <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
+          <button type="button" class="btn btn-ghost" data-archive-more aria-expanded="${moreOpen}">${moreOpen ? "收起" : "更多条件"}</button>
+          ${extraButtons}
+        </div>
+      </div>
+      <div class="filter-row alert-toolbar archive-toolbar camera-toolbar-more"${moreOpen ? "" : " hidden"}>
+        ${moreHtml}
+      </div>
+    </div>`;
+}
+
+function archiveExtraFiltersOn(filters, extraKeys, defaults) {
+  return extraKeys.some((key) => {
+    const cur = filters[key];
+    const base = defaults[key];
+    if (key === "fStatus") return String(cur || "") !== String(base || "全部");
+    return String(cur || "").trim() !== "";
+  });
 }
 
 function archiveFieldIncludes(hay, needle) {
@@ -11353,9 +11545,7 @@ function alertArchiveDetailHtml(alert) {
   const logCount = (alert.timeline || []).length;
   const tabCount = (n) => (n ? `<span class="detail-tab-count">${n}</span>` : "");
   const placeLine = [alert.plant, alert.place].filter(Boolean).map((s) => esc(s)).join(" · ") || "—";
-  const eventLine = ev
-    ? `<a class="text-link" href="#/t6/events?id=${encodeURIComponent(ev.id)}">${esc(ev.id)}</a> · ${esc(eventSourceLabel(ev))}`
-    : `<span class="meta">未绑定</span>`;
+  const eventLine = alertLinkedEventCellHtml(alert);
   const handleFoot = alert.status !== "已办结"
     ? `<div class="form-foot archive-detail-foot"><a class="btn btn-primary" href="#/t2/alerts?id=${encodeURIComponent(alert.id)}">告警中心办理</a></div>`
     : "";
@@ -11379,9 +11569,9 @@ function alertArchiveDetailHtml(alert) {
               ${archiveDetailFact("规则", esc(alert.rule || "—"))}
               ${archiveDetailFact("派发", esc(alertDispatchLine(alert)))}
               ${archiveDetailFact("摄像头", esc(cameraName(alert.camera) || "—"))}
-              ${archiveDetailFact("关联事件", eventLine, true)}
+              ${archiveDetailFact("关联事件", eventLine)}
+              ${archiveDetailFact("作业工单", alertLinkedWorkOrderCellHtml(alert))}
             </div>
-            ${renderAlertLinkedWorkOrders(alert)}
           </div>
         </div>
         <div data-history-panel="video" hidden>
@@ -11391,7 +11581,7 @@ function alertArchiveDetailHtml(alert) {
           <div class="white-card flush archive-detail-card">
             <ol class="log">
               ${logCount
-    ? (alert.timeline || []).map((row) => `<li><b>${esc(row.time)}</b> ${esc(row.status)} · ${esc(row.actor)}<span>${esc(row.note || "")}</span></li>`).join("")
+    ? (alert.timeline || []).slice().reverse().map((row) => `<li><b>${esc(row.time)}</b> ${esc(row.status)} · ${esc(row.actor)}<span>${esc(row.note || "")}</span></li>`).join("")
     : `<li class="meta">无时间线记录</li>`}
             </ol>
           </div>
@@ -11423,10 +11613,61 @@ function eventArchiveLevelMatch(item, needle) {
   return archiveFieldIncludes(String(item.level), needle) || archiveFieldIncludes(lv, needle);
 }
 
+function csvDownload(filename, headers, bodyRows) {
+  const lines = [headers.join(",")];
+  bodyRows.forEach((cells) => {
+    lines.push(cells.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","));
+  });
+  const blob = new Blob([`\ufeff${lines.join("\n")}`], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function exportEventArchiveCsv(rows) {
+  const headers = ["事件编号", "来源", "类型", "等级", "分厂", "区域", "对象", "结论", "正式告警", "发生时间"];
+  const body = rows.map((row) => [
+    row.id,
+    eventSourceLabel(row),
+    row.type,
+    LEVEL_NAME[row.level] || row.level,
+    row.plant || "",
+    row.place || "",
+    row.person || "",
+    row.status || "",
+    row.alertId || "",
+    row.time || ""
+  ]);
+  csvDownload(`事件档案-${new Date().toISOString().slice(0, 10)}.csv`, headers, body);
+}
+
+function exportAlertArchiveCsv(rows) {
+  const headers = ["告警编号", "类型", "等级", "分厂", "区域", "对象", "状态", "关联事件", "发生时间"];
+  const body = rows.map((row) => {
+    const ev = eventsForAlert(row)[0];
+    return [
+      row.id,
+      row.type,
+      LEVEL_NAME[row.level] || row.level,
+      row.plant || "",
+      row.place || "",
+      row.person || "",
+      row.status || "",
+      ev?.id || "",
+      row.time || ""
+    ];
+  });
+  csvDownload(`告警档案-${new Date().toISOString().slice(0, 10)}.csv`, headers, body);
+}
+
 function renderEventArchive(root, route) {
   let filters = defaultEventArchiveFilters();
   if (route.filter && route.filter !== "全部") filters.fType = route.filter;
   let openFocus = route.focus || "";
+  let filtersOpen = false;
+  const extraKeys = ["fSource", "fLevel", "fPlace", "fPerson", "fAlert", "fTime"];
   const filterNames = ["fId", "fSource", "fType", "fPlant", "fLevel", "fPlace", "fPerson", "fConclusion", "fAlert", "fTime"];
 
   function rowsOf() {
@@ -11456,21 +11697,27 @@ function renderEventArchive(root, route) {
   function paint() {
     const rows = rowsOf();
     const canReset = eventArchiveFiltersActive(filters);
+    const moreOpen = filtersOpen || archiveExtraFiltersOn(filters, extraKeys, defaultEventArchiveFilters());
     root.innerHTML = `
-      <div class="filter-row alert-toolbar archive-toolbar">
-        ${labeledArchiveSearch("事件编号", "fId", filters.fId)}
-        ${labeledArchiveSearch("来源", "fSource", filters.fSource)}
-        ${labeledArchiveSearch("类型", "fType", filters.fType)}
-        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
-        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
-        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
-        ${labeledArchiveSearch("对象", "fPerson", filters.fPerson)}
-        ${labeledArchiveSearch("结论", "fConclusion", filters.fConclusion)}
-        ${labeledArchiveSearch("正式告警", "fAlert", filters.fAlert)}
-        ${labeledArchiveSearch("发生时间", "fTime", filters.fTime)}
-        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
-        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
-      </div>
+      ${archiveFilterStackHtml({
+        moreOpen,
+        canReset,
+        extraButtons: `<button type="button" class="btn" data-export>导出</button>`,
+        mainHtml: [
+          labeledArchiveSearch("事件编号", "fId", filters.fId, "", "cam-field-label--id"),
+          labeledArchiveSearch("类型", "fType", filters.fType),
+          labeledArchiveSearch("分厂", "fPlant", filters.fPlant),
+          labeledArchiveSearch("结论", "fConclusion", filters.fConclusion)
+        ].join(""),
+        moreHtml: [
+          labeledArchiveSearch("来源", "fSource", filters.fSource),
+          labeledArchiveSearch("等级", "fLevel", filters.fLevel),
+          labeledArchiveSearch("区域", "fPlace", filters.fPlace),
+          labeledArchiveSearch("对象", "fPerson", filters.fPerson),
+          labeledArchiveSearch("正式告警", "fAlert", filters.fAlert),
+          labeledArchiveSearch("发生时间", "fTime", filters.fTime)
+        ].join("")
+      })}
       <div class="table-wrap">
         <table>
           <thead>
@@ -11516,11 +11763,22 @@ function renderEventArchive(root, route) {
     };
     const reset = () => {
       filters = defaultEventArchiveFilters();
+      filtersOpen = false;
       openFocus = "";
       paint();
     };
     root.querySelector("[data-search]")?.addEventListener("click", apply);
     root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelector("[data-archive-more]")?.addEventListener("click", () => {
+      filtersOpen = !moreOpen;
+      paint();
+    });
+    root.querySelector("[data-export]")?.addEventListener("click", () => {
+      openAlertDialog("导出事件档案", `<p class="meta">导出当前筛选 ${rows.length} 条为 CSV。</p>`, () => {
+        exportEventArchiveCsv(rows);
+        return true;
+      }, "导出");
+    });
     root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
       el.addEventListener("keydown", (event) => {
         if (event.key === "Enter") apply();
@@ -11553,6 +11811,8 @@ function renderAlertArchive(root, route) {
   let filters = defaultAlertArchiveFilters();
   if (route.filter && route.filter !== "全部") filters.fType = route.filter;
   let openFocus = route.focus || "";
+  let filtersOpen = false;
+  const extraKeys = ["fPlace", "fPerson", "fLevel", "fEvent", "fTime"];
   const filterNames = ["fId", "fType", "fPlant", "fPlace", "fPerson", "fLevel", "fEvent", "fTime"];
 
   function rowsOf() {
@@ -11582,24 +11842,30 @@ function renderAlertArchive(root, route) {
   function paint() {
     const rows = rowsOf();
     const canReset = alertArchiveFiltersActive(filters);
+    const moreOpen = filtersOpen || archiveExtraFiltersOn(filters, extraKeys, defaultAlertArchiveFilters());
     root.innerHTML = `
-      <div class="filter-row alert-toolbar archive-toolbar">
-        ${labeledArchiveSearch("告警编号", "fId", filters.fId)}
-        ${labeledArchiveSearch("类型", "fType", filters.fType)}
-        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
-        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
-        ${labeledArchiveSearch("对象", "fPerson", filters.fPerson)}
-        ${labeledArchiveSelect("状态", "fStatus", filters.fStatus, [
-          { value: "已办结", label: "已办结" },
-          { value: "在办", label: "在办" },
-          { value: "全部", label: "全部" }
-        ])}
-        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
-        ${labeledArchiveSearch("关联事件", "fEvent", filters.fEvent)}
-        ${labeledArchiveSearch("发生时间", "fTime", filters.fTime)}
-        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
-        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
-      </div>
+      ${archiveFilterStackHtml({
+        moreOpen,
+        canReset,
+        extraButtons: `<button type="button" class="btn" data-export>导出</button>`,
+        mainHtml: [
+          labeledArchiveSearch("告警编号", "fId", filters.fId, "", "cam-field-label--id"),
+          labeledArchiveSearch("类型", "fType", filters.fType),
+          labeledArchiveSearch("分厂", "fPlant", filters.fPlant),
+          labeledArchiveSelect("状态", "fStatus", filters.fStatus, [
+            { value: "已办结", label: "已办结" },
+            { value: "在办", label: "在办" },
+            { value: "全部", label: "全部" }
+          ])
+        ].join(""),
+        moreHtml: [
+          labeledArchiveSearch("区域", "fPlace", filters.fPlace),
+          labeledArchiveSearch("对象", "fPerson", filters.fPerson),
+          labeledArchiveSearch("等级", "fLevel", filters.fLevel),
+          labeledArchiveSearch("关联事件", "fEvent", filters.fEvent),
+          labeledArchiveSearch("发生时间", "fTime", filters.fTime)
+        ].join("")
+      })}
       <div class="table-wrap">
         <table>
           <thead>
@@ -11644,11 +11910,22 @@ function renderAlertArchive(root, route) {
     };
     const reset = () => {
       filters = defaultAlertArchiveFilters();
+      filtersOpen = false;
       openFocus = "";
       paint();
     };
     root.querySelector("[data-search]")?.addEventListener("click", apply);
     root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelector("[data-archive-more]")?.addEventListener("click", () => {
+      filtersOpen = !moreOpen;
+      paint();
+    });
+    root.querySelector("[data-export]")?.addEventListener("click", () => {
+      openAlertDialog("导出告警档案", `<p class="meta">导出当前筛选 ${rows.length} 条为 CSV。</p>`, () => {
+        exportAlertArchiveCsv(rows);
+        return true;
+      }, "导出");
+    });
     root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
       el.addEventListener("keydown", (event) => {
         if (event.key === "Enter") apply();
@@ -11746,10 +12023,10 @@ function workArchiveDetailHtml(item) {
         ${gasBlock}
         <div class="white-card flush archive-detail-card">
           <h3>安全交底</h3>
-          <div class="work-info-grid work-brief-grid">
-            ${workInfoFact("交底人", esc(item.briefBy || ""))}
-            ${workInfoFact("监护人", esc(item.guardian || ""))}
-            ${workInfoFact("接受交底人", esc(item.briefedTo || peopleByRole(item, "接受交底人").join("、") || ""), true)}
+          <div class="alert-facts">
+            ${archiveDetailFact("交底人", esc(item.briefBy || "—"))}
+            ${archiveDetailFact("监护人", esc(item.guardian || "—"))}
+            ${archiveDetailFact("接受交底人", esc(item.briefedTo || peopleByRole(item, "接受交底人").join("、") || "—"), true)}
           </div>
         </div>
       </div>
@@ -11783,6 +12060,8 @@ function showWorkArchiveDetail(item) {
 function renderWorkArchive(root, route) {
   let filters = defaultWorkArchiveFilters();
   let openFocus = route.focus || "";
+  let filtersOpen = false;
+  const extraKeys = ["fPlace", "fPerson", "fLevel", "fApplicant", "fTime"];
   const filterNames = ["fId", "fType", "fPlant", "fPlace", "fPerson", "fLevel", "fApplicant", "fTime"];
 
   function rowsOf() {
@@ -11804,20 +12083,25 @@ function renderWorkArchive(root, route) {
   function paint() {
     const rows = rowsOf();
     const canReset = workArchiveFiltersActive(filters);
+    const moreOpen = filtersOpen || archiveExtraFiltersOn(filters, extraKeys, defaultWorkArchiveFilters());
     root.innerHTML = `
-      <div class="filter-row alert-toolbar archive-toolbar">
-        ${labeledArchiveSearch("工单编号", "fId", filters.fId)}
-        ${labeledArchiveSearch("作业类型", "fType", filters.fType)}
-        ${labeledArchiveSearch("分厂", "fPlant", filters.fPlant)}
-        ${labeledArchiveSearch("区域", "fPlace", filters.fPlace)}
-        ${labeledArchiveSearch("作业人", "fPerson", filters.fPerson)}
-        ${labeledArchiveSearch("等级", "fLevel", filters.fLevel)}
-        ${labeledArchiveSearch("申请人", "fApplicant", filters.fApplicant)}
-        ${labeledArchiveSearch("作业/验收时间", "fTime", filters.fTime)}
-        <button type="button" class="btn btn-primary alert-q-submit" data-search>查询</button>
-        <button type="button" class="btn btn-ghost alert-q-reset" data-reset${canReset ? "" : " disabled"}>重置</button>
-        <button type="button" class="btn" data-export>导出</button>
-      </div>
+      ${archiveFilterStackHtml({
+        moreOpen,
+        canReset,
+        extraButtons: `<button type="button" class="btn" data-export>导出</button>`,
+        mainHtml: [
+          labeledArchiveSearch("工单编号", "fId", filters.fId, "", "cam-field-label--id"),
+          labeledArchiveSearch("作业类型", "fType", filters.fType),
+          labeledArchiveSearch("分厂", "fPlant", filters.fPlant)
+        ].join(""),
+        moreHtml: [
+          labeledArchiveSearch("区域", "fPlace", filters.fPlace),
+          labeledArchiveSearch("作业人", "fPerson", filters.fPerson),
+          labeledArchiveSearch("等级", "fLevel", filters.fLevel),
+          labeledArchiveSearch("申请人", "fApplicant", filters.fApplicant),
+          labeledArchiveSearch("作业/验收时间", "fTime", filters.fTime)
+        ].join("")
+      })}
       <div class="table-wrap">
         <table>
           <thead>
@@ -11861,11 +12145,16 @@ function renderWorkArchive(root, route) {
     };
     const reset = () => {
       filters = defaultWorkArchiveFilters();
+      filtersOpen = false;
       openFocus = "";
       paint();
     };
     root.querySelector("[data-search]")?.addEventListener("click", apply);
     root.querySelector("[data-reset]")?.addEventListener("click", reset);
+    root.querySelector("[data-archive-more]")?.addEventListener("click", () => {
+      filtersOpen = !moreOpen;
+      paint();
+    });
     root.querySelectorAll(".alert-toolbar [name]").forEach((el) => {
       el.addEventListener("keydown", (event) => {
         if (event.key === "Enter") apply();
@@ -12044,11 +12333,21 @@ function sysUserTable(rows, focusId) {
   `;
 }
 
-function sysRoleNavList(rows, focusId) {
-  if (!rows.length) return `<p class="meta" style="padding:8px 10px">没有角色。</p>`;
-  return rows.map((row) => (
-    `<button type="button" class="sys-nav-item${row.id === focusId ? " is-on" : ""}" data-id="${row.id}">${row.name}</button>`
-  )).join("");
+function sysRoleListCards(rows, focusId) {
+  if (!rows.length) return `<p class="meta">暂无角色。</p>`;
+  const users = data.sysUsers || [];
+  return rows.map((row) => {
+    const used = users.filter((u) => u.role === row.name).length;
+    const menus = (row.menus || []).length;
+    return `
+      <button type="button" class="alert-card${row.id === focusId ? " is-on" : ""}" data-id="${row.id}">
+        <div class="row">
+          <strong>${esc(row.name)}</strong>
+          <span class="meta">${esc(row.scope || "—")}</span>
+        </div>
+        <p class="meta">${menus} 个菜单 · ${used} 人</p>
+      </button>`;
+  }).join("");
 }
 
 function sysOrgFormFields(item) {
@@ -12196,7 +12495,7 @@ function showSysUserEditor(item, after) {
 function sysRoleEdit(item, editing) {
   const headActions = editing
     ? `<button type="button" class="btn" data-role-cancel>取消</button><button type="button" class="btn btn-primary" data-role-save>保存</button>`
-    : `<button type="button" class="btn btn-primary" data-role-edit>编辑</button><button type="button" class="btn btn-ghost" data-del-role>删除</button>`;
+    : `<button type="button" class="btn" data-del-role>删除</button><button type="button" class="btn btn-primary" data-role-edit>编辑</button>`;
   const body = editing ? `
       <div class="form-fields">
         <label>名称<input class="field" name="name" value="${esc(item.name)}"></label>
@@ -12809,7 +13108,7 @@ function openLocImportDialog(after) {
 
 function renderSysEmployeesPage(root, focusId) {
   let focus = focusId;
-  const search = { page: 1, ...sysFilterBlank(SYS_EMP_FILTER_DEFAULTS) };
+  const search = { page: 1, filtersOpen: false, ...sysFilterBlank(SYS_EMP_FILTER_DEFAULTS) };
   const pageSize = 20;
 
   function openEditor(id) {
@@ -12826,14 +13125,20 @@ function renderSysEmployeesPage(root, focusId) {
     const start = (search.page - 1) * pageSize;
     const rows = rowsAll.slice(start, start + pageSize);
     if (focus && !rowsAll.some((row) => row.id === focus)) focus = rowsAll[0]?.id || null;
+    const canReset = sysFiltersActive(search.filters, SYS_EMP_FILTER_DEFAULTS);
+    const moreOpen = search.filtersOpen || sysExtraFiltersOn(search.filters, SYS_EMP_FILTER_EXTRA, SYS_EMP_FILTER_DEFAULTS);
     root.innerHTML = `
       <div class="sys-stack">
-        ${sysEmployeeFilterToolbar(search.draft, `<button type="button" class="btn" data-import-loc>批量导入</button>`)}
+        ${sysEmployeeFilterToolbar(search.draft, moreOpen, canReset, `<button type="button" class="btn" data-import-loc>批量导入</button>`)}
         ${sysEmployeeTable(rows, focus)}
         ${listPagerHtml(search.page, totalPages, rowsAll.length)}
       </div>
     `;
     bindSysListFilterToolbar(root, search, SYS_EMP_FILTER_FIELDS, SYS_EMP_FILTER_DEFAULTS, paint);
+    root.querySelector("[data-sys-more]")?.addEventListener("click", () => {
+      search.filtersOpen = !moreOpen;
+      paint();
+    });
     bindListPager(root, search, totalPages, paint);
     root.querySelectorAll("tr[data-id]").forEach((row) => {
       row.addEventListener("click", (ev) => {
@@ -12911,9 +13216,9 @@ function renderSysIamPage(root, focusId, kind) {
   let focus = focusId;
   const orgCollapsed = new Set();
   const search = kind === "org"
-    ? { page: 1, ...sysFilterBlank(SYS_ORG_FILTER_DEFAULTS) }
+    ? { page: 1, filtersOpen: false, ...sysFilterBlank(SYS_ORG_FILTER_DEFAULTS) }
     : kind === "users"
-      ? { page: 1, ...sysFilterBlank(SYS_USER_FILTER_DEFAULTS) }
+      ? { page: 1, filtersOpen: false, ...sysFilterBlank(SYS_USER_FILTER_DEFAULTS) }
       : { page: 1 };
   const pageSize = 20;
   let roleEditing = false;
@@ -12940,9 +13245,11 @@ function renderSysIamPage(root, focusId, kind) {
       const table = hasOrgListFilters(search.filters)
         ? sysOrgFlatTable(filtered, focus)
         : sysOrgTreeTable(focus, orgCollapsed);
+      const canResetOrg = sysFiltersActive(search.filters, SYS_ORG_FILTER_DEFAULTS);
+      const moreOpenOrg = search.filtersOpen || sysExtraFiltersOn(search.filters, SYS_ORG_FILTER_EXTRA, SYS_ORG_FILTER_DEFAULTS);
       body = `
         <div class="sys-stack">
-          ${sysOrgFilterToolbar(search.draft)}
+          ${sysOrgFilterToolbar(search.draft, moreOpenOrg, canResetOrg)}
           ${table}
         </div>
       `;
@@ -12954,9 +13261,11 @@ function renderSysIamPage(root, focusId, kind) {
       const pageRows = filtered.slice(start, start + pageSize);
       item = userRows.find((row) => row.id === focus) || userRows[0] || null;
       focus = item?.id || null;
+      const canResetUser = sysFiltersActive(search.filters, SYS_USER_FILTER_DEFAULTS);
+      const moreOpenUser = search.filtersOpen || sysExtraFiltersOn(search.filters, SYS_USER_FILTER_EXTRA, SYS_USER_FILTER_DEFAULTS);
       body = `
         <div class="sys-stack">
-          ${sysUserFilterToolbar(search.draft)}
+          ${sysUserFilterToolbar(search.draft, moreOpenUser, canResetUser)}
           ${sysUserTable(pageRows, focus)}
           ${listPagerHtml(search.page, totalPages, filtered.length)}
         </div>
@@ -12966,18 +13275,10 @@ function renderSysIamPage(root, focusId, kind) {
       item = rows.find((row) => row.id === focus) || rows[0] || null;
       focus = item?.id || null;
       body = `
-        <div class="alert-layout sys-org-layout">
-          <aside class="alert-list-panel sys-nav-panel">
-            <div class="sys-panel-head">
-              <span class="sys-panel-title">角色列表</span>
-              <button type="button" class="btn" data-add>新建</button>
-            </div>
-            <div class="sys-panel-body">
-              ${sysRoleNavList(rows, focus)}
-            </div>
-          </aside>
+        <div class="alert-layout">
+          ${configListPanelHtml("角色", sysRoleListCards(rows, focus), `<button type="button" class="btn btn-sm btn-primary" data-add>新增</button>`)}
           <section class="alert-detail">
-            ${item ? sysRoleEdit(item, roleEditing) : ""}
+            ${item ? sysRoleEdit(item, roleEditing) : `<p class="meta">请新增一个角色。</p>`}
           </section>
         </div>
       `;
@@ -12987,9 +13288,19 @@ function renderSysIamPage(root, focusId, kind) {
 
     if (kind === "org") {
       bindSysListFilterToolbar(root, search, SYS_ORG_FILTER_FIELDS, SYS_ORG_FILTER_DEFAULTS, paint);
+      const moreOpenOrg = search.filtersOpen || sysExtraFiltersOn(search.filters, SYS_ORG_FILTER_EXTRA, SYS_ORG_FILTER_DEFAULTS);
+      root.querySelector("[data-sys-more]")?.addEventListener("click", () => {
+        search.filtersOpen = !moreOpenOrg;
+        paint();
+      });
     }
     if (kind === "users") {
       bindSysListFilterToolbar(root, search, SYS_USER_FILTER_FIELDS, SYS_USER_FILTER_DEFAULTS, paint);
+      const moreOpenUser = search.filtersOpen || sysExtraFiltersOn(search.filters, SYS_USER_FILTER_EXTRA, SYS_USER_FILTER_DEFAULTS);
+      root.querySelector("[data-sys-more]")?.addEventListener("click", () => {
+        search.filtersOpen = !moreOpenUser;
+        paint();
+      });
       const filtered = userRows.filter((row) => userMatchesFilters(row, search.filters));
       const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
       bindListPager(root, search, totalPages, paint);
@@ -13060,7 +13371,7 @@ function renderSysIamPage(root, focusId, kind) {
         paint();
       });
     });
-    root.querySelectorAll(".sys-nav-item[data-id]").forEach((btn) => {
+    root.querySelectorAll(".alert-card[data-id]").forEach((btn) => {
       btn.addEventListener("click", () => {
         focus = btn.dataset.id;
         roleEditing = false;
@@ -13124,6 +13435,17 @@ function renderSysIamPage(root, focusId, kind) {
   paint();
 }
 
+function sysDictListCards(dicts, focusId) {
+  if (!dicts.length) return `<p class="meta">暂无字典。</p>`;
+  return dicts.map((row) => `
+    <button type="button" class="alert-card${row.id === focusId ? " is-on" : ""}" data-id="${row.id}">
+      <div class="row">
+        <strong>${esc(row.name)}</strong>
+      </div>
+      <p class="meta">${esc(row.code || "—")} · ${(row.items || []).length} 项</p>
+    </button>`).join("");
+}
+
 function renderSysDictPage(root, focusId) {
   let focus = focusId;
 
@@ -13131,49 +13453,52 @@ function renderSysDictPage(root, focusId) {
     const dicts = data.sysDicts || [];
     const item = dicts.find((row) => row.id === focus) || dicts[0] || null;
     focus = item?.id || null;
+    const items = item?.items || [];
+    const itemBody = items.length
+      ? items.map((row, index) => `
+          <tr>
+            <td class="mono">${esc(row.value)}</td>
+            <td>${esc(row.label)}</td>
+            <td><span class="dot ${sysTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span></td>
+            <td class="table-actions"><button type="button" class="btn btn-sm" data-toggle="${index}">${row.enabled ? "停用" : "启用"}</button></td>
+          </tr>`).join("")
+      : `<tr><td colspan="4" class="meta">未配置字典项</td></tr>`;
     root.innerHTML = `
-      <div class="alert-layout sys-org-layout">
-        <aside class="alert-list-panel sys-nav-panel">
-          ${dicts.map((row) => (
-            `<button type="button" class="sys-nav-item${row.id === focus ? " is-on" : ""}" data-id="${row.id}">${row.name}</button>`
-          )).join("")}
-        </aside>
+      <div class="alert-layout">
+        ${configListPanelHtml("字典", sysDictListCards(dicts, focus))}
         <section class="alert-detail">
           ${item ? `
-            <div class="detail-head dict-detail-head">
-              <div>
-                <h2>${item.name}</h2>
-                <p class="meta">${item.code}${item.note ? ` · ${item.note}` : ""}</p>
+            <div class="detail-head">
+              <div class="detail-head-main">
+                <div class="work-order-title-row">
+                  <h2>${esc(item.name)}</h2>
+                </div>
               </div>
-              <button type="button" class="btn btn-primary" data-add-dict-item>新增</button>
+              <div class="detail-head-side">
+                <div class="work-order-actions" role="toolbar">
+                  <button type="button" class="btn btn-primary" data-add-dict-item>新增</button>
+                </div>
+              </div>
             </div>
             <div class="table-wrap">
               <table>
                 <thead><tr><th>取值</th><th>显示名</th><th>状态</th><th>操作</th></tr></thead>
-                <tbody>
-                  ${(item.items || []).map((row, index) => `
-                    <tr>
-                      <td class="mono">${row.value}</td>
-                      <td>${row.label}</td>
-                      <td><span class="dot ${sysTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span></td>
-                      <td class="table-actions"><button type="button" class="btn" data-toggle="${index}">${row.enabled ? "停用" : "启用"}</button></td>
-                    </tr>
-                  `).join("")}
-                </tbody>
+                <tbody>${itemBody}</tbody>
               </table>
             </div>
-          ` : "<p class=\"meta\">没有字典。</p>"}
+          ` : `<p class="meta">请选择一个字典。</p>`}
         </section>
       </div>
     `;
-    root.querySelectorAll(".sys-nav-item[data-id]").forEach((btn) => {
+    root.querySelectorAll(".alert-card[data-id]").forEach((btn) => {
       btn.addEventListener("click", () => { focus = btn.dataset.id; paint(); });
     });
     root.querySelectorAll("[data-toggle]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const row = item.items[Number(btn.dataset.toggle)];
+        const row = items[Number(btn.dataset.toggle)];
         if (!row) return;
         row.enabled = !row.enabled;
+        persist();
         paint();
       });
     });
@@ -13194,6 +13519,7 @@ function renderSysDictPage(root, focusId) {
         }
         item.items = item.items || [];
         item.items.push({ value, label, enabled: true });
+        persist();
         paint();
         return true;
       }, "保存", true);
@@ -13516,10 +13842,16 @@ function paramGroupsFromData(params) {
   return PARAM_GROUP_ORDER.filter((name) => inData.has(name));
 }
 
-function sysParamGroupNav(groups, activeGroup) {
-  return groups.map((name) => (
-    `<button type="button" class="sys-nav-item${name === activeGroup ? " is-on" : ""}" data-group="${name}">${name}</button>`
-  )).join("");
+function sysParamGroupCards(groups, params, activeGroup) {
+  if (!groups.length) return `<p class="meta">没有参数分组。</p>`;
+  return groups.map((name) => {
+    const n = (params || []).filter((row) => row.group === name).length;
+    return `
+      <button type="button" class="alert-card${name === activeGroup ? " is-on" : ""}" data-group="${name}">
+        <div class="row"><strong>${esc(name)}</strong></div>
+        <p class="meta">${n} 项参数</p>
+      </button>`;
+  }).join("");
 }
 
 function sysParamGroupTable(rows) {
@@ -13564,21 +13896,22 @@ function renderSysParamsPage(root, focusId) {
   function paint() {
     const rows = params.filter((row) => row.group === group);
     root.innerHTML = `
-      <div class="alert-layout sys-org-layout">
-        <aside class="alert-list-panel sys-nav-panel">
-          ${groups.length ? sysParamGroupNav(groups, group) : `<p class="meta" style="padding:8px 10px">没有参数分组。</p>`}
-        </aside>
+      <div class="alert-layout">
+        ${configListPanelHtml("参数分组", sysParamGroupCards(groups, params, group))}
         <section class="alert-detail">
           <div class="detail-head">
-            <div>
-              <h2>${group}</h2>
-              <p class="meta">${rows.length} 项参数</p>
+            <div class="detail-head-main">
+              <div class="work-order-title-row">
+                <h2>${esc(group)}</h2>
+              </div>
+            </div>
+            <div class="detail-head-side">
+              <div class="work-order-actions" role="toolbar">
+                <button type="button" class="btn btn-primary" data-save-params>保存</button>
+              </div>
             </div>
           </div>
           ${sysParamGroupTable(rows)}
-          <div class="form-foot">
-            <button type="button" class="btn btn-primary" data-save-params>保存</button>
-          </div>
         </section>
       </div>
     `;
@@ -13589,22 +13922,32 @@ function renderSysParamsPage(root, focusId) {
       rows.forEach((row) => {
         row.value = formVal(root, `param-${row.id}`) || row.value;
       });
+      persist();
       paint();
     });
   }
   paint();
 }
 
+const SYS_AUDIT_FILTER_DEFAULTS = { module: "全部", user: "全部", q: "" };
+const SYS_AUDIT_FILTER_FIELDS = [
+  { key: "module", name: "au-module", type: "select" },
+  { key: "user", name: "au-user", type: "select" },
+  { key: "q", name: "au-q" }
+];
+
 function renderSysAudit(root, route) {
-  let module = "全部";
-  let user = "全部";
-  let query = "";
+  const search = { page: 1, ...sysFilterBlank(SYS_AUDIT_FILTER_DEFAULTS) };
 
   function rowsOf() {
+    const f = search.filters;
     return (data.sysAudits || []).filter((item) => {
-      if (module !== "全部" && item.module !== module) return false;
-      if (user !== "全部" && item.user !== user) return false;
-      if (query && ![item.id, item.object, item.action, item.detail].join(" ").includes(query)) return false;
+      if (f.module && f.module !== "全部" && item.module !== f.module) return false;
+      if (f.user && f.user !== "全部" && item.user !== f.user) return false;
+      if (f.q) {
+        const hay = `${item.id} ${item.object} ${item.action} ${item.detail}`.toLowerCase();
+        if (!hay.includes(f.q)) return false;
+      }
       return true;
     });
   }
@@ -13613,57 +13956,49 @@ function renderSysAudit(root, route) {
     const rows = rowsOf();
     const modules = ["全部", ...new Set((data.sysAudits || []).map((row) => row.module))];
     const users = ["全部", ...new Set((data.sysAudits || []).map((row) => row.user))];
+    const resetOff = search.draft.module === "全部" && search.draft.user === "全部" && !search.draft.q;
     root.innerHTML = `
-      <div class="filter-row">
-        <select class="field" name="module">${optionList(modules, module)}</select>
-        <select class="field" name="user">${optionList(users, user)}</select>
-        <input class="field search" name="q" placeholder="编号、对象、动作" value="${query}">
-        <button type="button" class="btn btn-primary" data-search>搜索</button>
-        <button type="button" class="btn btn-ghost" data-reset${module === "全部" && user === "全部" && !query ? " disabled" : ""}>重置</button>
-      </div>
-      <div class="table-wrap sys-audit-table">
-        <table>
-          <thead>
-            <tr>
-              <th>时间</th>
-              <th>用户</th>
-              <th>模块</th>
-              <th>动作</th>
-              <th>对象</th>
-              <th>结果</th>
-              <th>终端</th>
-              <th>详情</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.length ? rows.map((row) => `
+      <div class="sys-stack">
+        ${sysListFilterToolbar(`
+          ${sysFilterFieldSelect("模块", "au-module", search.draft.module, modules)}
+          ${sysFilterFieldSelect("用户", "au-user", search.draft.user, users)}
+          ${sysFilterFieldText("关键词", "au-q", search.draft.q)}
+        `)}
+        <div class="table-wrap sys-audit-table">
+          <table>
+            <thead>
               <tr>
-                <td class="mono">${row.time}</td>
-                <td>${row.user}</td>
-                <td>${row.module}</td>
-                <td>${row.action}</td>
-                <td class="mono">${row.object}</td>
-                <td><span class="dot ${sysTone(row.result)}">${row.result}</span></td>
-                <td class="mono">${row.ip}</td>
-                <td>${row.detail}</td>
+                <th>时间</th>
+                <th>用户</th>
+                <th>模块</th>
+                <th>动作</th>
+                <th>对象</th>
+                <th>结果</th>
+                <th>终端</th>
+                <th>详情</th>
               </tr>
-            `).join("") : `<tr><td class="empty" colspan="8">没有符合条件的记录。</td></tr>`}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              ${rows.length ? rows.map((row) => `
+                <tr>
+                  <td class="mono">${esc(row.time)}</td>
+                  <td>${esc(row.user)}</td>
+                  <td>${esc(row.module)}</td>
+                  <td>${esc(row.action)}</td>
+                  <td class="mono">${esc(row.object)}</td>
+                  <td><span class="dot ${sysTone(row.result)}">${esc(row.result)}</span></td>
+                  <td class="mono">${esc(row.ip)}</td>
+                  <td>${esc(row.detail)}</td>
+                </tr>
+              `).join("") : `<tr><td class="empty" colspan="8">没有符合条件的记录。</td></tr>`}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
-    root.querySelector("[data-search]")?.addEventListener("click", () => {
-      module = formVal(root, "module") || "全部";
-      user = formVal(root, "user") || "全部";
-      query = formVal(root, "q");
-      paint();
-    });
-    root.querySelector("[data-reset]")?.addEventListener("click", () => {
-      module = "全部";
-      user = "全部";
-      query = "";
-      paint();
-    });
+    bindSysListFilterToolbar(root, search, SYS_AUDIT_FILTER_FIELDS, SYS_AUDIT_FILTER_DEFAULTS, paint);
+    const resetBtn = root.querySelector("[data-sys-reset]");
+    if (resetBtn && resetOff) resetBtn.disabled = true;
   }
   paint();
 }
