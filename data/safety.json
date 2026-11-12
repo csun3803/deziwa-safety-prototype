@@ -3558,17 +3558,24 @@
       ],
       "approval": [
         {
-          "step": "班组确认",
-          "role": "班长"
+          "step": "作业单位意见",
+          "role": "作业负责人"
         },
         {
-          "step": "分厂审批",
+          "step": "区域单位意见",
           "role": "分厂值班员"
+        },
+        {
+          "step": "安全管理部门意见",
+          "role": "安环专工"
+        },
+        {
+          "step": "公司领导审批意见",
+          "role": "公司领导"
         }
       ],
       "validityHours": 8,
-      "night": false,
-      "flowId": "wf-four"
+      "night": false
     },
     {
       "id": "wt-height",
@@ -3603,13 +3610,24 @@
       ],
       "approval": [
         {
-          "step": "分厂审批",
+          "step": "作业单位意见",
+          "role": "作业负责人"
+        },
+        {
+          "step": "区域单位意见",
           "role": "分厂值班员"
+        },
+        {
+          "step": "安全管理部门意见",
+          "role": "安环专工"
+        },
+        {
+          "step": "公司领导审批意见",
+          "role": "公司领导"
         }
       ],
       "validityHours": 8,
-      "night": false,
-      "flowId": "wf-four"
+      "night": false
     }
   ],
   "workOrders": [
@@ -4504,50 +4522,6 @@
       "tagBattery": "",
       "tagHeartbeat": "",
       "note": ""
-    }
-  ],
-  "workFlows": [
-    {
-      "id": "wf-four",
-      "name": "四方签批",
-      "enabled": true,
-      "steps": [
-        {
-          "step": "作业单位意见",
-          "role": "作业负责人"
-        },
-        {
-          "step": "区域单位意见",
-          "role": "分厂值班员"
-        },
-        {
-          "step": "安全管理部门意见",
-          "role": "安环专工"
-        },
-        {
-          "step": "公司领导审批意见",
-          "role": "公司领导"
-        }
-      ]
-    },
-    {
-      "id": "wf-three",
-      "name": "三级签批",
-      "enabled": true,
-      "steps": [
-        {
-          "step": "作业单位意见",
-          "role": "作业负责人"
-        },
-        {
-          "step": "区域单位意见",
-          "role": "分厂值班员"
-        },
-        {
-          "step": "安全管理部门意见",
-          "role": "安环专工"
-        }
-      ]
     }
   ]
 }

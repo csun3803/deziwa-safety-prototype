@@ -21,13 +21,6 @@ const TABS = [
     ]
   },
   {
-    id: "t3b",
-    name: "识别复核（布局2）",
-    pages: [
-      { id: "review-desk", name: "识别复核（布局2）", done: true, layout: "列表-详情型" }
-    ]
-  },
-  {
     id: "t5",
     name: "作业管理",
     pages: [
@@ -51,8 +44,7 @@ const TABS = [
     pages: [
       { id: "zones", name: "区域配置", group: "告警规则", done: true, layout: "表单录入/编辑型", desc: "区域准入、围栏与定位告警（人员落点、越界等同一规则池）。" },
       { id: "cameras", name: "摄像头配置", group: "告警规则", done: true, layout: "列表-详情型", desc: "通道接入、三维标定、按通道配置识别告警。" },
-      { id: "work-types", name: "作业类型", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批流绑定。" },
-      { id: "work-flows", name: "审批流", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "作业签批节点模板；作业类型引用审批流。" }
+      { id: "work-types", name: "作业配置", group: "作业规则", done: true, layout: "表单录入/编辑型", desc: "等级、区域、资格、措施与审批节点。" }
     ]
   },
   {
@@ -102,7 +94,7 @@ const LAYER_BTNS = [
 let selected = null;
 let scenePanelExpanded = true;
 let sceneDetailTab = "info";
-/** 作业类型详情：basic | measure | flow（qual 已并入 basic） */
+/** 作业配置详情：basic | measure | flow（qual 已并入 basic） */
 let workTypeDetailTab = "basic";
 
 function normalizeWorkTypeDetailTab() {
@@ -541,7 +533,8 @@ function parseRoute() {
     pageId = "review";
   }
   if (tabId === "t3b") {
-    pageId = "review-desk";
+    tabId = "t3";
+    pageId = "review";
   }
   if (tabId === "t4") {
     tabId = "t7";
@@ -574,6 +567,11 @@ function parseRoute() {
   if (tabId === "t5" && pageId === "work-types") {
     tabId = "t7";
     pageId = "work-types";
+  }
+  if ((tabId === "t7" || tabId === "t5") && pageId === "work-flows") {
+    tabId = "t7";
+    pageId = "work-types";
+    workTypeDetailTab = "flow";
   }
   if (tabId === "t5" && pageId === "archive") {
     tabId = "t6";
@@ -1074,7 +1072,7 @@ function renderShell() {
   const hasL2 = tab.pages.length > 1;
   document.querySelector(".body").classList.toggle("no-side", !hasL2);
   document.getElementById("tabs").innerHTML = TABS.map((item) => {
-    const count = item.id === "t2" ? openCount() : (item.id === "t3" || item.id === "t3b") ? pendingReview() : 0;
+    const count = item.id === "t2" ? openCount() : item.id === "t3" ? pendingReview() : 0;
     const badge = count ? `<span class="tab-badge num">${count > 99 ? "99+" : count}</span>` : "";
     const on = item.id === tab.id;
     return `<button class="tab dark-nav-item${on ? " is-active" : ""}" type="button" data-tab="${item.id}">${item.name}${badge}${on ? `<span class="tab-underline"></span>` : ""}</button>`;
@@ -1096,7 +1094,7 @@ function renderShell() {
   const crumb = document.getElementById("crumb");
   if (crumb) {
     const hideCrumb = tab.id === "t1" && page.id === "overview";
-    const pageTitleTabs = new Set(["t2", "t3", "t3b", "t5"]);
+    const pageTitleTabs = new Set(["t2", "t3", "t5"]);
     const usePageTitle = pageTitleTabs.has(tab.id);
     crumb.classList.toggle("is-hidden", hideCrumb);
     crumb.classList.toggle("has-page-title", !hideCrumb && usePageTitle);
@@ -1133,10 +1131,6 @@ function renderPage() {
     renderAiQueue(root, route.focus);
     return;
   }
-  if (route.tab.id === "t3b") {
-    renderAiQueue(root, route.focus, { desk: true });
-    return;
-  }
   if (route.tab.id === "t5") {
     renderWorkOrders(root, route);
     return;
@@ -1151,7 +1145,6 @@ function renderPage() {
   }
   if (route.tab.id === "t7") {
     if (route.page.id === "work-types") renderWorkTypesConfig(root, route.focus);
-    else if (route.page.id === "work-flows") renderWorkFlowsConfig(root, route.focus);
     else if (route.page.id === "zones") renderZoneAccess(root, route.focus);
     else if (route.page.id === "cameras") renderCameraPage(root, route);
     else renderPlaceholder(root, route);
@@ -7381,81 +7374,20 @@ function cloneWorkMeasures(type) {
   });
 }
 
-function defaultWorkFlows() {
-  return [
-    {
-      id: "wf-four",
-      name: "四方签批",
-      enabled: true,
-      steps: WORK_APPROVAL_DEFAULT.map((row) => ({ ...row }))
-    },
-    {
-      id: "wf-three",
-      name: "三级签批",
-      enabled: true,
-      steps: [
-        { step: "作业单位意见", role: "作业负责人" },
-        { step: "区域单位意见", role: "分厂值班员" },
-        { step: "安全管理部门意见", role: "安环专工" }
-      ]
-    }
-  ];
-}
-
-function workFlowById(id) {
-  return (data.workFlows || []).find((row) => row.id === id) || null;
-}
-
-function workFlowName(id) {
-  return workFlowById(id)?.name || id || "—";
-}
-
 function workApprovalRoleOptions() {
   const names = new Set(["作业负责人", "分厂值班员", "安环专工", "公司领导", "班长"]);
   (data.sysRoles || []).forEach((row) => { if (row.name) names.add(row.name); });
   return [...names];
 }
 
-function workTypesUsingFlow(flowId) {
-  return (data.workTypes || []).filter((row) => row.flowId === flowId);
-}
-
 function workTypeApprovalChain(type) {
-  const flow = workFlowById(type?.flowId);
-  if (flow?.steps?.length) return flow.steps;
-  if ((type?.approval || []).length) return type.approval;
-  return WORK_APPROVAL_DEFAULT;
-}
-
-function guessWorkFlowId(type) {
-  const n = (type?.approval || []).length;
-  if (type?.id === "wt-elec" || n === 3) return "wf-three";
-  return "wf-four";
-}
-
-function ensureWorkFlows() {
-  const seeds = defaultWorkFlows();
-  if (!Array.isArray(data.workFlows) || !data.workFlows.length) {
-    data.workFlows = seeds.map((row) => ({
-      ...row,
-      steps: row.steps.map((step) => ({ ...step }))
-    }));
-  } else {
-    seeds.forEach((seed) => {
-      if (!data.workFlows.some((row) => row.id === seed.id)) {
-        data.workFlows.push({ ...seed, steps: seed.steps.map((step) => ({ ...step })) });
-      }
-    });
-  }
-  data.workFlows.forEach((flow) => {
-    flow.steps = (flow.steps || []).map((row) => ({ step: row.step || "", role: row.role || "" }));
-    if (flow.enabled == null) flow.enabled = true;
-  });
+  return Array.isArray(type?.approval) ? type.approval : [];
 }
 
 function cloneWorkApprovals(type) {
   const chain = workTypeApprovalChain(type);
-  return chain.map((row) => ({
+  const steps = chain.length ? chain : WORK_APPROVAL_DEFAULT;
+  return steps.map((row) => ({
     step: row.step,
     role: row.role,
     result: "",
@@ -7529,7 +7461,6 @@ function defaultWorkTypeSeeds() {
         { name: "现场配备消防带、灭火器、铁锹、消防沙、灭火毯", fills: ["消防带根数", "灭火器个数", "铁锹把数", "消防沙桶数", "灭火毯块数"] },
         { name: "其他安全措施", fills: ["说明"] }
       ],
-      flowId: "wf-four",
       approval: WORK_APPROVAL_DEFAULT.map((row) => ({ ...row })),
       riskOptions: ["火灾", "触电", "灼烫", "爆炸"],
       validityHours: 8,
@@ -7575,7 +7506,6 @@ function defaultWorkTypeSeeds() {
         { name: "屋顶等斜面作业设置有牢固可靠的安全绳、安全网及相关防护措施", fills: [] },
         { name: "禁止在石棉瓦等不承重的物件上行走或停留", fills: [] }
       ],
-      flowId: "wf-four",
       approval: WORK_APPROVAL_DEFAULT.map((row) => ({ ...row })),
       riskOptions: ["高处坠落", "物体打击", "触电"],
       validityHours: 8,
@@ -7620,7 +7550,7 @@ function normalizeWorkType(type, seed) {
       || oldMeasures.every((row) => typeof row === "string")
       || (typeof oldMeasures[0] !== "string" && oldMeasures.length < (seed.measures || []).length && seed.id === next.id);
     if (looksLegacy && seed.measures) next.measures = seed.measures.map((row) => ({ ...row, fills: [...(row.fills || [])] }));
-    if (!Array.isArray(next.approval) || !next.approval.some((row) => (row.step || "").includes("作业单位") || (row.step || "").includes("安全管理部门"))) {
+    if (!Array.isArray(next.approval) || !next.approval.length) {
       next.approval = (seed.approval || WORK_APPROVAL_DEFAULT).map((row) => ({ ...row }));
     }
     if (!Array.isArray(next.levels) || !next.levels.length) next.levels = seed.levels ? [...seed.levels] : [next.level || 2];
@@ -7630,12 +7560,13 @@ function normalizeWorkType(type, seed) {
     if (!Array.isArray(next.riskOptions) || !next.riskOptions.length) next.riskOptions = [...(seed.riskOptions || [])];
     if (seed.quals && (next.quals || []).length < seed.quals.length) next.quals = seed.quals.map((row) => ({ ...row }));
     if (!Array.isArray(next.suppressEventTypes)) next.suppressEventTypes = [...(seed.suppressEventTypes || [])];
-    if (!next.flowId && seed.flowId) next.flowId = seed.flowId;
   }
   next.measures = (next.measures || []).map(normalizeWorkMeasureTpl);
-  next.approval = (next.approval || []).map((row) => ({ step: row.step || "", role: row.role || "" }));
-  if (!next.flowId) next.flowId = guessWorkFlowId(next);
-  next.approval = workTypeApprovalChain(next).map((row) => ({ step: row.step || "", role: row.role || "" }));
+  if (!Array.isArray(next.approval) || !next.approval.length) {
+    next.approval = WORK_APPROVAL_DEFAULT.map((row) => ({ ...row }));
+  }
+  next.approval = next.approval.map((row) => ({ step: row.step || "", role: row.role || "" }));
+  delete next.flowId;
   next.quals = (next.quals || []).map((row) => ({ role: row.role || "", cert: row.cert || "", required: row.required !== false }));
   next.levels = workTypeLevels(next);
   next.extras = next.extras || {};
@@ -7859,7 +7790,7 @@ function ensureWorkCatalog() {
   ensureEmployees();
   syncCertLedgersFromWorkCerts();
   delete data.externalPermits;
-  ensureWorkFlows();
+  delete data.workFlows;
   const seeds = defaultWorkTypeSeeds();
   const byId = new Map(seeds.map((row) => [row.id, row]));
   data.workTypes = (data.workTypes || []).map((row) => normalizeWorkType(row, byId.get(row.id)));
@@ -7924,8 +7855,6 @@ function workTypeFromForm(root, item) {
   const levels = formChecks(root, "wlevel").map(Number);
   item.levels = levels.length ? levels : workTypeAllowedLevels(item);
   item.level = item.levels[0] ?? item.level ?? 2;
-  item.flowId = formVal(root, "flowId") || item.flowId || "wf-four";
-  item.approval = workTypeApprovalChain(item).map((row) => ({ step: row.step, role: row.role }));
 }
 
 function openWorkTypeRowDialog(kind, item, idx, after) {
@@ -8007,356 +7936,48 @@ function openWorkFlowStepDialog(list, idx, after) {
     const next = { step, role: dlg.querySelector("#wf-role")?.value || "" };
     if (isNew) list.push(next);
     else list[idx] = next;
+    persist();
     after();
     return true;
   });
 }
 
-function openWorkFlowPickerDialog(item, after) {
-  ensureWorkFlows();
-  const flows = data.workFlows || [];
-  if (!flows.length) {
-    openAlertDialog("更换审批流", `<p class="meta">暂无审批流，请先在审批流配置中新增。</p>`, () => true, "知道了");
-    return;
-  }
-  const applyPick = (id, backdrop) => {
-    if (!id || id === item.flowId) {
-      backdrop?.remove();
-      return;
-    }
-    item.flowId = id;
-    item.approval = workTypeApprovalChain(item).map((row) => ({ step: row.step, role: row.role }));
+function bindWorkTypeApprovalEditors(root, item, paint) {
+  if (!item.approval) item.approval = [];
+  const refresh = () => {
     persist();
-    if (typeof after === "function") after();
-    backdrop?.remove();
+    paint();
   };
-  openAlertDialog("更换审批流", `
-    <p class="meta">当前：${esc(workFlowName(item.flowId))} · 点击一行即可切换并保存</p>
-    <div class="table-wrap work-cfg-table">
-      <table>
-        <thead>
-          <tr><th>名称</th><th>状态</th><th>节点</th></tr>
-        </thead>
-        <tbody>
-          ${flows.map((flow) => `
-            <tr class="${flow.id === item.flowId ? "is-on" : ""}" data-wf-pick="${esc(flow.id)}" role="button" tabindex="0">
-              <td>${esc(flow.name)}<span class="meta"> · ${esc(flow.id)}</span></td>
-              <td><span class="dot ${workStatusTone(flow.enabled !== false ? "启用" : "停用")}">${flow.enabled !== false ? "启用" : "停用"}</span></td>
-              <td>${(flow.steps || []).length} 步 · ${esc((flow.steps || []).map((s) => s.role).filter(Boolean).join(" → ") || "—")}</td>
-            </tr>`).join("")}
-        </tbody>
-      </table>
-    </div>
-    <p class="meta"><a class="text-link" href="#/t7/work-flows">审批流配置</a> 中可编辑节点。</p>
-  `, () => true, "关闭", true, (dlg) => {
-    const backdrop = dlg.closest(".modal-backdrop");
-    const onRow = (row) => {
-      const id = row.dataset.wfPick;
-      if (!id) return;
-      dlg.querySelectorAll("[data-wf-pick]").forEach((tr) => tr.classList.toggle("is-on", tr.dataset.wfPick === id));
-      applyPick(id, backdrop);
-    };
-    dlg.querySelectorAll("[data-wf-pick]").forEach((row) => {
-      row.addEventListener("click", () => onRow(row));
-      row.addEventListener("keydown", (ev) => {
-        if (ev.key === "Enter" || ev.key === " ") {
-          ev.preventDefault();
-          onRow(row);
-        }
-      });
+  root.querySelector("[data-approval-add]")?.addEventListener("click", () => {
+    openWorkFlowStepDialog(item.approval, null, paint);
+  });
+  root.querySelectorAll("[data-approval-edit]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openWorkFlowStepDialog(item.approval, Number(btn.dataset.idx), paint);
     });
   });
-}
-
-function showWorkFlowEditor(item, after) {
-  const draftSteps = (item.steps || []).map((row) => ({ ...row }));
-  const renderSteps = (host) => {
-    if (!host) return;
-    host.innerHTML = `
-      <div class="table-wrap work-cfg-table">
-        <table>
-          <thead><tr><th>序号</th><th>步骤</th><th>岗位</th><th>操作</th></tr></thead>
-          <tbody>
-            ${draftSteps.length ? draftSteps.map((row, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${esc(row.step)}</td>
-                <td>${esc(row.role || "—")}</td>
-                <td class="table-actions">
-                  <button type="button" class="btn btn-sm" data-step-up data-idx="${i}" ${i === 0 ? "disabled" : ""}>上移</button>
-                  <button type="button" class="btn btn-sm" data-step-down data-idx="${i}" ${i === draftSteps.length - 1 ? "disabled" : ""}>下移</button>
-                  <button type="button" class="btn btn-sm" data-step-edit data-idx="${i}">编辑</button>
-                  <button type="button" class="btn btn-sm btn-ghost" data-step-del data-idx="${i}">删除</button>
-                </td>
-              </tr>`).join("") : `<tr><td colspan="4" class="meta">未配置节点</td></tr>`}
-          </tbody>
-        </table>
-      </div>
-      <button type="button" class="btn btn-sm" data-step-add style="margin-top:8px">新增节点</button>
-    `;
-    host.querySelector("[data-step-add]")?.addEventListener("click", () => {
-      openWorkFlowStepDialog(draftSteps, null, () => renderSteps(host));
+  root.querySelectorAll("[data-approval-del]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      item.approval.splice(Number(btn.dataset.idx), 1);
+      refresh();
     });
-    host.querySelectorAll("[data-step-edit]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openWorkFlowStepDialog(draftSteps, Number(btn.dataset.idx), () => renderSteps(host));
-      });
-    });
-    host.querySelectorAll("[data-step-del]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        draftSteps.splice(Number(btn.dataset.idx), 1);
-        renderSteps(host);
-      });
-    });
-    host.querySelectorAll("[data-step-up]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const i = Number(btn.dataset.idx);
-        if (i < 1) return;
-        [draftSteps[i - 1], draftSteps[i]] = [draftSteps[i], draftSteps[i - 1]];
-        renderSteps(host);
-      });
-    });
-    host.querySelectorAll("[data-step-down]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const i = Number(btn.dataset.idx);
-        if (i >= draftSteps.length - 1) return;
-        [draftSteps[i], draftSteps[i + 1]] = [draftSteps[i + 1], draftSteps[i]];
-        renderSteps(host);
-      });
-    });
-  };
-  openAlertDialog(`编辑审批流 · ${item.name}`, `
-    <div class="form-fields">
-      <label>审批流 ID<input class="field" name="id" value="${esc(item.id)}" readonly></label>
-      <label>名称<input class="field" name="name" value="${esc(item.name)}"></label>
-      <label>状态
-        <select class="field" name="enabled">
-          <option value="启用"${item.enabled !== false ? " selected" : ""}>启用</option>
-          <option value="停用"${item.enabled === false ? " selected" : ""}>停用</option>
-        </select>
-      </label>
-    </div>
-    <h3 class="form-section">审批节点</h3>
-    <div id="wf-step-host"></div>
-  `, (dlg, err) => {
-    const name = formVal(dlg, "name").trim();
-    if (!name) {
-      err.hidden = false;
-      err.textContent = "请填写名称。";
-      return false;
-    }
-    if (!draftSteps.length) {
-      err.hidden = false;
-      err.textContent = "请至少配置一个审批节点。";
-      return false;
-    }
-    item.name = name;
-    item.enabled = formVal(dlg, "enabled") !== "停用";
-    item.steps = draftSteps.map((row) => ({ step: row.step, role: row.role }));
-    workTypesUsingFlow(item.id).forEach((type) => {
-      type.approval = item.steps.map((row) => ({ ...row }));
-    });
-    persist();
-    after?.();
-    return true;
-  }, "保存", true, (dlg) => {
-    dlg.querySelector(".modal")?.classList.add("work-modal");
-    renderSteps(dlg.querySelector("#wf-step-host"));
   });
-}
-
-function renderWorkFlowDetail(item, editing, steps) {
-  const on = item.enabled !== false;
-  const rows = steps || [];
-  const headActions = editing
-    ? `<button type="button" class="btn" data-wf-cancel>取消</button><button type="button" class="btn btn-primary" data-wf-save>保存</button>`
-    : `<button type="button" class="btn" data-wf-del>删除</button><button type="button" class="btn btn-primary" data-wf-edit>编辑</button>`;
-  const stepBody = rows.length
-    ? rows.map((row, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${esc(row.step)}</td>
-          <td>${esc(row.role || "—")}</td>
-          ${editing ? `<td class="table-actions">
-            <button type="button" class="btn btn-sm" data-step-up data-idx="${i}"${i === 0 ? " disabled" : ""}>上移</button>
-            <button type="button" class="btn btn-sm" data-step-down data-idx="${i}"${i >= rows.length - 1 ? " disabled" : ""}>下移</button>
-            <button type="button" class="btn btn-sm" data-step-edit data-idx="${i}">编辑</button>
-            <button type="button" class="btn btn-sm btn-ghost" data-step-del data-idx="${i}">删除</button>
-          </td>` : ""}
-        </tr>`).join("")
-    : `<tr><td colspan="${editing ? 4 : 3}" class="meta">未配置节点</td></tr>`;
-  const basic = editing ? `
-      <div class="form-fields">
-        <label>审批流 ID<input class="field" name="id" value="${esc(item.id)}" readonly></label>
-        <label>名称<input class="field" name="name" value="${esc(item.name)}"></label>
-        <label>状态
-          <select class="field" name="enabled">
-            <option value="启用"${on ? " selected" : ""}>启用</option>
-            <option value="停用"${!on ? " selected" : ""}>停用</option>
-          </select>
-        </label>
-      </div>` : `
-      <div class="alert-facts">
-        ${archiveDetailFact("审批流 ID", esc(item.id))}
-        ${archiveDetailFact("状态", `<span class="dot ${workStatusTone(on ? "启用" : "停用")}">${on ? "启用" : "停用"}</span>`)}
-        ${archiveDetailFact("节点", `${rows.length} 步`)}
-      </div>`;
-  return `
-    <div class="detail-head">
-      <div class="detail-head-main">
-        <div class="work-order-title-row">
-          <h2>${esc(item.name)}</h2>
-          <span class="dot ${workStatusTone(on ? "启用" : "停用")}">${on ? "启用" : "停用"}</span>
-        </div>
-      </div>
-      <div class="detail-head-side">
-        <div class="work-order-actions" role="toolbar">${headActions}</div>
-      </div>
-    </div>
-    <div class="work-type-detail-panels">
-      <div class="white-card">
-        <h3>基础</h3>
-        ${basic}
-      </div>
-      ${workCfgTable("审批节点", ["序号", "步骤", "岗位"], stepBody, "data-step-add", editing)}
-    </div>
-  `;
-}
-
-function renderWorkFlowsConfig(root, focusId) {
-  let focus = focusId;
-  let flowEditing = false;
-  let draftSteps = [];
-
-  const beginEdit = (item) => {
-    flowEditing = true;
-    draftSteps = (item.steps || []).map((row) => ({ ...row }));
-  };
-
-  function paint() {
-    ensureWorkFlows();
-    const all = data.workFlows || [];
-    const item = all.find((row) => row.id === focus) || all[0] || null;
-    focus = item?.id || null;
-    const steps = item && flowEditing ? draftSteps : (item?.steps || []);
-    const listCards = all.map((row) => `
-      <button type="button" class="alert-card${row.id === item?.id ? " is-on" : ""}" data-id="${row.id}">
-        <div class="row">
-          <strong>${esc(row.name)}</strong>
-          <span class="dot ${workStatusTone(row.enabled !== false ? "启用" : "停用")}">${row.enabled !== false ? "启用" : "停用"}</span>
-        </div>
-        <p class="meta">${esc(row.id)} · ${(row.steps || []).length} 步 · ${esc((row.steps || []).map((s) => s.role).filter(Boolean).join(" → ") || "—")}</p>
-      </button>
-    `).join("");
-    root.innerHTML = `
-      <div class="alert-layout">
-        ${configListPanelHtml("审批流", listCards || `<p class="meta">暂无审批流。</p>`, `<button type="button" class="btn btn-sm btn-primary" data-wf-add>新增</button>`)}
-        <section class="alert-detail">
-          ${item ? renderWorkFlowDetail(item, flowEditing, steps) : `<p class="meta">请新增一条审批流。</p>`}
-        </section>
-      </div>
-    `;
-    root.querySelectorAll("[data-id]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        focus = btn.dataset.id;
-        flowEditing = false;
-        draftSteps = [];
-        paint();
-      });
+  root.querySelectorAll("[data-approval-up]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.idx);
+      if (i < 1) return;
+      [item.approval[i - 1], item.approval[i]] = [item.approval[i], item.approval[i - 1]];
+      refresh();
     });
-    root.querySelector("[data-wf-add]")?.addEventListener("click", () => {
-      const fresh = {
-        id: `wf-${Date.now()}`,
-        name: "新审批流",
-        enabled: true,
-        steps: WORK_APPROVAL_DEFAULT.map((row) => ({ ...row }))
-      };
-      data.workFlows = data.workFlows || [];
-      data.workFlows.push(fresh);
-      persist();
-      focus = fresh.id;
-      beginEdit(fresh);
-      paint();
+  });
+  root.querySelectorAll("[data-approval-down]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.idx);
+      if (i >= item.approval.length - 1) return;
+      [item.approval[i], item.approval[i + 1]] = [item.approval[i + 1], item.approval[i]];
+      refresh();
     });
-    root.querySelector("[data-wf-edit]")?.addEventListener("click", () => {
-      if (!item) return;
-      beginEdit(item);
-      paint();
-    });
-    root.querySelector("[data-wf-cancel]")?.addEventListener("click", () => {
-      flowEditing = false;
-      draftSteps = [];
-      paint();
-    });
-    root.querySelector("[data-wf-save]")?.addEventListener("click", () => {
-      if (!item) return;
-      const name = formVal(root, "name").trim();
-      if (!name) {
-        openAlertDialog("无法保存", `<p class="meta">请填写名称。</p>`, () => true, "知道了");
-        return;
-      }
-      if (!draftSteps.length) {
-        openAlertDialog("无法保存", `<p class="meta">请至少配置一个审批节点。</p>`, () => true, "知道了");
-        return;
-      }
-      item.name = name;
-      item.enabled = formVal(root, "enabled") !== "停用";
-      item.steps = draftSteps.map((row) => ({ step: row.step, role: row.role }));
-      workTypesUsingFlow(item.id).forEach((type) => {
-        type.approval = item.steps.map((row) => ({ ...row }));
-      });
-      persist();
-      flowEditing = false;
-      draftSteps = [];
-      paint();
-    });
-    root.querySelector("[data-wf-del]")?.addEventListener("click", () => {
-      if (!item) return;
-      const used = workTypesUsingFlow(item.id);
-      if (used.length) {
-        openAlertDialog("无法删除", `<p class="meta">该审批流已被 ${esc(used.map((t) => t.name).join("、"))} 引用。</p>`, () => true, "知道了");
-        return;
-      }
-      data.workFlows = (data.workFlows || []).filter((row) => row.id !== item.id);
-      persist();
-      focus = null;
-      flowEditing = false;
-      draftSteps = [];
-      paint();
-    });
-    const refreshSteps = () => paint();
-    root.querySelector("[data-step-add]")?.addEventListener("click", () => {
-      openWorkFlowStepDialog(draftSteps, null, refreshSteps);
-    });
-    root.querySelectorAll("[data-step-edit]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        openWorkFlowStepDialog(draftSteps, Number(btn.dataset.idx), refreshSteps);
-      });
-    });
-    root.querySelectorAll("[data-step-del]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        draftSteps.splice(Number(btn.dataset.idx), 1);
-        refreshSteps();
-      });
-    });
-    root.querySelectorAll("[data-step-up]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const i = Number(btn.dataset.idx);
-        if (i < 1) return;
-        [draftSteps[i - 1], draftSteps[i]] = [draftSteps[i], draftSteps[i - 1]];
-        refreshSteps();
-      });
-    });
-    root.querySelectorAll("[data-step-down]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const i = Number(btn.dataset.idx);
-        if (i >= draftSteps.length - 1) return;
-        [draftSteps[i], draftSteps[i + 1]] = [draftSteps[i + 1], draftSteps[i]];
-        refreshSteps();
-      });
-    });
-  }
-  paint();
+  });
 }
 
 function destroyWorkTypeMultiSelects(root) {
@@ -8411,12 +8032,12 @@ function renderWorkTypesConfig(root, focusId) {
           <strong>${esc(row.name)}</strong>
           <span class="dot ${workStatusTone(row.enabled ? "启用" : "停用")}">${row.enabled ? "启用" : "停用"}</span>
         </div>
-        <p class="meta">${esc(row.code)} · ${esc(workTypeLevelsText(row))} · ${esc(workFlowName(row.flowId))}</p>
+        <p class="meta">${esc(row.code)} · ${esc(workTypeLevelsText(row))}</p>
       </button>
     `).join("");
     root.innerHTML = `
       <div class="alert-layout">
-        ${configListPanelHtml("作业类型", listCards)}
+        ${configListPanelHtml("作业配置", listCards)}
         <section class="alert-detail">
           ${item ? renderWorkTypeDetail(item, workTypeEditing) : ""}
         </section>
@@ -8469,9 +8090,7 @@ function renderWorkTypesConfig(root, focusId) {
       bindRow("data-qual", "qual", item.quals);
       bindRow("data-measure", "measure", item.measures);
       bindRow("data-risk", "risk", item.riskOptions);
-      root.querySelector("[data-change-flow]")?.addEventListener("click", () => {
-        openWorkFlowPickerDialog(item, paint);
-      });
+      bindWorkTypeApprovalEditors(root, item, paint);
     }
     root.querySelector("[name=enabled]")?.addEventListener("change", (event) => {
       if (!workTypeEditing) return;
@@ -8568,26 +8187,23 @@ function renderWorkTypeDetail(item, editing) {
       <button type="button" class="detail-tab${tab === "measure" ? " is-on" : ""}" data-wt-tab="measure">安全措施</button>
       <button type="button" class="detail-tab${tab === "flow" ? " is-on" : ""}" data-wt-tab="flow">审批</button>
     </div>`;
-  const approvalBlock = `
-    <div class="white-card">
-      <div class="zone-admission-toolbar">
-        <div>
-          <h3>审批节点预览</h3>
-          <p class="meta">审批流：${esc(workFlowName(item.flowId))}</p>
-        </div>
-        ${editing ? `<button type="button" class="btn btn-sm" data-change-flow>更换审批流</button>` : ""}
-      </div>
-      <div class="table-wrap work-cfg-table">
-        <table>
-          <thead><tr><th>序号</th><th>步骤</th><th>岗位</th></tr></thead>
-          <tbody>
-            ${workTypeApprovalChain(item).length ? workTypeApprovalChain(item).map((row, i) => `
-              <tr><td>${i + 1}</td><td>${esc(row.step)}</td><td>${esc(row.role || "—")}</td></tr>
-            `).join("") : `<tr><td colspan="3" class="meta">未绑定审批流</td></tr>`}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
+  const approvalRows = workTypeApprovalChain(item);
+  const approvalColspan = editing ? 4 : 3;
+  const approvalBody = approvalRows.length
+    ? approvalRows.map((row, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${esc(row.step)}</td>
+          <td>${esc(row.role || "—")}</td>
+          ${editing ? `<td class="table-actions">
+            <button type="button" class="btn btn-sm" data-approval-up data-idx="${i}"${i === 0 ? " disabled" : ""}>上移</button>
+            <button type="button" class="btn btn-sm" data-approval-down data-idx="${i}"${i >= approvalRows.length - 1 ? " disabled" : ""}>下移</button>
+            <button type="button" class="btn btn-sm" data-approval-edit data-idx="${i}">编辑</button>
+            <button type="button" class="btn btn-sm btn-ghost" data-approval-del data-idx="${i}">删除</button>
+          </td>` : ""}
+        </tr>`).join("")
+    : `<tr><td colspan="${approvalColspan}" class="meta">未配置审批节点</td></tr>`;
+  const approvalBlock = workCfgTable("审批节点", ["序号", "步骤", "岗位"], approvalBody, "data-approval-add", editing);
   return `
     <div class="detail-head">
       <div class="detail-head-main">
@@ -8685,7 +8301,7 @@ function workOrderSubmitErrors(item) {
 function createNewWorkOrder() {
   const types = (data.workTypes || []).filter((row) => row.enabled);
   if (!types.length) {
-    openAlertDialog("创建工单", `<p class="meta">没有已启用的作业类型，请先在作业类型中启用。</p>`, () => true, "知道了");
+    openAlertDialog("创建工单", `<p class="meta">没有已启用的作业类型，请先在作业配置中启用。</p>`, () => true, "知道了");
     return null;
   }
   const type = types[0];
@@ -8868,7 +8484,7 @@ function workOrderActions(item, editingIds) {
     if (editing) return [["save", "保存", true], ["cancel-edit", "取消", false], ["void", "作废", false]];
     return [["edit", "编辑", false], ["submit", "提交审批", true], ["void", "作废", false]];
   }
-  if (item.status === "待审批") return [["flow", "审批流", true]];
+  if (item.status === "待审批") return [["flow", "审批", true]];
   if (item.status === "已签发") return [["start", "开始作业", true]];
   if (item.status === "作业中") {
     const extras = workExtras(workTypeById(item.typeId));
@@ -9170,7 +8786,7 @@ function showWorkApprovalFlowDialog(item, after) {
   const pending = workPendingApproval(item);
   const canApprove = workCanApproveNode(item, pending);
   const opRole = data.operator?.role || "当前用户";
-  openAlertDialog("审批流", `
+  openAlertDialog("审批", `
     <div class="work-flow-dialog">
       <p class="meta">${esc(item.id)} · ${pending ? `当前节点 ${esc(pending.step)}（${esc(pending.role)}）` : "签批已完成"}</p>
       ${workApprovalFlowStepsHtml(item, pending)}
@@ -14100,7 +13716,7 @@ function bindChrome() {
 }
 
 async function boot() {
-  data = await fetch("./data/safety.json?v=40").then((res) => res.json());
+  data = await fetch("./data/safety.json?v=41").then((res) => res.json());
   try {
     const mapZones = await fetch("./data/deziwa-map-zones.json", { cache: "no-store" }).then((res) => res.json());
     if (Array.isArray(mapZones) && mapZones.length) data.zones = mapZones;
