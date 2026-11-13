@@ -244,6 +244,8 @@ function setOverviewHashWithTrack(extra) {
   if (sceneDetailTab === "watch" && selected?.id) q.set("watch", "1");
   else q.delete("watch");
   q.delete("roster");
+  q.delete("history");
+  if (overviewTrackMode && !trackReplay.active) q.set("history", "1");
   if (trackReplay.active && trackReplay.trackId) q.set("tid", trackReplay.trackId);
   else q.delete("tid");
   const qs = q.toString();
@@ -253,10 +255,29 @@ function setOverviewHashWithTrack(extra) {
   location.hash = next;
 }
 
+function openPersonTrackHistory(personId) {
+  const person = personById(personId);
+  if (!person) return;
+  exitTrackReplay();
+  selected = person;
+  trackSearch.personId = personId;
+  trackSearchCollapsed = false;
+  enterOverviewTrackMode();
+  setOverviewHashWithTrack({ id: personId, history: "1" });
+  renderPage();
+}
+
 function applyTrackFromRoute(route) {
   exitTrackReplay();
   const focusId = route.focus;
-  if (route.trackMode !== "1" || !focusId || !personById(focusId)) return;
+  if (!focusId || !personById(focusId)) return;
+  if (route.historyMode === "1" && route.trackMode !== "1") {
+    selected = personById(focusId);
+    trackSearch.personId = focusId;
+    enterOverviewTrackMode();
+    return;
+  }
+  if (route.trackMode !== "1") return;
   const trObj = trackForReplay(focusId, route.trackTid);
   if (!trObj) return;
   trackReplay.active = true;
@@ -381,7 +402,10 @@ function enterOverviewTrackMode() {
 }
 
 function exitOverviewTrackMode() {
+  if (!overviewTrackMode && !trackReplay.active) return;
   overviewTrackMode = false;
+  exitTrackReplay();
+  setOverviewHashWithTrack();
 }
 
 function personIdForAlertSubject(alertPerson) {
@@ -1561,6 +1585,11 @@ function renderOverview(root, route) {
   bindCameraCalibPanel(root);
   bindLinkagePanel(root);
   root.querySelector("[data-close-panel]")?.addEventListener("click", () => clearSceneSelection());
+  root.querySelector("[data-person-track-history]")?.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const id = ev.currentTarget.getAttribute("data-person-id");
+    if (id) openPersonTrackHistory(id);
+  });
   root.querySelector("[data-overview-up]")?.addEventListener("click", () => {
     const z = zoneForSceneItem(selected);
     if (z) {
@@ -1581,6 +1610,14 @@ function renderOverview(root, route) {
   if (selected?.id) {
     root.querySelector(`[data-pick="${CSS.escape(selected.id)}"]`)?.classList.add("is-hot");
   }
+  root.querySelector("[data-toggle-track-mode]")?.addEventListener("click", () => {
+    if (overviewTrackMode) exitOverviewTrackMode();
+    else {
+      enterOverviewTrackMode();
+      setOverviewHashWithTrack();
+    }
+    renderPage();
+  });
   bindTrackReplayBar(root);
   bindTrackHistoryPanel(root);
 }
@@ -2305,11 +2342,6 @@ function bindTrackHistoryPanel(root) {
   trackPersonSelectCtl = mountTrackPersonSelect(root.querySelector("#track-person-select-host"));
   trackZoneSelectCtl?.destroy();
   trackZoneSelectCtl = mountTrackZoneSelect(root.querySelector("#track-zone-select-host"));
-  root.querySelector("[data-toggle-track-mode]")?.addEventListener("click", () => {
-    if (overviewTrackMode) exitOverviewTrackMode();
-    else enterOverviewTrackMode();
-    renderPage();
-  });
   root.querySelector("[data-track-search-run]")?.addEventListener("click", () => {
     trackSearch.date = root.querySelector("#track-search-date")?.value || trackSearch.date;
     trackSearch.from = root.querySelector("#track-search-from")?.value || trackSearch.from;
@@ -2878,7 +2910,8 @@ function renderScenePanel(item) {
       title: "人员信息",
       sub: `${row.name} · ${row.job || ""}`,
       badge: `<span class="status-lamp"><i class="${lamp}"></i>${row.status || "在岗"}</span>`,
-      body: scenePanelTabbedBody(row, kind, personSceneProfileHtml(row))
+      body: scenePanelTabbedBody(row, kind, personSceneProfileHtml(row)),
+      actions: `<button type="button" class="btn btn-primary" data-person-track-history data-person-id="${esc(row.id)}">历史轨迹</button>`
     });
   }
   if (kind === "camera") {
